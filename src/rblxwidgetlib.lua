@@ -16,7 +16,10 @@ local StudioColor = Enum.StudioStyleGuideColor
 -- dumps the gui into workspace for debugging
 function m.DumpGUI()
     local temp = Instance.new("ScreenGui", workspace)
-    temp.Name = "Dump " .. os.time()
+    if workspace:FindFirstChild("Dump") then
+        workspace.Dump.Parent = nil
+    end
+    temp.Name = "Dump"
     for _, i in pairs(m.widget:GetChildren()) do
         i:Clone().Parent = temp
     end
@@ -90,15 +93,7 @@ function m.initWidget(p, n, title)
     plugin = p
     m.name = n
     if not title then title = m.name end
-    local WidgetInfo = DockWidgetPluginGuiInfo.new(
-        Enum.InitialDockState.Float,
-	    false,
-	    false,
-	    200,
-	    200,
-	    150,
-        150
-    )
+    local WidgetInfo = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, false, false, 200, 200, 150, 150)
     m.widget = plugin:CreateDockWidgetPluginGui(m.name, WidgetInfo)
     m.widget.Title = title
     initFrame()
@@ -112,6 +107,8 @@ function m.NewFrame(height, parent)
     local newFrame = Instance.new("Frame", parent)
     newFrame.BackgroundTransparency = 1
     newFrame.Size = UDim2.new(1,0,0,height)
+
+    -- table layout (used for stacking multiple elements in one row)
     local tablelayout = Instance.new("UITableLayout", newFrame)
     tablelayout.FillEmptySpaceColumns, tablelayout.FillEmptySpaceRows = true, true
     tablelayout.FillDirection = Enum.FillDirection.Horizontal
