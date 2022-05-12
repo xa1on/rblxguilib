@@ -32,3 +32,9 @@ local b_toggle = toolbar:CreateButton("","open widget","")
 -- toggle widget
 b_toggle.Click:Connect(function() widget.Enabled = not widget.Enabled end)
 
+dep.widgetlib.NewTextbox("Welcome to rblxwidgetlib!", Enum.Font.SourceSansBold, Enum.TextXAlignment.Center)
+
+
+
+
+dep.widgetlib.DumpGUI()

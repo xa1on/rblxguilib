@@ -9,7 +9,7 @@ local ScrollbarIMG = {"http://www.roblox.com/asset/?id=9599518795",
 local StudioColor = Enum.StudioStyleGuideColor
 
 -- dumps the gui into workspace for debugging
-function DumpGUI()
+function m.DumpGUI()
     local temp = Instance.new("ScreenGui", workspace)
     temp.Name = "Dump " .. os.time()
     for _, i in pairs(widget:GetChildren()) do
@@ -43,6 +43,7 @@ function initScrollframe()
     scrollframe.ScrollBarThickness = 15
     scrollframe.BottomImage, scrollframe.MidImage, scrollframe.TopImage = ScrollbarIMG[1], ScrollbarIMG[2], ScrollbarIMG[3]
     scrollframe.ScrollingDirection = Enum.ScrollingDirection.Y
+    scrollframe.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
     scrollframe.Name = "ScrollingFrame"
     scrollframe.ZIndex = 2
     ColorSync(scrollframe, "ScrollBarImageColor3", StudioColor.ScrollBar)
@@ -63,8 +64,9 @@ end
 
 -- updaing the scrolling frame to fit window size based on element size
 function UpdateFrameSize()
+    local scrollbarvis = scrollframe.AbsoluteWindowSize.Y < scrollframe.AbsoluteCanvasSize.Y
     scrollframe.CanvasSize = UDim2.new(0,0,0,listlayout.AbsoluteContentSize.Y)
-    scrollbg.Visible = scrollframe.AbsoluteWindowSize.Y < scrollframe.AbsoluteCanvasSize.Y
+    scrollbg.Visible = scrollbarvis
 end
 
 -- initalizing the gui into widget
@@ -75,7 +77,6 @@ function initFrame()
     bgframe.Name = "BGFrame"
     bgframe.ZIndex = 0
     initScrollframe()
-    DumpGUI()
     UpdateFrameSize()
 end
 
@@ -108,14 +109,19 @@ function NewFrame()
 end
 
 -- creating textboxes
-function m.NewTextbox(text, alignment)
+function m.NewTextbox(text, font, alignment)
+    if not alignment then alignment = Enum.TextXAlignment.Center end
     local frame = NewFrame()
     local newTextbox = Instance.new("TextLabel", frame)
     newTextbox.BackgroundTransparency = 1
     newTextbox.Size = UDim2.new(1,-20,1,0)
     newTextbox.Position = UDim2.new(0,10,0,0)
-    newTextbox.TextXAlignment = Enum.TextXAlignment[alignment]
-    ColorSync(newTextbox, "TextColor3", )
+    newTextbox.TextXAlignment = alignment
+    newTextbox.TextSize = 15
+    newTextbox.Font = font
+    newTextbox.Text = text
+    ColorSync(newTextbox, "TextColor3", StudioColor.MainText)
 end
+
 
 return m
