@@ -13,14 +13,8 @@
         Alerts
 ]]--
 
--- widgetlib
+-- adding widgetlib
 local widgetlib = require(script.Parent.rblxwidgetlib)
-
--- get userID(unnessecary)
-local playerId = game:GetService("StudioService"):GetUserId()
-
--- generate widget
-local widget = widgetlib.initWidget(plugin, "rblxwidgetlib", "rblxwidgetlib - " .. game:GetService("Players"):GetNameFromUserIdAsync(playerId))
 
 -- plugin toolbar
 toolbar = plugin:CreateToolbar("rblxwidgetlib")
@@ -28,13 +22,16 @@ toolbar = plugin:CreateToolbar("rblxwidgetlib")
 -- toggle toolbar button
 local b_toggle = toolbar:CreateButton("","open widget","")
 
+-- generate widget: usage - (plugin, widgetid, widget title(the thing that actually shows up on the widget bar))
+local widget = widgetlib.initWidget(plugin, "rblxwidgetlib", "rblxwidgetlib")
 
--- toggle widget
+-- toggle widget button
 b_toggle.Click:Connect(function() widget.Enabled = not widget.Enabled end)
 
+-- new textbox: usage - (text, font, X Alignment)
 widgetlib.NewTextbox("Welcome to rblxwidgetlib!", Enum.Font.SourceSansBold, Enum.TextXAlignment.Center)
 
 
 
-
+-- dumps the gui into workspace in case you need to debug (temporary)
 widgetlib.DumpGUI()
