@@ -1,4 +1,4 @@
-# RBLX Widget Library
+# RBLX GUI Library
 WIP
 
 ## Getting Started
