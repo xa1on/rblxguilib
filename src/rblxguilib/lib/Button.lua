@@ -1,8 +1,9 @@
 local Button = {}
 Button.__index = Button
-local util = require(script.Parent.Util)
 local TextboxMod = require(script.Parent.Textbox)
-local FrameMod = require(script.Parent.Frame)
+local ListFrame = require(script.Parent.ListFrame)
+local GUIObject = require(script.Parent.GUIObject)
+setmetatable(Button,GUIObject)
 
 Button.Images = {
     default = "http://www.roblox.com/asset/?id=9631146921",
@@ -12,10 +13,10 @@ Button.Images = {
 }
 
 function Button.new(textbox, scale, parent)
-    local self = {}
+    if not parent then parent = ListFrame.new().Frame end
+    local self = GUIObject.new()
     setmetatable(self,Button)
     self.Text = nil
-    if not parent then parent = FrameMod.new().Frame end
     if not scale then scale = 1 end
     -- creating a frame to hold the button
     self.ButtonFrame = Instance.new("Frame", parent)
@@ -27,8 +28,7 @@ function Button.new(textbox, scale, parent)
         self.Text = TextboxMod.new(textbox, nil, nil, self.ButtonFrame)
     else
         self.Text = textbox.Textbox
-        local previousframe = textbox.Frame
-        textbox.Frame = self.ButtonFrame
+        local previousframe = textbox.Textbox.Parent
         textbox.Textbox.Parent = self.ButtonFrame
         if previousframe.Name == "TextFrame" then previousframe:Destroy() end
     end
@@ -53,8 +53,6 @@ function Button.new(textbox, scale, parent)
     self.ButtonBackground.SliceCenter = Rect.new(7,7,156,36)
     self.ButtonBackground.Image = Button.Images.bg
     self.ButtonBackground.Name = "ButtonBG"
-
-    self.Frame = parent
     return self
 end
 

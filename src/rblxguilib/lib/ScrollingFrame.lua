@@ -2,6 +2,8 @@ local ScrollingFrame = {}
 ScrollingFrame.__index = ScrollingFrame
 
 local util = require(script.Parent.Util)
+local GUIFrame = require(script.Parent.GUIFrame)
+setmetatable(ScrollingFrame,GUIFrame)
 
 ScrollingFrame.Images = {
     bottom = "http://www.roblox.com/asset/?id=9599518795",
@@ -16,7 +18,7 @@ function ScrollingFrame:UpdateFrameSize()
 end
 
 function ScrollingFrame.new(parent)
-    local self = {}
+    local self = GUIFrame.new()
     setmetatable(self, ScrollingFrame)
     -- scroll bar background
     self.ScrollbarBackground = Instance.new("Frame", parent)

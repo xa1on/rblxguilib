@@ -21,14 +21,14 @@ toolbar = plugin:CreateToolbar("rblxguilib")
 -- generate widget
 local widget = gui.PluginWidget.new("rblxguilib").WidgetObject
 
--- toggle toolbar button
+-- toolbar button to toggle the widget
 local b_toggle = toolbar:CreateButton("","open widget","")
 b_toggle.Click:Connect(function() widget.Enabled = not widget.Enabled end)
 
--- new scrolling frame: usage - (parent)
-local mainframe = gui.ScrollingFrame.new(widget).Frame
+-- new scrolling frame(lets you scroll through the gui): usage - (parent)
+local mainframe = gui.ScrollingFrame.new(widget)
 -- sets mainframe as the main element(everything will go here by default unless you specify parent)
-gui.Util.SetMain(mainframe)
+mainframe:SetMain()
 
 -- new textbox: usage - (text, font, alignment, parent)
 gui.Textbox.new("Welcome to rblxguilib!", Enum.Font.SourceSansBold, Enum.TextXAlignment.Center)

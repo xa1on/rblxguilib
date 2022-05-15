@@ -2,16 +2,17 @@ local Textbox = {}
 Textbox.__index = Textbox
 
 local util = require(script.Parent.Util)
-local FrameMod = require(script.Parent.Frame)
+local ListFrame = require(script.Parent.ListFrame)
+local GUIObject = require(script.Parent.GUIObject)
+setmetatable(Textbox,GUIObject)
 
 function Textbox.new(text, font, alignment, parent)
-    local self = {}
-    setmetatable(self,Textbox)
-    
+    local self = GUIObject.new()
     if not parent then
-        parent = FrameMod.new().Frame
+        parent = ListFrame.new().Frame
         parent.Name = "TextFrame"
     end
+    setmetatable(self,Textbox)
     if not alignment then alignment = Enum.TextXAlignment.Center end
     if not font then font = Enum.Font.SourceSans end
     self.Textbox = Instance.new("TextLabel", parent)
@@ -21,7 +22,6 @@ function Textbox.new(text, font, alignment, parent)
     self.Textbox.TextSize = 15
     self.Textbox.Font = font
     self.Textbox.Text = text
-    self.Frame = parent
     util.ColorSync(self.Textbox, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     return self
 end

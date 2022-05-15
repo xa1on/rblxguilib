@@ -1,13 +1,13 @@
-local Frame = {}
-Frame.__index = Frame
+local ListFrame = {}
+ListFrame.__index = ListFrame
+local GUIFrame = require(script.Parent.GUIFrame)
+setmetatable(ListFrame,GUIFrame)
 
-
-function Frame.new(parent, height)
-    local self = {}
-    setmetatable(self,Frame)
+function ListFrame.new(parent, height)
+    if not parent then parent = _G.MainGUI end
+    local self = GUIFrame.new(Instance.new("Frame", parent))
+    setmetatable(self,ListFrame)
     if not height then height = 28 end
-    if not parent then parent = _G.MainUI end
-    self.Frame = Instance.new("Frame", parent)
     self.Frame.BackgroundTransparency = 1
     self.Frame.Size = UDim2.new(1,0,0,height)
     -- layout (used for stacking multiple elements in one row)
@@ -25,4 +25,4 @@ function Frame.new(parent, height)
     return self
 end
 
-return Frame
+return ListFrame

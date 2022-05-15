@@ -1,17 +1,12 @@
 local m = {}
 
--- syncing element colors to studio theme colors
+-- syncs colors with studio theme
 function m.ColorSync(element, property, enum)
     local function sync()
         element[property] = settings().Studio.Theme:GetColor(enum)
     end
     settings().Studio.ThemeChanged:Connect(sync)
 	sync()
-end
-
--- set instance as the main ui element
-function m.SetMain(i)
-    _G.MainUI = i
 end
 
 -- dumps the gui into workspace for debugging
