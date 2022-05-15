@@ -14,9 +14,7 @@ function Widget.new(name, title)
     if not title then title = self.Name end
     self.WidgetObject = plugin:CreateDockWidgetPluginGui(self.Name, self.Info)
     self.WidgetObject.Title = title
-
     self.BackgroundFrame = BackgroundFrame.new(self.WidgetObject)
-
     return self
 end
 

@@ -3,7 +3,6 @@
     something#7597
     todo:
         Sections
-        Button
         Dropdown
         Sliders
         Toggle
@@ -13,20 +12,37 @@
 ]]--
 
 
--- loading the library
+-- loads the library
 local gui = require(script.Parent.RBLXGUILib.initialize)(plugin)
 
 -- plugin toolbar
-toolbar = plugin:CreateToolbar("rblxwidgetlib")
+toolbar = plugin:CreateToolbar("rblxguilib")
+
+-- generate widget
+local widget = gui.PluginWidget.new("rblxguilib").WidgetObject
 
 -- toggle toolbar button
 local b_toggle = toolbar:CreateButton("","open widget","")
-
--- generate widget
-local widget = gui.PluginWidget.new("rblxwidgetlib").WidgetObject
-
--- toggle widget button
 b_toggle.Click:Connect(function() widget.Enabled = not widget.Enabled end)
 
--- generate scrolling frame
-local scrollframe = gui.ScrollingFrame.new(widget)
+-- new scrolling frame: usage - (parent)
+local mainframe = gui.ScrollingFrame.new(widget).Frame
+-- sets mainframe as the main element(everything will go here by default unless you specify parent)
+gui.Util.SetMain(mainframe)
+
+-- new textbox: usage - (text, font, alignment, parent)
+gui.Textbox.new("Welcome to rblxguilib!", Enum.Font.SourceSansBold, Enum.TextXAlignment.Center)
+
+-- new buttons: usage - (text/textbox, scale)
+local button1 = gui.Button.new("hi", 0.5)
+button1.Button.MouseButton1Click:Connect(function() print("hi") end)
+
+local fancybuttonlabel = gui.Textbox.new("hello", Enum.Font.Creepster)
+local button2 = gui.Button.new(fancybuttonlabel, 1)
+button2.Button.MouseButton1Click:Connect(function() print("hello") end)
+
+
+
+
+-- dumps the gui into workspace for debugging
+gui.Util.DumpGUI(widget)

@@ -4,9 +4,9 @@ ScrollingFrame.__index = ScrollingFrame
 local util = require(script.Parent.Util)
 
 ScrollingFrame.Images = {
-    top = "http://www.roblox.com/asset/?id=9599518795",
-    center = "http://www.roblox.com/asset/?id=9599545837",
-    bottom = "http://www.roblox.com/asset/?id=9599519108"}
+    bottom = "http://www.roblox.com/asset/?id=9599518795",
+    mid = "http://www.roblox.com/asset/?id=9599545837",
+    top = "http://www.roblox.com/asset/?id=9599519108"}
 
 -- updaing the scrolling frame to fit window size based on element size
 function ScrollingFrame:UpdateFrameSize()
@@ -30,7 +30,7 @@ function ScrollingFrame.new(parent)
     self.Frame.BackgroundTransparency = 1
     self.Frame.Size = UDim2.new(1,0,1,0)
     self.Frame.ScrollBarThickness = 15
-    self.Frame.BottomImage, self.Frame.MidImage, self.Frame.TopImage = self.Images.top, self.Images.center, self.Images.bottom
+    self.Frame.BottomImage, self.Frame.MidImage, self.Frame.TopImage = self.Images.bottom, self.Images.mid, self.Images.top
     self.Frame.ScrollingDirection = Enum.ScrollingDirection.Y
     self.Frame.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
     self.Frame.Name = "ScrollingFrame"
