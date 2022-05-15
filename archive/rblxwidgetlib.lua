@@ -14,10 +14,10 @@ local ScrollbarIMG = {"http://www.roblox.com/asset/?id=9599518795",
 local StudioColor = Enum.StudioStyleGuideColor
 
 local ButtonIMG = {
-    default = "http://www.roblox.com/asset/?id=9622824630",
+    default = "http://www.roblox.com/asset/?id=9631146921",
     hover = "http://www.roblox.com/asset/?id=9622825658",
     pressed = "http://www.roblox.com/asset/?id=9538564172",
-    bg = "http://www.roblox.com/asset/?id=9538563350"
+    bg = "http://www.roblox.com/asset/?id=9631095238"
 }
 
 local UDim2fill = UDim2.new(1,0,1,0)
@@ -113,7 +113,7 @@ end
 -- creating a frame for elements
 function m.NewFrame(height, parent)
     if not parent then parent = m.scrollframe end
-    if not height then height = 30 end
+    if not height then height = 28 end
     local newFrame = Instance.new("Frame", parent)
     newFrame.BackgroundTransparency = 1
     newFrame.Size = UDim2.new(1,0,0,height)
@@ -131,14 +131,17 @@ function m.NewFrame(height, parent)
 
     -- padding for elements in frame
     local padding = Instance.new("UIPadding", newFrame)
-    padding.PaddingBottom, padding.PaddingLeft, padding.PaddingRight, padding.PaddingTop = UDim.new(0,5), UDim.new(0,5), UDim.new(0,5), UDim.new(0,5)
+    padding.PaddingBottom, padding.PaddingLeft, padding.PaddingRight, padding.PaddingTop = UDim.new(0,2), UDim.new(0,2), UDim.new(0,2), UDim.new(0,2)
     return newFrame
 end
 
 -- creating textboxes
 function m.NewTextbox(text, font, alignment, parent)
     if not alignment then alignment = Enum.TextXAlignment.Center end
-    if not parent then parent = m.NewFrame() end
+    if not parent then
+        parent = m.NewFrame()
+        parent.Name = "TextFrame"
+    end
     if not font then font = Enum.Font.SourceSans end
     local newTextbox = Instance.new("TextLabel", parent)
     newTextbox.BackgroundTransparency = 1
@@ -153,9 +156,10 @@ function m.NewTextbox(text, font, alignment, parent)
     return newTextbox
 end
 
-function m.NewButton(textbox, parent)
+function m.NewButton(textbox, scale, parent)
     local text
     if not parent then parent = m.NewFrame() end
+    if not scale then scale = 1 end
 
     -- creating a frame to hold the button
     local buttonFrame = Instance.new("Frame", parent)
@@ -168,12 +172,16 @@ function m.NewButton(textbox, parent)
         text = m.NewTextbox(textbox, nil, nil, buttonFrame)
     else
         text = textbox
+        local previousparent = text.Parent
+        text.Parent = buttonFrame
+        if previousparent.Name == "TextFrame" then previousparent:Destroy() end
     end
     text.ZIndex = 3
 
     -- button image
     local button = Instance.new("ImageButton", buttonFrame)
-    button.Size = UDim2fill
+    button.Size = UDim2.new(scale,0,1,0)
+    button.Position = UDim2.new((1-scale)/2, 0, 0, 0)
     button.BackgroundTransparency = 1
     button.Image, button.HoverImage, button.PressedImage = ButtonIMG.default, ButtonIMG.hover, ButtonIMG.pressed
     button.ScaleType = Enum.ScaleType.Slice
@@ -183,7 +191,8 @@ function m.NewButton(textbox, parent)
 
     -- dark background for the button
     local buttonbg = Instance.new("ImageLabel", buttonFrame)
-    buttonbg.Size = UDim2fill
+    buttonbg.Size = UDim2.new(scale,0,1,0)
+    buttonbg.Position = UDim2.new((1-scale)/2, 0, 0, 0)
     buttonbg.BackgroundTransparency = 1
     buttonbg.ImageTransparency = 0.9
     buttonbg.ScaleType = Enum.ScaleType.Slice
