@@ -1,5 +1,7 @@
 local Button = {}
 Button.__index = Button
+
+local util = require(script.Parent.Util)
 local TextboxMod = require(script.Parent.Textbox)
 local ListFrame = require(script.Parent.ListFrame)
 local GUIObject = require(script.Parent.GUIObject)
@@ -12,11 +14,13 @@ Button.Images = {
     bg = "http://www.roblox.com/asset/?id=9631095238"
 }
 
+local IgnoreChanges = false
+
 function Button.new(textbox, scale, parent)
     if not parent then parent = ListFrame.new().Frame end
     local self = GUIObject.new()
     setmetatable(self,Button)
-    self.Text = nil
+    self.InternalTextbox = nil
     if not scale then scale = 1 end
     -- creating a frame to hold the button
     self.ButtonFrame = Instance.new("Frame", parent)
@@ -25,20 +29,19 @@ function Button.new(textbox, scale, parent)
     self.ButtonFrame.Size = UDim2.new(1,0,1,0)
     -- set up a textbox for the button
     if type(textbox) == "string" then
-        self.Text = TextboxMod.new(textbox, nil, nil, self.ButtonFrame)
+        self.InternalTextbox = TextboxMod.new(textbox, nil, nil, nil, self.ButtonFrame)
     else
-        self.Text = textbox.Textbox
-        local previousframe = textbox.Textbox.Parent
-        textbox.Textbox.Parent = self.ButtonFrame
-        if previousframe.Name == "TextFrame" then previousframe:Destroy() end
+        self.InternalTextbox = textbox
+        textbox:Move(self.ButtonFrame)
     end
-    self.Text.ZIndex = 3
+    self.InternalTextbox.Textbox.ZIndex = 3
+    self.Textbox = self.InternalTextbox.Textbox
     -- button image
     self.Button = Instance.new("ImageButton", self.ButtonFrame)
     self.Button.Size = UDim2.new(scale,0,1,0)
     self.Button.Position = UDim2.new((1-scale)/2, 0, 0, 0)
     self.Button.BackgroundTransparency = 1
-    self.Button.Image, self.Button.HoverImage, self.Button.PressedImage = Button.Images.default, Button.Images.hover, Button.Images.pressed
+    self.Button.Image, self.Button.HoverImage, self.Button.PressedImage = self.Images.default, self.Images.hover, self.Images.pressed
     self.Button.ScaleType = Enum.ScaleType.Slice
     self.Button.SliceCenter = Rect.new(7,7,156,36)
     self.Button.Name = "Button"
@@ -51,8 +54,21 @@ function Button.new(textbox, scale, parent)
     self.ButtonBackground.ImageTransparency = 0.9
     self.ButtonBackground.ScaleType = Enum.ScaleType.Slice
     self.ButtonBackground.SliceCenter = Rect.new(7,7,156,36)
-    self.ButtonBackground.Image = Button.Images.bg
+    self.ButtonBackground.Image = self.Images.bg
     self.ButtonBackground.Name = "ButtonBG"
+    self.Object = self.Button
+    self.Object.Changed:Connect(function(p)
+        if p == "Parent" and not IgnoreChanges then
+            self.Button.Visible = false
+            self.ButtonFrame.Parent = self.Object.Parent
+            IgnoreChanges = true
+            task.wait(0)
+            self.Object.Parent = self.ButtonFrame
+            self.Button.Visible = true
+            IgnoreChanges = false
+        end
+    end)
+    self.Frame = parent
     return self
 end
 

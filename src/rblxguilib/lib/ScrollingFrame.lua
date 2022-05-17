@@ -8,7 +8,8 @@ setmetatable(ScrollingFrame,GUIFrame)
 ScrollingFrame.Images = {
     bottom = "http://www.roblox.com/asset/?id=9599518795",
     mid = "http://www.roblox.com/asset/?id=9599545837",
-    top = "http://www.roblox.com/asset/?id=9599519108"}
+    top = "http://www.roblox.com/asset/?id=9599519108"
+}
 
 -- updaing the scrolling frame to fit window size based on element size
 function ScrollingFrame:UpdateFrameSize()

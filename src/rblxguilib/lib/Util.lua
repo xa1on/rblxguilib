@@ -21,4 +21,10 @@ function m.DumpGUI(parent)
     end
 end
 
+function m.AppendTable(table,newtable)
+    local fulltable = table
+    for i, v in pairs(newtable) do fulltable[i] = v end
+    return fulltable
+end
+
 return m

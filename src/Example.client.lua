@@ -33,16 +33,36 @@ mainframe:SetMain()
 -- new textbox: usage - (text, font, alignment, parent)
 gui.Textbox.new("Welcome to rblxguilib!", Enum.Font.SourceSansBold, Enum.TextXAlignment.Center)
 
--- new buttons: usage - (text/textbox, scale)
+-- new buttons: usage - (text/textbox, scale, parent)
 local button1 = gui.Button.new("hi", 0.5)
 button1.Button.MouseButton1Click:Connect(function() print("hi") end)
 
 local fancybuttonlabel = gui.Textbox.new("hello", Enum.Font.Creepster)
 local button2 = gui.Button.new(fancybuttonlabel, 1)
-button2.Button.MouseButton1Click:Connect(function() print("hello") end)
+button2.Object.MouseButton1Click:Connect(function() print("hello") end)
 
+local frame1 = gui.ListFrame.new()
+local frame2 = gui.ListFrame.new()
+local button3 = gui.Button.new("press to go down", 0.5, frame1.Frame)
+local buttonup = true
+button3.Button.MouseButton1Click:Connect(function()
+    print(button3.Textbox.Text)
+    if buttonup then
+        button3.Object.Parent = frame2.Frame
+        button3.Textbox.Text = "press to go up"
+    else
+        button3.Object.Parent = frame1.Frame
+        button3.Textbox.Text = "press to go down"
+    end
+    print(button3.Textbox.Text)
+    buttonup = not buttonup
+end)
 
 
 
 -- dumps the gui into workspace for debugging
-gui.Util.DumpGUI(widget)
+local dumpbutton = gui.Button.new("dump gui")
+dumpbutton.Button.MouseButton1Click:Connect(function()
+    print("Dumping GUI")
+    gui.Util.DumpGUI(widget)
+end)
