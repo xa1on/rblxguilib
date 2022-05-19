@@ -20,7 +20,7 @@ function Button.new(textbox, scale, parent)
     if not parent then parent = ListFrame.new().Frame end
     local self = GUIObject.new()
     setmetatable(self,Button)
-    self.InternalTextbox = nil
+    self.TextboxTable = nil
     if not scale then scale = 1 end
     -- creating a frame to hold the button
     self.ButtonFrame = Instance.new("Frame", parent)
@@ -29,13 +29,13 @@ function Button.new(textbox, scale, parent)
     self.ButtonFrame.Size = UDim2.new(1,0,1,0)
     -- set up a textbox for the button
     if type(textbox) == "string" then
-        self.InternalTextbox = TextboxMod.new(textbox, nil, nil, nil, self.ButtonFrame)
+        self.TextboxTable = TextboxMod.new(textbox, nil, nil, nil, self.ButtonFrame)
     else
-        self.InternalTextbox = textbox
+        self.TextboxTable = textbox
         textbox:Move(self.ButtonFrame)
     end
-    self.InternalTextbox.Textbox.ZIndex = 3
-    self.Textbox = self.InternalTextbox.Textbox
+    self.Textbox = self.TextboxTable.Textbox
+    self.Textbox.ZIndex = 3
     -- button image
     self.Button = Instance.new("ImageButton", self.ButtonFrame)
     self.Button.Size = UDim2.new(scale,0,1,0)
@@ -59,16 +59,20 @@ function Button.new(textbox, scale, parent)
     self.Object = self.Button
     self.Object.Changed:Connect(function(p)
         if p == "Parent" and not IgnoreChanges then
-            self.Button.Visible = false
+            self.Object.Visible = false
+            self.Textbox.Visible = false
+            task.wait(0)
             self.ButtonFrame.Parent = self.Object.Parent
             IgnoreChanges = true
             task.wait(0)
             self.Object.Parent = self.ButtonFrame
-            self.Button.Visible = true
+            self.Object.Visible = true
+            self.Textbox.Visible = true
             IgnoreChanges = false
+            self.Frame = self.ButtonFrame.Parent
         end
     end)
-    self.Frame = parent
+    self.Frame = self.ButtonFrame.Parent
     return self
 end
 

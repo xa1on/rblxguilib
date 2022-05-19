@@ -41,12 +41,11 @@ local fancybuttonlabel = gui.Textbox.new("hello", Enum.Font.Creepster)
 local button2 = gui.Button.new(fancybuttonlabel, 1)
 button2.Object.MouseButton1Click:Connect(function() print("hello") end)
 
-local frame1 = gui.ListFrame.new()
-local frame2 = gui.ListFrame.new()
+local frame1 = gui.ListFrame.new("the first frane")
+local frame2 = gui.ListFrame.new("the second frame")
 local button3 = gui.Button.new("press to go down", 0.5, frame1.Frame)
 local buttonup = true
 button3.Button.MouseButton1Click:Connect(function()
-    print(button3.Textbox.Text)
     if buttonup then
         button3.Object.Parent = frame2.Frame
         button3.Textbox.Text = "press to go up"
@@ -54,7 +53,6 @@ button3.Button.MouseButton1Click:Connect(function()
         button3.Object.Parent = frame1.Frame
         button3.Textbox.Text = "press to go down"
     end
-    print(button3.Textbox.Text)
     buttonup = not buttonup
 end)
 

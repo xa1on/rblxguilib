@@ -24,8 +24,14 @@ function Textbox.new(text, font, alignment, size, parent)
     self.Textbox.Font = font
     self.Textbox.Text = text
     util.ColorSync(self.Textbox, "TextColor3", Enum.StudioStyleGuideColor.MainText)
-    self.Frame = parent
     self.Object = self.Textbox
+    self.Object.Changed:Connect(function(p)
+        if p == "Parent" then
+            task.wait(0)
+            self.Frame = self.Textbox.Parent
+        end
+    end)
+    self.Frame = self.Textbox.Parent
     return self
 end
 
