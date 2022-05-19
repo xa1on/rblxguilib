@@ -1,13 +1,15 @@
 local GUIObject = {}
 GUIObject.__index = GUIObject
-local GUIElement = require(script.Parent.GUIElement)
+local GUIElement = require(script.Parent.Parent.GUIElement)
+local ListFrame = require(script.Parent.Parent.Frames.ListFrame)
 setmetatable(GUIObject,GUIElement)
 
-function GUIObject.new(Object, Frame)
-    local self = GUIElement.new(Object)
-    setmetatable(self,GUIObject)
-    self.Object = Object
+function GUIObject.new(Frame)
+    local self = GUIElement.new()
     self.Frame = Frame
+    if not Frame then self.Frame = ListFrame.new().Frame end
+    setmetatable(self,GUIObject)
+    self.Object = nil
     return self
 end
 

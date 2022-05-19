@@ -3,7 +3,7 @@ ListFrame.__index = ListFrame
 local GUIFrame = require(script.Parent.GUIFrame)
 setmetatable(ListFrame,GUIFrame)
 
-function ListFrame.new(name, parent, height)
+function ListFrame.new(name, height, parent)
     if not parent then parent = _G.MainGUI end
     local self = GUIFrame.new(Instance.new("Frame", parent))
     setmetatable(self,ListFrame)

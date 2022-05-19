@@ -1,9 +1,8 @@
 local Button = {}
 Button.__index = Button
 
-local util = require(script.Parent.Util)
+local util = require(script.Parent.Parent.Util)
 local TextboxMod = require(script.Parent.Textbox)
-local ListFrame = require(script.Parent.ListFrame)
 local GUIObject = require(script.Parent.GUIObject)
 setmetatable(Button,GUIObject)
 
@@ -11,19 +10,18 @@ Button.Images = {
     default = "http://www.roblox.com/asset/?id=9631146921",
     hover = "http://www.roblox.com/asset/?id=9622825658",
     pressed = "http://www.roblox.com/asset/?id=9538564172",
-    bg = "http://www.roblox.com/asset/?id=9631095238"
+    bg = "http://www.roblox.com/asset/?id=9666283489"
 }
 
 local IgnoreChanges = false
 
 function Button.new(textbox, scale, parent)
-    if not parent then parent = ListFrame.new().Frame end
-    local self = GUIObject.new()
+    local self = GUIObject.new(parent)
     setmetatable(self,Button)
     self.TextboxTable = nil
     if not scale then scale = 1 end
     -- creating a frame to hold the button
-    self.ButtonFrame = Instance.new("Frame", parent)
+    self.ButtonFrame = Instance.new("Frame", self.Frame)
     self.ButtonFrame.BackgroundTransparency = 1
     self.ButtonFrame.Name = "ButtonFrame"
     self.ButtonFrame.Size = UDim2.new(1,0,1,0)
@@ -51,17 +49,17 @@ function Button.new(textbox, scale, parent)
     self.ButtonBackground.Size = UDim2.new(scale,0,1,0)
     self.ButtonBackground.Position = UDim2.new((1-scale)/2, 0, 0, 0)
     self.ButtonBackground.BackgroundTransparency = 1
-    self.ButtonBackground.ImageTransparency = 0.9
+    self.ButtonBackground.ImageTransparency = 0.7
     self.ButtonBackground.ScaleType = Enum.ScaleType.Slice
     self.ButtonBackground.SliceCenter = Rect.new(7,7,156,36)
     self.ButtonBackground.Image = self.Images.bg
     self.ButtonBackground.Name = "ButtonBG"
+    util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
     self.Object = self.Button
     self.Object.Changed:Connect(function(p)
         if p == "Parent" and not IgnoreChanges then
             self.Object.Visible = false
             self.Textbox.Visible = false
-            task.wait(0)
             self.ButtonFrame.Parent = self.Object.Parent
             IgnoreChanges = true
             task.wait(0)

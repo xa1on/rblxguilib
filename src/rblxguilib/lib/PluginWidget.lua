@@ -3,7 +3,7 @@ Widget.__index = Widget
 
 local plugin = _G.PluginObject
 local util = require(script.Parent.Util)
-local BackgroundFrame = require(script.Parent.BackgroundFrame)
+local BackgroundFrame = require(script.Parent.Frames.BackgroundFrame)
 
 Widget.Info = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, false, false, 200, 200, 150, 150)
 
