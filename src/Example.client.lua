@@ -43,6 +43,11 @@ gui.Textbox.new("WELCOME TO RBLXGUILIB!", Enum.Font.SourceSansBold, nil, nil, ac
 local button1 = gui.Button.new("hi", 0.5)
 button1.Button.MouseButton1Click:Connect(function() print("hi") end)
 
+-- using a list frame to add padding between elements
+gui.ListFrame.new(nil, 5)
+
+local buttonsection = gui.Section.new("Buttons")
+buttonsection:SetMain()
 -- textbox inside button for custom text
 local fancybuttonlabel = gui.Textbox.new("fancier button", Enum.Font.Arcade)
 local button2 = gui.Button.new(fancybuttonlabel, 1)
@@ -66,9 +71,6 @@ button3.Button.MouseButton1Click:Connect(function()
     buttonup = not buttonup
 end)
 
-
-
--- using a list frame to add padding between elements
 gui.ListFrame.new(nil, 5)
 
 -- dumps the gui into workspace for debugging

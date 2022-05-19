@@ -6,12 +6,11 @@ local GUIFrame = require(script.Parent.GUIFrame)
 setmetatable(BackgroundFrame,GUIFrame)
 
 
-function BackgroundFrame.new(parent)
-    if not parent then parent = _G.MainGUI end
-    local self = GUIFrame.new()
+function BackgroundFrame.new(Parent)
+    local self = GUIFrame.new(Parent)
     setmetatable(self,BackgroundFrame)
     -- generate background frame
-    self.Frame = Instance.new("Frame", parent)
+    self.Frame = Instance.new("Frame", Parent)
     util.ColorSync(self.Frame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
     self.Frame.Size = UDim2.new(1,0,1,0)
     self.Frame.Name = "Background"

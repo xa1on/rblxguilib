@@ -18,18 +18,18 @@ function ScrollingFrame:UpdateFrameSize()
     self.ScrollbarBackground.Visible = ScrollbarVisibility
 end
 
-function ScrollingFrame.new(parent)
-    local self = GUIFrame.new()
+function ScrollingFrame.new(Parent)
+    local self = GUIFrame.new(Parent)
     setmetatable(self, ScrollingFrame)
     -- scroll bar background
-    self.ScrollbarBackground = Instance.new("Frame", parent)
+    self.ScrollbarBackground = Instance.new("Frame", self.Parent)
     self.ScrollbarBackground.Size = UDim2.new(0,15,1,0)
     self.ScrollbarBackground.Position = UDim2.new(1,-15,0,0)
     self.ScrollbarBackground.Name = "ScrollbarBackground"
     util.ColorSync(self.ScrollbarBackground, "BackgroundColor3", Enum.StudioStyleGuideColor.ScrollBarBackground)
 
     -- scrolling frame
-    self.Frame = Instance.new("ScrollingFrame", parent)
+    self.Frame = Instance.new("ScrollingFrame", self.Parent)
     self.Frame.BackgroundTransparency = 1
     self.Frame.Size = UDim2.new(1,0,1,0)
     self.Frame.ScrollBarThickness = 15
@@ -50,7 +50,7 @@ function ScrollingFrame.new(parent)
     self.Layout.Changed:Connect(function(p)
         if p == "AbsoluteContentSize" then self:UpdateFrameSize() end
     end)
-    parent.Changed:Connect(function(p)
+    self.Parent.Changed:Connect(function(p)
         if p == "AbsoluteSize" then self:UpdateFrameSize() end
     end)
     return self

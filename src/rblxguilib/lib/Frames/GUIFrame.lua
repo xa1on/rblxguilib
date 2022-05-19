@@ -5,10 +5,12 @@ setmetatable(GUIFrame,GUIElement)
 
 _G.MainGUI = nil
 
-function GUIFrame.new(Frame)
-    local self = GUIElement.new(Frame)
+function GUIFrame.new(Parent)
+    local self = GUIElement.new()
     setmetatable(self,GUIFrame)
-    self.Frame = Frame
+    self.Frame = nil
+    self.Parent = Parent
+    if not Parent then self.Parent = _G.MainGUI end
     return self
 end
 

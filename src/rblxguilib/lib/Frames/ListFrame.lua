@@ -3,14 +3,14 @@ ListFrame.__index = ListFrame
 local GUIFrame = require(script.Parent.GUIFrame)
 setmetatable(ListFrame,GUIFrame)
 
-function ListFrame.new(name, height, parent)
-    if not parent then parent = _G.MainGUI end
-    local self = GUIFrame.new(Instance.new("Frame", parent))
+function ListFrame.new(Name, Height, Parent)
+    local self = GUIFrame.new(Parent)
     setmetatable(self,ListFrame)
-    if not height then height = 28 end
+    if not Height then Height = 28 end
+    self.Frame = Instance.new("Frame", self.Parent)
     self.Frame.BackgroundTransparency = 1
-    self.Frame.Size = UDim2.new(1,0,0,height)
-    if name then self.Frame.Name = name end
+    self.Frame.Size = UDim2.new(1,0,0,Height)
+    if Name then self.Frame.Name = Name end
     -- layout (used for stacking multiple elements in one row)
     self.Layout = Instance.new("UIGridLayout", self.Frame)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
