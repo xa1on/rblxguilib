@@ -37,7 +37,7 @@ function Section.new(Name, Text, Open, Parent)
     self.CollapseLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self.CollapseLayout.FillDirection = Enum.FillDirection.Vertical
     self.CollapseLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    self.CollapseLayout.Padding = UDim.new(0,5)
+    --self.CollapseLayout.Padding = UDim.new(0,5)
 
     self.Label = Instance.new("TextButton", self.Collapse)
     self.Label.Text = ""
@@ -68,14 +68,12 @@ function Section.new(Name, Text, Open, Parent)
     end
 
     self.Frame = Instance.new("Frame", self.Collapse)
-    self.Frame.Size = UDim2.new(1,0,0,0)
+    self.Frame.Size = UDim2.new(1,-15,0,0)
     self.Frame.BackgroundTransparency = 1
     self.Frame.Visible = self.Open
     self.Layout = Instance.new("UIListLayout", self.Frame)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
     self.Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    self.Padding = Instance.new("UIPadding", self.Frame)
-    self.Padding.PaddingLeft, self.Padding.PaddingRight = UDim.new(0,7), UDim.new(0,7)
     self:SetState(Open)
 
     return self

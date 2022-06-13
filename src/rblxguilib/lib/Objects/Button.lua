@@ -19,7 +19,6 @@ function Button.new(Textbox, Scale, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,Button)
     self.TextboxTable = nil
-    if not Scale then Scale = 1 end
     -- creating a frame to hold the button
     self.ButtonFrame = Instance.new("Frame", self.Frame)
     self.ButtonFrame.BackgroundTransparency = 1
@@ -36,8 +35,13 @@ function Button.new(Textbox, Scale, Parent)
     self.Textbox.ZIndex = 3
     -- button image
     self.Button = Instance.new("ImageButton", self.ButtonFrame)
-    self.Button.Size = UDim2.new(Scale,0,1,0)
-    self.Button.Position = UDim2.new((1-Scale)/2, 0, 0, 0)
+    if not Scale then
+        self.Button.Size = UDim2.new(0,self.Textbox.TextBounds.X+16, 1, 0)
+    else
+        self.Button.Size = UDim2.new(Scale,0,1,0)
+    end
+    self.Button.Position = UDim2.new(0.5, 0, 0, 0)
+    self.Button.AnchorPoint = Vector2.new(0.5,0)
     self.Button.BackgroundTransparency = 1
     self.Button.Image, self.Button.HoverImage, self.Button.PressedImage = self.Images.default, self.Images.hover, self.Images.pressed
     self.Button.ScaleType = Enum.ScaleType.Slice
@@ -46,8 +50,9 @@ function Button.new(Textbox, Scale, Parent)
     self.Button.ZIndex = 2
     -- dark background for the button
     self.ButtonBackground = Instance.new("ImageLabel", self.ButtonFrame)
-    self.ButtonBackground.Size = UDim2.new(Scale,0,1,0)
-    self.ButtonBackground.Position = UDim2.new((1-Scale)/2, 0, 0, 0)
+    self.ButtonBackground.Size = self.Button.Size
+    self.ButtonBackground.Position = self.Button.Position
+    self.ButtonBackground.AnchorPoint = self.Button.AnchorPoint
     self.ButtonBackground.BackgroundTransparency = 1
     self.ButtonBackground.ImageTransparency = 0.7
     self.ButtonBackground.ScaleType = Enum.ScaleType.Slice

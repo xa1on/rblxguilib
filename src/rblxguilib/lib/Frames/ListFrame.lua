@@ -15,6 +15,7 @@ function ListFrame.new(Name, Height, Parent)
     self.Layout = Instance.new("UIGridLayout", self.Frame)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
     self.Layout.FillDirection = Enum.FillDirection.Vertical
+    self.Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     self.Layout.Changed:Connect(function(p)
         if p == "AbsoluteCellCount" then
             self.Layout.CellSize = UDim2.new(1/self.Layout.AbsoluteCellCount.X,0,1,0)
