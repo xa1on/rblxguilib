@@ -36,7 +36,13 @@ function Button.new(Textbox, Scale, Parent)
     -- button image
     self.Button = Instance.new("ImageButton", self.ButtonFrame)
     if not Scale then
-        self.Button.Size = UDim2.new(0,self.Textbox.TextBounds.X+16, 1, 0)
+        local function sync()
+            self.Button.Size = UDim2.new(0,self.Textbox.TextBounds.X+self.Textbox.TextSize, 1, 0)
+        end
+        self.Textbox.Changed:Connect(function(p)
+            if p == "TextBounds" then sync() end
+        end)
+        sync()
     else
         self.Button.Size = UDim2.new(Scale,0,1,0)
     end

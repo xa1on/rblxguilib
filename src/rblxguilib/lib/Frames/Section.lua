@@ -42,30 +42,37 @@ function Section.new(Name, Text, Open, Parent)
     self.Label = Instance.new("TextButton", self.Collapse)
     self.Label.Text = ""
     self.Label.Name = "Section Label"
-    self.Label.Size = UDim2.new(1,0,0,30)
-    util.ColorSync(self.Label, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
+    self.Label.Size = UDim2.new(2,0,0,25)
     self.Label.BorderSizePixel = 0
+    util.ColorSync(self.Label, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
     self.Label.MouseButton1Click:Connect(function() self:Toggle() end)
 
-    self.LabelPadding = Instance.new("UIPadding", self.Label)
+    self.LabelFrame = Instance.new("Frame", self.Label)
+    self.LabelFrame.AnchorPoint = Vector2.new(0.5,0)
+    self.LabelFrame.Position = UDim2.new(0.5,0,0,0)
+    self.LabelFrame.Size = UDim2.new(0.5,0,0,25)
+    self.LabelFrame.BackgroundTransparency = 1
+
+    self.LabelPadding = Instance.new("UIPadding", self.LabelFrame)
     self.LabelPadding.PaddingBottom, self.LabelPadding.PaddingLeft, self.LabelPadding.PaddingRight, self.LabelPadding.PaddingTop = UDim.new(0,5), UDim.new(0,5), UDim.new(0,5), UDim.new(0,5)
     
-    self.LabelLayout = Instance.new("UIListLayout", self.Label)
+    self.LabelLayout = Instance.new("UIListLayout", self.LabelFrame)
     self.LabelLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self.LabelLayout.FillDirection = Enum.FillDirection.Horizontal
     self.LabelLayout.Padding = UDim.new(0,5)
 
-    self.CollapseImage = Instance.new("ImageLabel", self.Label)
+    self.CollapseImage = Instance.new("ImageLabel", self.LabelFrame)
     self.CollapseImage.BackgroundTransparency = 1
-    self.CollapseImage.Size = UDim2.new(0,20,0,20)
+    self.CollapseImage.Size = UDim2.new(0,15,0,15)
     util.ColorSync(self.CollapseImage, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
 
     if type(Text) == "string" then
-        self.TextboxTable = TextboxMod.new(Text, Enum.Font.SourceSansBold, Enum.TextXAlignment.Left, 16, self.Label)
+        self.TextboxTable = TextboxMod.new(Text, Enum.Font.SourceSansBold, Enum.TextXAlignment.Left, 15, self.LabelFrame)
     else
         self.TextboxTable = Text
-        Text:Move(self.Label)
+        Text:Move(self.LabelFrame)
     end
+    self.Textbox = self.TextboxTable.Textbox
 
     self.Frame = Instance.new("Frame", self.Collapse)
     self.Frame.Size = UDim2.new(1,-15,0,0)

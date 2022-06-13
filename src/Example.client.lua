@@ -51,14 +51,14 @@ buttonsection:SetMain()
 
 -- textbox inside button for custom text
 local fancybuttonlabel = gui.Textbox.new("fancier button", Enum.Font.Arcade)
-local button2 = gui.Button.new(fancybuttonlabel, 1)
+local button2 = gui.Button.new(fancybuttonlabel)
 button2.Object.MouseButton1Click:Connect(function() print("hello") end)
 
 -- using frames to move a button
 local frame1 = gui.ListFrame.new("the first frame")
 local frame2 = gui.ListFrame.new("the second frame")
 
-local button3 = gui.Button.new("press to go down", 3/5, frame1.Frame)
+local button3 = gui.Button.new("press to go down", nil, frame1.Frame)
 local buttonup = true
 button3.Button.MouseButton1Click:Connect(function()
     print("im was in "..button3.Frame.Name.."!")
