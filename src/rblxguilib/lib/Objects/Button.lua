@@ -15,7 +15,28 @@ Button.Images = {
 
 local IgnoreChanges = false
 
-function Button.new(Textbox, Scale, Parent)
+function Button:SetDisabled(State)
+    self.Disabled = State
+    if self.Disabled then
+        self.Button.ImageTransparency, self.ButtonBackground.ImageTransparency, self.Textbox.TextTransparency = 0.5, 0.5, 0.5
+        self.Button.HoverImage, self.Button.PressedImage = self.Images.default, self.Images.default
+    else
+        self.Button.ImageTransparency, self.ButtonBackground.ImageTransparency, self.Textbox.TextTransparency = 0, 0, 0
+        self.Button.HoverImage, self.Button.PressedImage = self.Images.hover, self.Images.pressed
+    end
+end
+
+function Button:ToggleDisable()
+    self:SetDisabled(not self.Disabled)
+end
+
+function Button:Clicked(func)
+    self.Button.MouseButton1Click:Connect(function()
+        if not self.Disabled then func() end
+    end)
+end
+
+function Button.new(Textbox, Scale, Disabled, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,Button)
     self.TextboxTable = nil
@@ -60,12 +81,15 @@ function Button.new(Textbox, Scale, Parent)
     self.ButtonBackground.Position = self.Button.Position
     self.ButtonBackground.AnchorPoint = self.Button.AnchorPoint
     self.ButtonBackground.BackgroundTransparency = 1
-    self.ButtonBackground.ImageTransparency = 0.7
+    self.ButtonBackground.ImageTransparency = 0
     self.ButtonBackground.ScaleType = Enum.ScaleType.Slice
     self.ButtonBackground.SliceCenter = Rect.new(7,7,156,36)
     self.ButtonBackground.Image = self.Images.bg
     self.ButtonBackground.Name = "ButtonBG"
-    util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
+    util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.RibbonButton)
+
+    self:SetDisabled(Disabled)
+
     self.Object = self.Button
     self.Object.Changed:Connect(function(p)
         if p == "Parent" and not IgnoreChanges then
