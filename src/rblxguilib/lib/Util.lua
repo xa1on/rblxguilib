@@ -27,4 +27,32 @@ function m.AppendTable(table,newtable)
     return fulltable
 end
 
+function m.DumpTable(Table, Step)
+    if not Step then Step = 1; end
+    --[[
+    if type(o) == 'table' then
+       local s = '{ '
+       for k,v in pairs(o) do
+          if type(k) ~= 'number' then k = '"'..k..'"' end
+          s = s .. '['..k..'] = ' .. m.DumpTable(v) .. ','
+       end
+       return s .. '} '
+    else
+       return tostring(o)
+    end]]
+    if type(Table) == "table"then
+        local result = "{\n" .. string.rep(":", Step)
+        for i, v in pairs(Table) do
+            if type(i) == "number" then
+                result = result .. m.DumpTable(v, Step+1) .. ","
+            else
+                result = result .. i .." = " .. m.DumpTable(v, Step+1) .. ","
+            end
+        end
+        return result .. "\n".. string.rep(":", Step-1) .. "}"
+    else
+        return tostring(Table)
+    end
+end
+
 return m

@@ -17,7 +17,7 @@ function ListFrame.new(Name, Height, Parent)
     self.Layout.FillDirection = Enum.FillDirection.Vertical
     self.Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     self.Layout.Changed:Connect(function(p)
-        if p == "AbsoluteCellCount" then
+        if p == "AbsoluteCellCount" and self.Layout.AbsoluteCellCount.X > 0 then
             self.Layout.CellSize = UDim2.new(1/self.Layout.AbsoluteCellCount.X,0,1,0)
         end
     end)

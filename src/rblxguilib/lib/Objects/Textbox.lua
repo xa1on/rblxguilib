@@ -20,13 +20,8 @@ function Textbox.new(Text, Font, Alignment, Size, Parent)
     self.Textbox.Text = Text
     util.ColorSync(self.Textbox, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     self.Object = self.Textbox
-    self.Object.Changed:Connect(function(p)
-        if p == "Parent" then
-            task.wait(0)
-            self.Frame = self.Textbox.Parent
-        end
-    end)
     self.Frame = self.Textbox.Parent
+    self.MainMovable = self.Textbox
     return self
 end
 

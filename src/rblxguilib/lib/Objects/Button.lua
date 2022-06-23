@@ -13,8 +13,6 @@ Button.Images = {
     bg = "http://www.roblox.com/asset/?id=9666283489"
 }
 
-local IgnoreChanges = false
-
 function Button:SetDisabled(State)
     self.Disabled = State
     if self.Disabled then
@@ -50,7 +48,7 @@ function Button.new(Textbox, Scale, Disabled, Parent)
         self.TextboxTable = TextboxMod.new(Textbox, nil, nil, nil, self.ButtonFrame)
     else
         self.TextboxTable = Textbox
-        Textbox:Move(self.ButtonFrame)
+        Textbox:Move(self.ButtonFrame, true)
     end
     self.Textbox = self.TextboxTable.Textbox
     self.Textbox.ZIndex = 3
@@ -91,21 +89,8 @@ function Button.new(Textbox, Scale, Disabled, Parent)
     self:SetDisabled(Disabled)
 
     self.Object = self.Button
-    self.Object.Changed:Connect(function(p)
-        if p == "Parent" and not IgnoreChanges then
-            self.Object.Visible = false
-            self.Textbox.Visible = false
-            self.ButtonFrame.Parent = self.Object.Parent
-            IgnoreChanges = true
-            task.wait(0)
-            self.Object.Parent = self.ButtonFrame
-            self.Object.Visible = true
-            self.Textbox.Visible = true
-            IgnoreChanges = false
-            self.Frame = self.ButtonFrame.Parent
-        end
-    end)
     self.Frame = self.ButtonFrame.Parent
+    self.MainMovable = self.ButtonFrame
     return self
 end
 

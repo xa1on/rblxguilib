@@ -37,7 +37,7 @@ local acoolframe = gui.ListFrame.new("cool new frame")
 gui.Textbox.new("welcome to rblxgui!", nil, nil, nil, acoolframe.Frame)
 gui.Textbox.new("WELCOME TO RBLXGUI!", Enum.Font.SourceSansBold, nil, nil, acoolframe.Frame)
 
--- buttons: usage - (text/textbox, scale, frame)
+-- buttons: usage - (text/textbox, scale, disabled, frame)
 local button1 = gui.Button.new("hi")
 button1:Clicked(function() print("hi") end)
 local button2 = gui.Button.new("Hello", 1, nil, button1.Frame)
@@ -65,14 +65,14 @@ local frame2 = gui.ListFrame.new("the second frame")
 local button3 = gui.Button.new("press to go down", nil, nil, frame1.Frame)
 local buttonup = true
 button3:Clicked(function()
-    print("i was in "..button3.Frame.Name.."!")
     if buttonup then
-        button3.Object.Parent = frame2.Frame
+        button3:Move(frame2.Frame)
         button3.Textbox.Text = "press to go up"
     else
-        button3.Object.Parent = frame1.Frame
+        button3:Move(frame1.Frame)
         button3.Textbox.Text = "press to go down"
     end
+    print("im in "..button3.Frame.Name.."!")
     buttonup = not buttonup
 end)
 
@@ -82,8 +82,10 @@ local sectionwithin = gui.Section.new("another section", nil, false, newsection.
 gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
 
--- textinputs - (Label, placeholder)
-gui.TextInput.new("")
+-- inputfields - (Label, placeholder, default, labelscale, disabled, frame)
+gui.InputField.new("Input", "Placeholder", nil, 0.5, nil)
+
+
 
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new("Dump GUI into workspace")

@@ -10,6 +10,7 @@ function temp.new(Parent)
     setmetatable(self,temp)
     self.Object = nil
     self.Frame = nil
+    self.MainMovable = nil
     return self
 end
 
