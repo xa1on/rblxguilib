@@ -9,8 +9,8 @@ function temp.new(Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,temp)
     self.Object = nil
-    self.Frame = nil
     self.MainMovable = nil
+    self.Frame = self.MainMovable.Parent
     return self
 end
 

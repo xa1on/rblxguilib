@@ -83,8 +83,8 @@ gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
 
 -- inputfields - (Label, placeholder, default, labelscale, disabled, frame)
-gui.InputField.new("Input", "Placeholder", nil, 0.5, nil)
-
+gui.InputField.new("Input", "Placeholder", nil, UDim.new(0.3,0), nil)
+gui.InputField.new("another input", "Placeholder")
 
 
 -- dumps the gui into workspace for debugging
