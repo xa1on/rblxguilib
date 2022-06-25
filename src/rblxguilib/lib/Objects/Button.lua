@@ -16,10 +16,10 @@ Button.Images = {
 function Button:SetDisabled(State)
     self.Disabled = State
     if self.Disabled then
-        self.Button.ImageTransparency, self.ButtonBackground.ImageTransparency, self.Textbox.TextTransparency = 0.5, 0.5, 0.5
+        self.Button.ImageTransparency, self.Textbox.TextTransparency = 0.5, 0.5
         self.Button.HoverImage, self.Button.PressedImage = self.Images.default, self.Images.default
     else
-        self.Button.ImageTransparency, self.ButtonBackground.ImageTransparency, self.Textbox.TextTransparency = 0, 0, 0
+        self.Button.ImageTransparency, self.Textbox.TextTransparency = 0, 0
         self.Button.HoverImage, self.Button.PressedImage = self.Images.hover, self.Images.pressed
     end
 end
@@ -34,7 +34,7 @@ function Button:Clicked(func)
     end)
 end
 
-function Button.new(Textbox, Scale, Disabled, Parent)
+function Button.new(Textbox, Size, Disabled, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,Button)
     self.TextboxTable = nil
@@ -54,7 +54,15 @@ function Button.new(Textbox, Scale, Disabled, Parent)
     self.Textbox.ZIndex = 3
     -- button image
     self.Button = Instance.new("ImageButton", self.ButtonFrame)
-    if not Scale then
+    if Size then
+        if type(Size) == "userdata" then
+            self.Button.Size = UDim2.new(Size.Scale,Size.Offset,1,0)
+        elseif type(Size) == "number" then
+            self.Button.Size = UDim2.new(Size,0,1,0)
+        else
+            self.Button.Size = UDim2.new(0.5,0,1,0)
+        end
+    else
         local function sync()
             self.Button.Size = UDim2.new(0,self.Textbox.TextBounds.X+self.Textbox.TextSize, 1, 0)
         end
@@ -62,8 +70,6 @@ function Button.new(Textbox, Scale, Disabled, Parent)
             if p == "TextBounds" then sync() end
         end)
         sync()
-    else
-        self.Button.Size = UDim2.new(Scale,0,1,0)
     end
     self.Button.Position = UDim2.new(0.5, 0, 0, 0)
     self.Button.AnchorPoint = Vector2.new(0.5,0)
@@ -73,18 +79,6 @@ function Button.new(Textbox, Scale, Disabled, Parent)
     self.Button.SliceCenter = Rect.new(7,7,156,36)
     self.Button.Name = "Button"
     self.Button.ZIndex = 2
-    -- dark background for the button
-    self.ButtonBackground = Instance.new("ImageLabel", self.ButtonFrame)
-    self.ButtonBackground.Size = self.Button.Size
-    self.ButtonBackground.Position = self.Button.Position
-    self.ButtonBackground.AnchorPoint = self.Button.AnchorPoint
-    self.ButtonBackground.BackgroundTransparency = 1
-    self.ButtonBackground.ImageTransparency = 0
-    self.ButtonBackground.ScaleType = Enum.ScaleType.Slice
-    self.ButtonBackground.SliceCenter = Rect.new(7,7,156,36)
-    self.ButtonBackground.Image = self.Images.bg
-    self.ButtonBackground.Name = "ButtonBG"
-    util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.RibbonButton)
 
     self:SetDisabled(Disabled)
 

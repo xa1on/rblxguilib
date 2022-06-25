@@ -37,7 +37,7 @@ local acoolframe = gui.ListFrame.new("cool new frame")
 gui.Textbox.new("welcome to rblxgui!", nil, nil, nil, acoolframe.Frame)
 gui.Textbox.new("WELCOME TO RBLXGUI!", Enum.Font.SourceSansBold, nil, nil, acoolframe.Frame)
 
--- buttons: usage - (text/textbox, scale, disabled, frame)
+-- buttons: usage - (text/textbox, size, disabled, frame)
 local button1 = gui.Button.new("hi")
 button1:Clicked(function() print("hi") end)
 local button2 = gui.Button.new("Hello", 1, nil, button1.Frame)
@@ -82,10 +82,12 @@ local sectionwithin = gui.Section.new("another section", nil, false, newsection.
 gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
 
--- inputfields - (Label, placeholder, default, labelscale, disabled, frame)
-gui.InputField.new("Input", "Placeholder", nil, UDim.new(0.3,0), nil)
-gui.InputField.new("another input", "Placeholder")
+-- inputfields - (Label, placeholder, default, labelscale, cleartextonfocus, disabled, frame)
+gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0))
+local inpfield = gui.InputField.new("another input:", "placeholder")
 
+local disablebutton = gui.Button.new("toggle previous inputfield")
+disablebutton:Clicked(function() inpfield:ToggleDisable() end)
 
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new("Dump GUI into workspace")

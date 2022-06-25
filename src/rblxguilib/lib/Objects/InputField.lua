@@ -6,7 +6,27 @@ local TextboxMod = require(script.Parent.Textbox)
 local GUIObject = require(script.Parent.GUIObject)
 setmetatable(InputField,GUIObject)
 
-function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Disabled, Parent)
+function InputField:SetDisabled(State)
+    self.Disabled = State
+    if self.Disabled then
+        self.Textbox.TextTransparency, self.TextInputFrame.BackgroundTransparency, self.Input.TextTransparency = 0.5,0.5,0.5
+    else
+        self.Textbox.TextTransparency, self.TextInputFrame.BackgroundTransparency, self.Input.TextTransparency = 0,0,0
+    end
+    self.Input.TextEditable = not State
+end
+
+function InputField:ToggleDisable()
+    self:SetDisabled(not self.Disabled)
+end
+
+function InputField:Clicked(func)
+    self.Button.MouseButton1Click:Connect(function()
+        if not self.Disabled then func() end
+    end)
+end
+
+function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, ClearText, Disabled, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,InputField)
     self.InputFieldFrame = Instance.new("Frame", self.Frame)
@@ -25,16 +45,18 @@ function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Disabled, 
     end
     self.Textbox = self.TextboxTable.Textbox
     self.TextInputFrame = Instance.new("Frame", self.InputFieldFrame)
-    self.TextInputFrame.BorderSizePixel = 1
     util.ColorSync(self.TextInputFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     util.ColorSync(self.TextInputFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     if LabelSize then
         if type(LabelSize) == "userdata" then
             self.Textbox.Size = UDim2.new(LabelSize.Scale, LabelSize.Offset, 0, 20)
             self.TextInputFrame.Size = UDim2.new(1-LabelSize.Scale, -LabelSize.Offset, 0, 20)
-        else
+        elseif type(LabelSize) == "number" then
             self.Textbox.Size = UDim2.new(LabelSize, 0, 0, 20)
             self.TextInputFrame.Size = UDim2.new(1-LabelSize, 0, 0, 20)
+        else
+            self.Textbox.Size = UDim2.new(0.5, 0, 0, 20)
+            self.TextInputFrame.Size = UDim2.new(0.5, 0, 0, 20)
         end
     else
         local function sync()
@@ -46,7 +68,33 @@ function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Disabled, 
         end)
         sync()
     end
-    self.Input = 
+    self.Input = Instance.new("TextBox", self.TextInputFrame)
+    self.Input.BackgroundTransparency = 1
+    self.Input.Size = UDim2.new(1,-10,1,0)
+    self.Input.Font = Enum.Font.SourceSans
+    if not DefaultText then
+        DefaultText = ""
+    end
+    self.Input.Text = DefaultText
+    self.Input.TextSize = 14
+    if Placeholder then self.Input.PlaceholderText = Placeholder end
+    self.Input.TextXAlignment = Enum.TextXAlignment.Left
+    self.Input.AnchorPoint = Vector2.new(0.5,0)
+    self.Input.Position = UDim2.new(0.5,0,0,0)
+    self.Input.ClearTextOnFocus = ClearText
+    util.ColorSync(self.Input, "TextColor3", Enum.StudioStyleGuideColor.MainText)
+    util.ColorSync(self.Input, "PlaceholderColor3", Enum.StudioStyleGuideColor.DimmedText)
+    self.Input.Focused:Connect(function()
+        if not self.Disabled then
+            util.ColorSync(self.TextInputFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
+        else
+            self.Input:ReleaseFocus()
+        end
+    end)
+    self.Input.FocusLost:Connect(function()
+        util.ColorSync(self.TextInputFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+    end)
+    self:SetDisabled(Disabled)
     self.Object = self.Input
     self.MainMovable = self.InputFieldFrame
     self.Frame = self.MainMovable.Parent

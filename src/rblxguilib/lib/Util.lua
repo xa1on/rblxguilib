@@ -1,9 +1,9 @@
 local m = {}
 
 -- syncs colors with studio theme
-function m.ColorSync(element, property, enum)
+function m.ColorSync(element, property, enum, enum2)
     local function sync()
-        element[property] = settings().Studio.Theme:GetColor(enum)
+        element[property] = settings().Studio.Theme:GetColor(enum, enum2)
     end
     settings().Studio.ThemeChanged:Connect(sync)
 	sync()
