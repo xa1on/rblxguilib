@@ -7,7 +7,7 @@ setmetatable(GUIObject,GUIElement)
 function GUIObject.new(Frame)
     local self = GUIElement.new()
     self.Frame = Frame
-    if not Frame then self.Frame = ListFrame.new().Frame end
+    if not Frame then self.Frame = ListFrame.new().Content end
     setmetatable(self,GUIObject)
     self.Object = nil
     self.MainMovable = nil

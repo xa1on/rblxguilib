@@ -55,4 +55,15 @@ function m.DumpTable(Table, Step)
     end
 end
 
+function m.HoverIcon(element, icon)
+    if not icon then icon = "rbxasset://SystemCursors/PointingHand" end
+    element.MouseMoved:Connect(function()
+        _G.PluginObject:GetMouse().Icon = icon
+    end)
+    element.MouseLeave:Connect(function()
+        task.wait(0)
+        _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+    end)
+end
+
 return m

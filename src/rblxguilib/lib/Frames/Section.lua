@@ -13,7 +13,7 @@ Section.Images = {
 
 function Section:SetState(State)
     self.Open = State
-    self.Frame.Visible = self.Open
+    self.Content.Visible = self.Open
     if self.Open then self.CollapseImage.Image = self.Images.Open else self.CollapseImage.Image = self.Images.Closed end
 end
 
@@ -31,7 +31,7 @@ function Section.new(Name, Text, Open, Parent)
     self.Collapse.BackgroundTransparency = 1
     self.Collapse.Size = UDim2.new(1,0,0,0)
     self.Collapse.AutomaticSize = Enum.AutomaticSize.Y
-    self.Collapse.Name = Name .. " Section"
+    self.Collapse.Name = "Section - "..Name
 
     self.CollapseLayout = Instance.new("UIListLayout", self.Collapse)
     self.CollapseLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -46,6 +46,7 @@ function Section.new(Name, Text, Open, Parent)
     self.Label.BorderSizePixel = 0
     util.ColorSync(self.Label, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
     self.Label.MouseButton1Click:Connect(function() self:Toggle() end)
+    util.HoverIcon(self.Label, "rbxasset://SystemCursors/PointingHand")
 
     self.LabelFrame = Instance.new("Frame", self.Label)
     self.LabelFrame.AnchorPoint = Vector2.new(0.5,0)
@@ -74,11 +75,12 @@ function Section.new(Name, Text, Open, Parent)
     end
     self.Textbox = self.TextboxTable.Textbox
 
-    self.Frame = Instance.new("Frame", self.Collapse)
-    self.Frame.Size = UDim2.new(1,-15,0,0)
-    self.Frame.BackgroundTransparency = 1
-    self.Frame.Visible = self.Open
-    self.Layout = Instance.new("UIListLayout", self.Frame)
+    self.Content = Instance.new("Frame", self.Collapse)
+    self.Content.Size = UDim2.new(1,-15,0,0)
+    self.Content.BackgroundTransparency = 1
+    self.Content.Visible = self.Open
+    self.Content.Name = "Contents"
+    self.Layout = Instance.new("UIListLayout", self.Content)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
     self.Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     self:SetState(Open)

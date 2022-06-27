@@ -16,9 +16,11 @@ Button.Images = {
 function Button:SetDisabled(State)
     self.Disabled = State
     if self.Disabled then
+        self.CursorIcon = "rbxasset://SystemCursors/Forbidden"
         self.Button.ImageTransparency, self.Textbox.TextTransparency = 0.5, 0.5
         self.Button.HoverImage, self.Button.PressedImage = self.Images.default, self.Images.default
     else
+        self.CursorIcon = "rbxasset://SystemCursors/PointingHand"
         self.Button.ImageTransparency, self.Textbox.TextTransparency = 0, 0
         self.Button.HoverImage, self.Button.PressedImage = self.Images.hover, self.Images.pressed
     end
@@ -81,6 +83,14 @@ function Button.new(Textbox, Size, Disabled, Parent)
     self.Button.ZIndex = 0
 
     self:SetDisabled(Disabled)
+    self.Button.MouseMoved:Connect(function()
+        _G.PluginObject:GetMouse().Icon = self.CursorIcon
+    end)
+    self.Button.MouseLeave:Connect(function()
+        task.wait(0)
+        _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+    end)
+
 
     self.Object = self.Button
     self.Frame = self.ButtonFrame.Parent

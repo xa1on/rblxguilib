@@ -8,14 +8,14 @@ _G.MainGUI = nil
 function GUIFrame.new(Parent)
     local self = GUIElement.new()
     setmetatable(self,GUIFrame)
-    self.Frame = nil
+    self.Content = nil
     self.Parent = Parent
     if not Parent then self.Parent = _G.MainGUI end
     return self
 end
 
 function GUIFrame:SetMain()
-    _G.MainGUI = self.Frame
+    _G.MainGUI = self.Content
 end
 
 return GUIFrame

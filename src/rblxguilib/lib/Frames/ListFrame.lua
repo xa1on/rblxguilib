@@ -2,17 +2,20 @@ local ListFrame = {}
 ListFrame.__index = ListFrame
 local GUIFrame = require(script.Parent.GUIFrame)
 setmetatable(ListFrame,GUIFrame)
+local Count = 0
 
 function ListFrame.new(Name, Height, Parent)
     local self = GUIFrame.new(Parent)
     setmetatable(self,ListFrame)
+    Count = Count + 1;
     if not Height then Height = 28 end
-    self.Frame = Instance.new("Frame", self.Parent)
-    self.Frame.BackgroundTransparency = 1
-    self.Frame.Size = UDim2.new(1,0,0,Height)
-    if Name then self.Frame.Name = Name end
+    self.Content = Instance.new("Frame", self.Parent)
+    self.Content.BackgroundTransparency = 1
+    self.Content.Size = UDim2.new(1,0,0,Height)
+    self.Content.Name = Count
+    if Name then self.Content.Name = self.Content.Name .. ": " .. Name end
     -- layout (used for stacking multiple elements in one row)
-    self.Layout = Instance.new("UIGridLayout", self.Frame)
+    self.Layout = Instance.new("UIGridLayout", self.Content)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
     self.Layout.FillDirection = Enum.FillDirection.Vertical
     self.Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -22,7 +25,7 @@ function ListFrame.new(Name, Height, Parent)
         end
     end)
     -- self.Padding for elements in frame
-    self.Padding = Instance.new("UIPadding", self.Frame)
+    self.Padding = Instance.new("UIPadding", self.Content)
     self.Padding.PaddingBottom, self.Padding.PaddingLeft, self.Padding.PaddingRight, self.Padding.PaddingTop = UDim.new(0,2), UDim.new(0,2), UDim.new(0,2), UDim.new(0,2)
     return self
 end

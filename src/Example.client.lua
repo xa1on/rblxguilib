@@ -5,8 +5,7 @@
         Instance Selector
         Toggle Checkboxes
         Sliders
-        Dropdown
-        Keybinds
+        /Keybinds
 ]]--
 
 
@@ -33,8 +32,8 @@ gui.Textbox.new("Welcome to rblxgui!", Enum.Font.SourceSansBold, Enum.TextXAlign
 
 -- listframe(contains stuff): usage - (name, height, parent)
 local acoolframe = gui.ListFrame.new("cool new frame")
-gui.Textbox.new("welcome to rblxgui!", nil, nil, nil, acoolframe.Frame)
-gui.Textbox.new("WELCOME TO RBLXGUI!", Enum.Font.SourceSansBold, nil, nil, acoolframe.Frame)
+gui.Textbox.new("welcome to rblxgui!", nil, nil, nil, acoolframe.Content)
+gui.Textbox.new("WELCOME TO RBLXGUI!", Enum.Font.SourceSansBold, nil, nil, acoolframe.Content)
 
 -- buttons: usage - (text/textbox, size, disabled, frame)
 local button1 = gui.Button.new("hi")
@@ -61,14 +60,14 @@ button2.Object.MouseButton1Click:Connect(function() print("fancy") end)
 local frame1 = gui.ListFrame.new("the first frame")
 local frame2 = gui.ListFrame.new("the second frame")
 
-local button3 = gui.Button.new("press to go down", nil, nil, frame1.Frame)
+local button3 = gui.Button.new("press to go down", nil, nil, frame1.Content)
 local buttonup = true
 button3:Clicked(function()
     if buttonup then
-        button3:Move(frame2.Frame)
+        button3:Move(frame2.Content)
         button3.Textbox.Text = "press to go up"
     else
-        button3:Move(frame1.Frame)
+        button3:Move(frame1.Content)
         button3.Textbox.Text = "press to go down"
     end
     print("im in "..button3.Frame.Name.."!")
@@ -77,18 +76,18 @@ end)
 
 mainframe:SetMain()
 local newsection = gui.Section.new("section with a section inside it")
-local sectionwithin = gui.Section.new("another section", nil, false, newsection.Frame)
-gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
-gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
+local sectionwithin = gui.Section.new("another section", nil, false, newsection.Content)
+gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
+gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 
 -- inputfields - (Label, placeholder, default, labelscale, dropdownitems, cleartextonfocus, disabled, frame)
 gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0), {"bob","Steve"})
 local inpfield = gui.InputField.new("another input:", "placeholder")
-inpfield:AddItems({"1", "2", "remove"})
+inpfield:AddItems({"1", "2", "remove", "1000"})
 inpfield:RemoveItem("remove")
 
-inpfield:Changed(function()
-    print(inpfield.Input.Text)
+inpfield:Changed(function(text)
+    print(text)
 end)
 
 local disablebutton = gui.Button.new("toggle previous inputfield")

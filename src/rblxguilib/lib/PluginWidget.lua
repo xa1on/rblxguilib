@@ -15,10 +15,12 @@ function Widget.new(name, title)
     self.WidgetObject = plugin:CreateDockWidgetPluginGui(self.Name, self.Info)
     self.WidgetObject.Title = title
     self.BackgroundFrame = BackgroundFrame.new(self.WidgetObject)
-    _G.InputFrame = Instance.new("Frame", self.WidgetObject)
-    _G.InputFrame.Size = UDim2.new(1,0,1,0)
-    _G.InputFrame.ZIndex = 100
-    _G.InputFrame.BackgroundTransparency = 1
+    self.InputFrame = Instance.new("Frame", self.WidgetObject)
+    self.InputFrame.Size = UDim2.new(1,0,1,0)
+    self.InputFrame.ZIndex = 100
+    self.InputFrame.BackgroundTransparency = 1
+    self.InputFrame.Name = "InputFrame"
+    _G.InputFrame = self.InputFrame
     return self
 end
 

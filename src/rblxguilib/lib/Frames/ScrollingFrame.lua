@@ -13,8 +13,8 @@ ScrollingFrame.Images = {
 
 -- updaing the scrolling frame to fit window size based on element size
 function ScrollingFrame:UpdateFrameSize()
-    local ScrollbarVisibility = self.Frame.AbsoluteWindowSize.Y < self.Frame.AbsoluteCanvasSize.Y
-    self.Frame.CanvasSize = UDim2.new(0,0,0,self.Layout.AbsoluteContentSize.Y)
+    local ScrollbarVisibility = self.Content.AbsoluteWindowSize.Y < self.Content.AbsoluteCanvasSize.Y
+    self.Content.CanvasSize = UDim2.new(0,0,0,self.Layout.AbsoluteContentSize.Y)
     self.ScrollbarBackground.Visible = ScrollbarVisibility
 end
 
@@ -29,20 +29,20 @@ function ScrollingFrame.new(Parent)
     util.ColorSync(self.ScrollbarBackground, "BackgroundColor3", Enum.StudioStyleGuideColor.ScrollBarBackground)
 
     -- scrolling frame
-    self.Frame = Instance.new("ScrollingFrame", self.Parent)
-    self.Frame.BackgroundTransparency = 1
-    self.Frame.Size = UDim2.new(1,0,1,0)
-    self.Frame.ScrollBarThickness = 15
-    self.Frame.BottomImage, self.Frame.MidImage, self.Frame.TopImage = self.Images.bottom, self.Images.mid, self.Images.top
-    self.Frame.ScrollingDirection = Enum.ScrollingDirection.Y
-    self.Frame.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
-    self.Frame.Name = "ScrollingFrame"
-    self.Frame.ZIndex = 2
-    util.ColorSync(self.Frame, "ScrollBarImageColor3", Enum.StudioStyleGuideColor.ScrollBar)
-    util.ColorSync(self.Frame, "BorderColor3", Enum.StudioStyleGuideColor.Border)
+    self.Content = Instance.new("ScrollingFrame", self.Parent)
+    self.Content.BackgroundTransparency = 1
+    self.Content.Size = UDim2.new(1,0,1,0)
+    self.Content.ScrollBarThickness = 15
+    self.Content.BottomImage, self.Content.MidImage, self.Content.TopImage = self.Images.bottom, self.Images.mid, self.Images.top
+    self.Content.ScrollingDirection = Enum.ScrollingDirection.Y
+    self.Content.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+    self.Content.Name = "ScrollingFrame"
+    self.Content.ZIndex = 2
+    util.ColorSync(self.Content, "ScrollBarImageColor3", Enum.StudioStyleGuideColor.ScrollBar)
+    util.ColorSync(self.Content, "BorderColor3", Enum.StudioStyleGuideColor.Border)
 
     -- list layout for later elements
-    self.Layout = Instance.new("UIListLayout", self.Frame)
+    self.Layout = Instance.new("UIListLayout", self.Content)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
     self.Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
