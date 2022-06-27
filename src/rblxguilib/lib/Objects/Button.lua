@@ -51,7 +51,7 @@ function Button.new(Textbox, Size, Disabled, Parent)
         Textbox:Move(self.ButtonFrame, true)
     end
     self.Textbox = self.TextboxTable.Textbox
-    self.Textbox.ZIndex = 3
+    self.Textbox.ZIndex = 1
     -- button image
     self.Button = Instance.new("ImageButton", self.ButtonFrame)
     if Size then
@@ -78,7 +78,7 @@ function Button.new(Textbox, Size, Disabled, Parent)
     self.Button.ScaleType = Enum.ScaleType.Slice
     self.Button.SliceCenter = Rect.new(7,7,156,36)
     self.Button.Name = "Button"
-    self.Button.ZIndex = 2
+    self.Button.ZIndex = 0
 
     self:SetDisabled(Disabled)
 

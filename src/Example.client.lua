@@ -2,7 +2,6 @@
     [RBLXGUILib]
     something#7597
     todo:
-        Text Inputs
         Instance Selector
         Toggle Checkboxes
         Sliders
@@ -82,9 +81,15 @@ local sectionwithin = gui.Section.new("another section", nil, false, newsection.
 gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Frame).Frame)
 
--- inputfields - (Label, placeholder, default, labelscale, cleartextonfocus, disabled, frame)
-gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0))
+-- inputfields - (Label, placeholder, default, labelscale, dropdownitems, cleartextonfocus, disabled, frame)
+gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0), {"bob","Steve"})
 local inpfield = gui.InputField.new("another input:", "placeholder")
+inpfield:AddItems({"1", "2", "remove"})
+inpfield:RemoveItem("remove")
+
+inpfield:Changed(function()
+    print(inpfield.Input.Text)
+end)
 
 local disablebutton = gui.Button.new("toggle previous inputfield")
 disablebutton:Clicked(function() inpfield:ToggleDisable() end)
@@ -95,3 +100,4 @@ dumpbutton:Clicked(function()
     print("Dumping GUI")
     gui.Util.DumpGUI(widget)
 end)
+
