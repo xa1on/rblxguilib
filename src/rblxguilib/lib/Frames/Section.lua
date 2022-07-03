@@ -53,27 +53,35 @@ function Section.new(Name, Text, Open, Parent)
     self.LabelFrame.Position = UDim2.new(0.5,0,0,0)
     self.LabelFrame.Size = UDim2.new(0.5,0,0,25)
     self.LabelFrame.BackgroundTransparency = 1
-
-    self.LabelPadding = Instance.new("UIPadding", self.LabelFrame)
-    self.LabelPadding.PaddingBottom, self.LabelPadding.PaddingLeft, self.LabelPadding.PaddingRight, self.LabelPadding.PaddingTop = UDim.new(0,5), UDim.new(0,5), UDim.new(0,5), UDim.new(0,5)
     
     self.LabelLayout = Instance.new("UIListLayout", self.LabelFrame)
     self.LabelLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self.LabelLayout.FillDirection = Enum.FillDirection.Horizontal
-    self.LabelLayout.Padding = UDim.new(0,5)
 
-    self.CollapseImage = Instance.new("ImageLabel", self.LabelFrame)
+    self.CollapseImageFrame = Instance.new("Frame", self.LabelFrame)
+    self.CollapseImageFrame.Size = UDim2.new(0,25,0,25)
+    self.CollapseImageFrame.BackgroundTransparency = 1
+
+    self.CollapseTextboxFrame = Instance.new("Frame", self.LabelFrame)
+    self.CollapseTextboxFrame.Size = UDim2.new(1,-25,0,25)
+    self.CollapseTextboxFrame.BackgroundTransparency = 1
+
+    self.CollapseImage = Instance.new("ImageLabel", self.CollapseImageFrame)
     self.CollapseImage.BackgroundTransparency = 1
+    self.CollapseImage.AnchorPoint = Vector2.new(0.5,0.5)
+    self.CollapseImage.Position = UDim2.new(0.5,0,0.5,0)
     self.CollapseImage.Size = UDim2.new(0,15,0,15)
     util.ColorSync(self.CollapseImage, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
 
     if type(Text) == "string" then
-        self.TextboxTable = TextboxMod.new(Text, Enum.Font.SourceSansBold, Enum.TextXAlignment.Left, 15, self.LabelFrame)
+        self.TextboxTable = TextboxMod.new(Text, Enum.Font.SourceSansBold, Enum.TextXAlignment.Left, 15, self.CollapseTextboxFrame)
     else
         self.TextboxTable = Text
-        Text:Move(self.LabelFrame)
+        Text:Move(self.CollapseTextboxFrame)
     end
     self.Textbox = self.TextboxTable.Textbox
+    self.Textbox.AnchorPoint = Vector2.new(0,0.5)
+    self.Textbox.Position = UDim2.new(0,0,0.5,0)
 
     self.Content = Instance.new("Frame", self.Collapse)
     self.Content.Size = UDim2.new(1,-15,0,0)

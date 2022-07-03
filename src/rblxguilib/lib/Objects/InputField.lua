@@ -41,9 +41,19 @@ function InputField:SetDropdown(State)
     end
 end
 
+function InputField:RecallItem(Name)
+    if self.ItemTable[Name] then return self.ItemTable[Name]
+    else return Name end
+end
+
 function InputField:AddItem(Item)
+    local ItemName = Item
+    if type(Item) == "table" then
+        ItemName = Item[1]
+        self.ItemsTable[Item[1]] = Item[2]
+    end
     local ItemButton = Instance.new("TextButton", self.DropdownFrame)
-    ItemButton.Name = Item
+    ItemButton.Name = ItemName
     ItemButton.Size = UDim2.new(1,0,0,18)
     ItemButton.BorderSizePixel = 0
     util.ColorSync(ItemButton, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
@@ -53,7 +63,7 @@ function InputField:AddItem(Item)
     util.ColorSync(ItemLabel, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     ItemLabel.Font = Enum.Font.SourceSans
     ItemLabel.TextSize = 14
-    ItemLabel.Text = Item
+    ItemLabel.Text = ItemName
     ItemLabel.AnchorPoint = Vector2.new(0.5,0.5)
     ItemLabel.Position = UDim2.new(0.5,0,0.5,0)
     ItemLabel.Size = UDim2.new(1,-8,0,14)
@@ -63,7 +73,7 @@ function InputField:AddItem(Item)
     util.HoverIcon(ItemButton)
     ItemButton.MouseButton1Click:Connect(function()
         self:SetDropdown(false)
-        self.Input.Text = Item
+        self.Input.Text = ItemName
     end)
 end
 
@@ -75,7 +85,10 @@ end
 
 function InputField:RemoveItem(Item)
     local Target = self.DropdownFrame:FindFirstChild(Item)
-    if Target then Target:Destroy() end
+    if Target then
+        Target:Destroy()
+        if self.ItemTable[Item] then self.ItemTable[Item] = nil end
+    end
 end
 
 function InputField:RemoveItems(Items)
@@ -86,13 +99,14 @@ end
 
 function InputField:Changed(func)
     self.Input.Changed:Connect(function(p)
-        if p =="Text" then func(self.Input.Text) end
+        if p =="Text" then func(InputField:RecallItem(self.Input.Text)) end
     end)
 end
 
 function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Items, ClearText, Disabled, Parent)
     local self = LabeledObject.new(Textbox, LabelSize, Parent)
     setmetatable(self,InputField)
+    self.ItemsTable = {}
     util.ColorSync(self.SecondaryFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     self.Input = Instance.new("TextBox", self.SecondaryFrame)
