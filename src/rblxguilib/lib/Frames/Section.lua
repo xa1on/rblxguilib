@@ -24,7 +24,7 @@ end
 function Section.new(Name, Text, Open, Parent)
     local self = GUIFrame.new(Parent)
     setmetatable(self, Section)
-    if not Text then Text = Name end
+    Text = Text or Name
     self.Open = Open
 
     self.Collapse = Instance.new("Frame", self.Parent)

@@ -8,9 +8,9 @@ setmetatable(Textbox,GUIObject)
 function Textbox.new(Text, Font, Alignment, Size, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,Textbox)
-    if not Alignment then Alignment = Enum.TextXAlignment.Center end
-    if not Font then Font = Enum.Font.SourceSans end
-    if not Size then Size = 15 end
+    Alignment = Alignment or Enum.TextXAlignment.Center
+    Font = Font or Enum.Font.SourceSans
+    Size = Size or 15
     self.Textbox = Instance.new("TextLabel", self.Frame)
     self.Textbox.BackgroundTransparency = 1
     self.Textbox.Size = UDim2.new(1,0,1,0)

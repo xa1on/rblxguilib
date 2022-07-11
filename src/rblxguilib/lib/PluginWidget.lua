@@ -11,7 +11,7 @@ function Widget.new(name, title)
     local self = {}
     setmetatable(self, Widget)
     self.Name = name
-    if not title then title = self.Name end
+    title = title or self.Name
     self.WidgetObject = plugin:CreateDockWidgetPluginGui(self.Name, self.Info)
     self.WidgetObject.Title = title
     self.BackgroundFrame = BackgroundFrame.new(self.WidgetObject)

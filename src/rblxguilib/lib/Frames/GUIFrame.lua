@@ -9,8 +9,8 @@ function GUIFrame.new(Parent)
     local self = GUIElement.new()
     setmetatable(self,GUIFrame)
     self.Content = nil
+    Parent = Parent or _G.MainGUI
     self.Parent = Parent
-    if not Parent then self.Parent = _G.MainGUI end
     return self
 end
 

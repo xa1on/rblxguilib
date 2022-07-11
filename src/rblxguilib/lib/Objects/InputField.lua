@@ -2,7 +2,6 @@ local InputField = {}
 InputField.__index = InputField
 
 local util = require(script.Parent.Parent.Util)
-local TextboxMod = require(script.Parent.Textbox)
 local LabeledObject = require(script.Parent.LabeledObject)
 setmetatable(InputField,LabeledObject)
 
@@ -18,7 +17,9 @@ function InputField:SetDisabled(State)
     else
         self.Textbox.TextTransparency, self.SecondaryFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0,0,0,0
     end
-    self.Input.TextEditable = not State
+    if self.TextEditable then
+        self.Input.TextEditable = not State
+    end
 end
 
 function InputField:ToggleDisable()
@@ -46,14 +47,23 @@ function InputField:RecallItem(Name)
     else return Name end
 end
 
-function InputField:AddItem(Item)
-    local ItemName = Item
+function InputField:StoreItem(Item)
     if type(Item) == "table" then
-        ItemName = Item[1]
-        self.ItemsTable[Item[1]] = Item[2]
+        self.ItemTable[Item[1]] = Item[2]
+        return Item
+    else if type(Item) == "userdata" then
+        self.ItemTable[Item.Name] = {Item}
+        return {Item.Name, {Item}}
+    else
+        return {Item, Item}
     end
+    end
+end
+
+function InputField:AddItem(Item)
+    local StoredItem = self:StoreItem(Item)
     local ItemButton = Instance.new("TextButton", self.DropdownFrame)
-    ItemButton.Name = ItemName
+    ItemButton.Name = StoredItem[1]
     ItemButton.Size = UDim2.new(1,0,0,18)
     ItemButton.BorderSizePixel = 0
     util.ColorSync(ItemButton, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
@@ -63,7 +73,7 @@ function InputField:AddItem(Item)
     util.ColorSync(ItemLabel, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     ItemLabel.Font = Enum.Font.SourceSans
     ItemLabel.TextSize = 14
-    ItemLabel.Text = ItemName
+    ItemLabel.Text = StoredItem[1]
     ItemLabel.AnchorPoint = Vector2.new(0.5,0.5)
     ItemLabel.Position = UDim2.new(0.5,0,0.5,0)
     ItemLabel.Size = UDim2.new(1,-8,0,14)
@@ -73,14 +83,12 @@ function InputField:AddItem(Item)
     util.HoverIcon(ItemButton)
     ItemButton.MouseButton1Click:Connect(function()
         self:SetDropdown(false)
-        self.Input.Text = ItemName
+        self.Input.Text = StoredItem[1]
     end)
 end
 
 function InputField:AddItems(Items)
-    for _, v in pairs(Items) do
-        self:AddItem(v)
-    end
+    for _, v in pairs(Items) do self:AddItem(v) end
 end
 
 function InputField:RemoveItem(Item)
@@ -92,31 +100,29 @@ function InputField:RemoveItem(Item)
 end
 
 function InputField:RemoveItems(Items)
-    for _, v in pairs(Items) do
-        self:RemoveItem(v)
-    end
+    for _, v in pairs(Items) do self:RemoveItem(v) end
 end
 
 function InputField:Changed(func)
     self.Input.Changed:Connect(function(p)
-        if p =="Text" then func(InputField:RecallItem(self.Input.Text)) end
+        if p =="Text" then func(self:RecallItem(self.Input.Text)) end
     end)
 end
 
-function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Items, ClearText, Disabled, Parent)
+function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, ClearText, Disabled, Parent)
     local self = LabeledObject.new(Textbox, LabelSize, Parent)
     setmetatable(self,InputField)
-    self.ItemsTable = {}
+    self.ItemTable = {}
     util.ColorSync(self.SecondaryFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     self.Input = Instance.new("TextBox", self.SecondaryFrame)
+    self.Input.TextTruncate = Enum.TextTruncate.AtEnd
     self.Input.BackgroundTransparency = 1
     self.Input.Size = UDim2.new(1,-30,1,0)
     self.Input.Font = Enum.Font.SourceSans
-    if not DefaultText then
-        DefaultText = ""
-    end
-    self.Input.Text = DefaultText
+    DefaultValue = DefaultValue or ""
+    local StoredValue = self:StoreItem(DefaultValue)
+    self.Input.Text = StoredValue[1]
     self.Input.TextSize = 14
     if Placeholder then self.Input.PlaceholderText = Placeholder end
     self.Input.TextXAlignment = Enum.TextXAlignment.Left
@@ -125,7 +131,9 @@ function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Items, Cle
     self.Input.Name = "Input"
     util.ColorSync(self.Input, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     util.ColorSync(self.Input, "PlaceholderColor3", Enum.StudioStyleGuideColor.DimmedText)
+    self.MouseInInput = false
     self.SecondaryFrame.MouseMoved:Connect(function()
+        self.MouseInInput = true
         if not self.Disabled and not self.Input:IsFocused() then
             util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Hover)
         else
@@ -133,6 +141,7 @@ function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Items, Cle
         end
     end)
     self.SecondaryFrame.MouseLeave:Connect(function()
+        self.MouseInInput = false
         if not self.Disabled and not self.Input:IsFocused() then
             util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         end
@@ -158,9 +167,9 @@ function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Items, Cle
     self.DropdownButton.Name = "DropdownButton"
     util.HoverIcon(self.DropdownButton)
     self.DropdownButton.MouseButton1Click:Connect(function() if not self.Disabled then self:ToggleDropdown() end end)
-    local MouseInsideButton = false
-    self.DropdownButton.MouseEnter:Connect(function() MouseInsideButton = true end)
-    self.DropdownButton.MouseLeave:Connect(function() MouseInsideButton = false end)
+    self.MouseInDropdownButton = false
+    self.DropdownButton.MouseEnter:Connect(function() self.MouseInDropdownButton = true end)
+    self.DropdownButton.MouseLeave:Connect(function() self.MouseInDropdownButton = false end)
     self.DropdownImage = Instance.new("ImageLabel", self.DropdownButton)
     self.DropdownImage.AnchorPoint = Vector2.new(0.5,0.5)
     self.DropdownImage.BackgroundTransparency = 1
@@ -174,9 +183,9 @@ function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Items, Cle
     util.ColorSync(self.DropdownFrame, "BorderColor3", Enum.StudioStyleGuideColor.Border)
     self.DropdownFrame.Visible = false
     self.DropdownFrame.Name = "DropdownFrame"
-    local MouseInsideDropdown = false
-    self.DropdownFrame.MouseEnter:Connect(function() MouseInsideDropdown = true end)
-    self.DropdownFrame.MouseLeave:Connect(function() MouseInsideDropdown = false end)
+    self.MouseInDropdownMenu = false
+    self.DropdownFrame.MouseEnter:Connect(function() self.MouseInDropdownMenu = true end)
+    self.DropdownFrame.MouseLeave:Connect(function() self.MouseInDropdownMenu = false end)
     self.DropdownLayout = Instance.new("UIListLayout", self.DropdownFrame)
     self.DropdownLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self:SetDropdown(false)
@@ -189,8 +198,11 @@ function InputField.new(Textbox, Placeholder, DefaultText, LabelSize, Items, Cle
     syncframe()
     _G.InputFrame.InputBegan:Connect(function(p)
         task.wait(0)
-        if self.DropdownOpen and p.UserInputType == Enum.UserInputType.MouseButton1 and not MouseInsideDropdown and not MouseInsideButton then
+        if self.DropdownOpen and p.UserInputType == Enum.UserInputType.MouseButton1 and not self.MouseInDropdownMenu and not self.MouseInDropdownButton then
             self:SetDropdown(false)
+        end
+        if p.UserInputType == Enum.UserInputType.MouseButton2 and self.MouseInInput then
+            self.Input.Text = ""
         end
     end)
     if Items then self:AddItems(Items) end

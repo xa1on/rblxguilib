@@ -66,7 +66,7 @@ function Button.new(Textbox, Size, Disabled, Parent)
         end
     else
         local function sync()
-            self.Button.Size = UDim2.new(0,self.Textbox.TextBounds.X+self.Textbox.TextSize, 1, 0)
+            self.Button.Size = UDim2.new(0,self.Textbox.TextBounds.X+2*self.Textbox.TextSize, 1, 0)
         end
         self.Textbox.Changed:Connect(function(p)
             if p == "TextBounds" then sync() end

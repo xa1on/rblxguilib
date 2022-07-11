@@ -28,7 +28,7 @@ function m.AppendTable(table,newtable)
 end
 
 function m.DumpTable(Table, Step)
-    if not Step then Step = 1; end
+    Step = Step or 1
     --[[
     if type(o) == 'table' then
        local s = '{ '
@@ -56,7 +56,7 @@ function m.DumpTable(Table, Step)
 end
 
 function m.HoverIcon(element, icon)
-    if not icon then icon = "rbxasset://SystemCursors/PointingHand" end
+    icon = icon or "rbxasset://SystemCursors/PointingHand"
     element.MouseMoved:Connect(function()
         _G.PluginObject:GetMouse().Icon = icon
     end)

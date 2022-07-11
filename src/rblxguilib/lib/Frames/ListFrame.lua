@@ -8,7 +8,7 @@ function ListFrame.new(Name, Height, Parent)
     local self = GUIFrame.new(Parent)
     setmetatable(self,ListFrame)
     Count = Count + 1;
-    if not Height then Height = 28 end
+    Height = Height or 28
     self.Content = Instance.new("Frame", self.Parent)
     self.Content.BackgroundTransparency = 1
     self.Content.Size = UDim2.new(1,0,0,Height)

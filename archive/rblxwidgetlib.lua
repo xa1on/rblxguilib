@@ -102,7 +102,7 @@ end
 function m.initWidget(p, n, title)
     plugin = p
     m.name = n
-    if not title then title = m.name end
+    title = title or m.name
     local WidgetInfo = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, false, false, 200, 200, 150, 150)
     m.widget = plugin:CreateDockWidgetPluginGui(m.name, WidgetInfo)
     m.widget.Title = title
@@ -112,8 +112,8 @@ end
 
 -- creating a frame for elements
 function m.NewFrame(height, parent)
-    if not parent then parent = m.scrollframe end
-    if not height then height = 28 end
+    parent = parent or m.scrollframe
+    height = height or 28
     local newFrame = Instance.new("Frame", parent)
     newFrame.BackgroundTransparency = 1
     newFrame.Size = UDim2.new(1,0,0,height)
@@ -137,12 +137,12 @@ end
 
 -- creating textboxes
 function m.NewTextbox(text, font, alignment, parent)
-    if not alignment then alignment = Enum.TextXAlignment.Center end
+    alignment = alignment or Enum.TextXAlignment.Center
     if not parent then
         parent = m.NewFrame()
         parent.Name = "TextFrame"
     end
-    if not font then font = Enum.Font.SourceSans end
+    font = font or Enum.Font.SourceSans
     local newTextbox = Instance.new("TextLabel", parent)
     newTextbox.BackgroundTransparency = 1
     newTextbox.Size = UDim2fill
@@ -158,8 +158,8 @@ end
 
 function m.NewButton(textbox, scale, parent)
     local text
-    if not parent then parent = m.NewFrame() end
-    if not scale then scale = 1 end
+    parent = parent or m.NewFrame()
+    scale = scale or 1
 
     -- creating a frame to hold the button
     local buttonFrame = Instance.new("Frame", parent)

@@ -1,11 +1,12 @@
+local Workspace = game:GetService("Workspace")
 --[[
     [RBLXGUILib]
     something#7597
     todo:
         Instance Selector
-        Toggle Checkboxes
+        Keybinds
+        Checkbox
         Sliders
-        /Keybinds
 ]]--
 
 
@@ -81,9 +82,9 @@ gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 
 -- inputfields - (Label, placeholder, default, labelscale, dropdownitems, cleartextonfocus, disabled, frame)
-gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0), {"bob","Steve"})
+gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0), {{"bob","Bob"},"Steve"})
 local inpfield = gui.InputField.new("another input:", "placeholder")
-inpfield:AddItems({"1", "2", "remove", "1000"})
+inpfield:AddItems({"1", "2", "remove", {"1 thousand",1000}})
 inpfield:RemoveItem("remove")
 
 inpfield:Changed(function(text)
@@ -92,6 +93,16 @@ end)
 
 local disablebutton = gui.Button.new("toggle previous inputfield")
 disablebutton:Clicked(function() inpfield:ToggleDisable() end)
+
+-- instanceinputfield - (label, placeholder, default, labelsize, items, disabled, frame)
+instanceinpfield = gui.InstanceInputField.new("an instance")
+instanceinpfield:Changed(function(result)
+    if not result then print(nil) return end
+    for _, v in pairs(result) do
+        print(v:GetFullName())
+    end
+end)
+
 
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new("Dump GUI into workspace")
