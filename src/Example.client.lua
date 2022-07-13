@@ -3,7 +3,6 @@ local Workspace = game:GetService("Workspace")
     [RBLXGUILib]
     something#7597
     todo:
-        Instance Selector
         Keybinds
         Checkbox
         Sliders
@@ -81,8 +80,8 @@ local sectionwithin = gui.Section.new("another section", nil, false, newsection.
 gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 
--- inputfields - (Label, placeholder, default, labelscale, dropdownitems, cleartextonfocus, disabled, frame)
-gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0), {{"bob","Bob"},"Steve"})
+-- inputfields - (Label, placeholder, default, labelscale, dropdownitems, DisableEditing, cleartextonfocus, disabled, frame)
+gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0), {{"bob","Bob"},"Steve"}, true)
 local inpfield = gui.InputField.new("another input:", "placeholder")
 inpfield:AddItems({"1", "2", "remove", {"1 thousand",1000}})
 inpfield:RemoveItem("remove")
@@ -91,17 +90,18 @@ inpfield:Changed(function(text)
     print(text)
 end)
 
-local disablebutton = gui.Button.new("toggle previous inputfield")
+local disablebutton = gui.Button.new("toggle previous")
 disablebutton:Clicked(function() inpfield:ToggleDisable() end)
 
--- instanceinputfield - (label, placeholder, default, labelsize, items, disabled, frame)
-instanceinpfield = gui.InstanceInputField.new("an instance")
+-- instanceinputfield - (label, placeholder, defaultname, defaultvalue, labelsize, items, disabled, frame)
+instanceinpfield = gui.InstanceInputField.new("an instance", nil, nil, nil, {{workspace.Hank}, {workspace.walter}})
 instanceinpfield:Changed(function(result)
-    if not result then print(nil) return end
     for _, v in pairs(result) do
         print(v:GetFullName())
     end
 end)
+keybindinpfield = gui.KeybindInputField.new("new keybind", function() print("hi") end, nil, {{"J"}, {"LeftShift", "J"}})
+gui.KeybindInputField.new("second keybind")
 
 
 -- dumps the gui into workspace for debugging

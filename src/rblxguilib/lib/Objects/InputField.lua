@@ -51,12 +51,8 @@ function InputField:StoreItem(Item)
     if type(Item) == "table" then
         self.ItemTable[Item[1]] = Item[2]
         return Item
-    else if type(Item) == "userdata" then
-        self.ItemTable[Item.Name] = {Item}
-        return {Item.Name, {Item}}
     else
         return {Item, Item}
-    end
     end
 end
 
@@ -105,11 +101,11 @@ end
 
 function InputField:Changed(func)
     self.Input.Changed:Connect(function(p)
-        if p =="Text" then func(self:RecallItem(self.Input.Text)) end
+        if p =="Text" then func(self:RecallItem(self.Input.Text))end
     end)
 end
 
-function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, ClearText, Disabled, Parent)
+function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, DisableEditing, ClearText, Disabled, Parent)
     local self = LabeledObject.new(Textbox, LabelSize, Parent)
     setmetatable(self,InputField)
     self.ItemTable = {}
@@ -129,11 +125,18 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Cl
     self.Input.Position = UDim2.new(0,5,0,0)
     self.Input.ClearTextOnFocus = ClearText
     self.Input.Name = "Input"
+    self.Focusable = true
+    if DisableEditing then
+        self.Input.TextEditable = false
+        self.TextEditable = false
+        self.Focusable = false
+    end
     util.ColorSync(self.Input, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     util.ColorSync(self.Input, "PlaceholderColor3", Enum.StudioStyleGuideColor.DimmedText)
     self.MouseInInput = false
     self.SecondaryFrame.MouseMoved:Connect(function()
         self.MouseInInput = true
+        if not self.Focusable then return end
         if not self.Disabled and not self.Input:IsFocused() then
             util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Hover)
         else
@@ -142,20 +145,23 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Cl
     end)
     self.SecondaryFrame.MouseLeave:Connect(function()
         self.MouseInInput = false
+        if not self.Focusable then return end
         if not self.Disabled and not self.Input:IsFocused() then
             util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         end
         _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
     self.Input.Focused:Connect(function()
-        if not self.Disabled then
+        if not self.Disabled and self.Focusable then
             util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
         else
             self.Input:ReleaseFocus()
         end
     end)
     self.Input.FocusLost:Connect(function()
-        util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+        if self.Focusable then
+            util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+        end
     end)
     self.DropdownButton = Instance.new("TextButton", self.SecondaryFrame)
     self.DropdownButton.Text = ""
