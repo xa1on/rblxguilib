@@ -100,9 +100,11 @@ instanceinpfield:Changed(function(result)
         print(v:GetFullName())
     end
 end)
-keybindinpfield = gui.KeybindInputField.new("new keybind", function() print("hi") end, nil, {{"J"}, {"LeftShift", "J"}})
-gui.KeybindInputField.new("second keybind")
-
+keybindinpfield = gui.KeybindInputField.new("new keybind", function() print("hi") end, nil, {{"N"}, {"LeftShift", "T"}}, nil, {{{"U"}, {"LeftShift", "L"}},{{"N"}, {"LeftShift", "K"}}})
+keybindinpfield2 = gui.KeybindInputField.new("second keybind")
+keybindinpfield2:Triggered(function()
+    print("second keybind triggered!")
+end)
 
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new("Dump GUI into workspace")

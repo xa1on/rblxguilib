@@ -43,11 +43,7 @@ function m.DumpTable(Table, Step)
     if type(Table) == "table"then
         local result = "{\n" .. string.rep(":", Step)
         for i, v in pairs(Table) do
-            if type(i) == "number" then
-                result = result .. m.DumpTable(v, Step+1) .. ","
-            else
-                result = result .. i .." = " .. m.DumpTable(v, Step+1) .. ","
-            end
+            result = result .. i .." = " .. m.DumpTable(v, Step+1) .. ","
         end
         return result .. "\n".. string.rep(":", Step-1) .. "}"
     else
@@ -64,6 +60,14 @@ function m.HoverIcon(element, icon)
         task.wait(0)
         _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
+end
+
+function m.tablecopy(t)
+    local newt = {}
+    for i,v in pairs(t) do
+        newt[i] = v
+    end
+    return newt
 end
 
 return m

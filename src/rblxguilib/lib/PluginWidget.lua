@@ -3,6 +3,7 @@ Widget.__index = Widget
 
 local plugin = _G.PluginObject
 local util = require(script.Parent.Util)
+local KeybindManager = require(script.Parent.KeybindManager)
 local BackgroundFrame = require(script.Parent.Frames.BackgroundFrame)
 
 Widget.Info = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, false, false, 200, 200, 150, 150)
@@ -21,6 +22,7 @@ function Widget.new(name, title)
     self.InputFrame.BackgroundTransparency = 1
     self.InputFrame.Name = "InputFrame"
     _G.InputFrame = self.InputFrame
+    KeybindManager.Run()
     return self
 end
 

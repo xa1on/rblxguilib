@@ -3,6 +3,7 @@ InputField.__index = InputField
 
 local util = require(script.Parent.Parent.Util)
 local LabeledObject = require(script.Parent.LabeledObject)
+local KeybindManager = require(script.Parent.Parent.KeybindManager)
 setmetatable(InputField,LabeledObject)
 
 InputField.Images = {
@@ -100,15 +101,14 @@ function InputField:RemoveItems(Items)
 end
 
 function InputField:Changed(func)
-    self.Input.Changed:Connect(function(p)
-        if p =="Text" then func(self:RecallItem(self.Input.Text))end
-    end)
+    self.Action = func
 end
 
 function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, DisableEditing, ClearText, Disabled, Parent)
     local self = LabeledObject.new(Textbox, LabelSize, Parent)
     setmetatable(self,InputField)
     self.ItemTable = {}
+    self.Action = nil
     util.ColorSync(self.SecondaryFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     self.Input = Instance.new("TextBox", self.SecondaryFrame)
@@ -125,6 +125,12 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Di
     self.Input.Position = UDim2.new(0,5,0,0)
     self.Input.ClearTextOnFocus = ClearText
     self.Input.Name = "Input"
+    self.Input.Changed:Connect(function(p)
+        if p == "Text" then
+            local RecalledItem = self:RecallItem(self.Input.Text)
+            if self.Action then self.Action(RecalledItem) end
+        end
+    end)
     self.Focusable = true
     if DisableEditing then
         self.Input.TextEditable = false
@@ -152,6 +158,7 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Di
         _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
     self.Input.Focused:Connect(function()
+        KeybindManager.Unfocus()
         if not self.Disabled and self.Focusable then
             util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
         else
