@@ -142,17 +142,15 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Di
     self.MouseInInput = false
     self.SecondaryFrame.MouseMoved:Connect(function()
         self.MouseInInput = true
-        if not self.Focusable then return end
-        if not self.Disabled and not self.Input:IsFocused() then
+        if not self.Disabled and not self.Input:IsFocused() and not self.Focused then
             util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Hover)
-        else
+        elseif self.Focusable then
             _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Forbidden"
         end
     end)
     self.SecondaryFrame.MouseLeave:Connect(function()
         self.MouseInInput = false
-        if not self.Focusable then return end
-        if not self.Disabled and not self.Input:IsFocused() then
+        if not self.Disabled and not self.Input:IsFocused() and not self.Focused then
             util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         end
         _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"

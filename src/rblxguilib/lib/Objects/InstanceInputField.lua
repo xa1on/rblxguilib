@@ -43,7 +43,7 @@ function InstanceInputField:StoreItem(Item)
 end
 
 function InstanceInputField.new(Textbox, Placeholder, DefaultInstances, LabelSize, Items, Disabled, Parent)
-    Placeholder = Placeholder or "Select an object"
+    Placeholder = Placeholder or "Select object(s)"
     local self = InputField.new(Textbox, Placeholder, nil, LabelSize, nil, true, true, Disabled, Parent)
     setmetatable(self,InstanceInputField)
     if Items then self:AddItems(Items) end

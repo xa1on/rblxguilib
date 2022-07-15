@@ -58,7 +58,10 @@ end
 
 function KeybindInputField:UnfocusInputField(ForceUnfocus)
     if not ForceUnfocus and self.MouseInInput then return false
-    else util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder) end
+    else
+        util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+        self.Focused = false
+    end
     return true
 end
 
@@ -86,6 +89,7 @@ function KeybindInputField.new(Textbox, Action, Placeholder, DefaultKeybind, Lab
     if Keybinds then self:AddItems(Keybinds) end
     self:SetKeybinds(DefaultKeybind)
     self.Input.Focused:Connect(function()
+        self.Focused = true
         util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
         KeybindManager.FocusInputField(self.Textbox.Text, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
     end)
