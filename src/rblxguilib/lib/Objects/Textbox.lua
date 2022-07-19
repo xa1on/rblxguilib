@@ -1,7 +1,7 @@
 local Textbox = {}
 Textbox.__index = Textbox
 
-local util = require(script.Parent.Parent.Util)
+local util = require(script.Parent.Parent.GUIUtil)
 local GUIObject = require(script.Parent.GUIObject)
 setmetatable(Textbox,GUIObject)
 
@@ -20,7 +20,6 @@ function Textbox.new(Text, Font, Alignment, Size, Parent)
     self.Textbox.Text = Text
     util.ColorSync(self.Textbox, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     self.Object = self.Textbox
-    self.Frame = self.Textbox.Parent
     self.MainMovable = self.Textbox
     return self
 end

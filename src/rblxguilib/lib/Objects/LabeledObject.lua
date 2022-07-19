@@ -1,7 +1,7 @@
 local LabeledObject = {}
 LabeledObject.__index = LabeledObject
 
-local util = require(script.Parent.Parent.Util)
+local util = require(script.Parent.Parent.GUIUtil)
 local TextboxMod = require(script.Parent.Textbox)
 local GUIObject = require(script.Parent.GUIObject)
 setmetatable(LabeledObject,GUIObject)
@@ -17,7 +17,7 @@ function LabeledObject.new(Textbox, LabelSize, Parent)
     self.MainLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self.MainLayout.FillDirection = Enum.FillDirection.Horizontal
     self.MainPadding = Instance.new("UIPadding", self.MainFrame)
-    self.MainPadding.PaddingBottom, self.MainPadding.PaddingLeft, self.MainPadding.PaddingRight, self.MainPadding.PaddingTop = UDim.new(0,2), UDim.new(0,4), UDim.new(0,4), UDim.new(0,2)
+    self.MainPadding.PaddingBottom, self.MainPadding.PaddingLeft, self.MainPadding.PaddingRight, self.MainPadding.PaddingTop = UDim.new(0,2), UDim.new(0,6), UDim.new(0,6), UDim.new(0,2)
     if type(Textbox) == "string" then
         self.TextboxTable = TextboxMod.new(Textbox, nil, Enum.TextXAlignment.Left, 14, self.MainFrame)
     else
@@ -48,6 +48,7 @@ function LabeledObject.new(Textbox, LabelSize, Parent)
         end)
         sync()
     end
+    self.MainMovable = self.MainFrame
     return self
 end
 

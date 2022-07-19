@@ -2,7 +2,7 @@ local Widget = {}
 Widget.__index = Widget
 
 local plugin = _G.PluginObject
-local util = require(script.Parent.Util)
+local util = require(script.Parent.GUIUtil)
 local KeybindManager = require(script.Parent.KeybindManager)
 local BackgroundFrame = require(script.Parent.Frames.BackgroundFrame)
 

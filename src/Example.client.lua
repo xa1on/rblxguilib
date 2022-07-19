@@ -3,7 +3,6 @@ local Workspace = game:GetService("Workspace")
     [RBLXGUILib]
     something#7597
     todo:
-        Keybinds
         Checkbox
         Sliders
 ]]--
@@ -94,22 +93,32 @@ local disablebutton = gui.Button.new("toggle previous")
 disablebutton:Clicked(function() inpfield:ToggleDisable() end)
 
 -- instanceinputfield - (label, placeholder, defaultname, defaultvalue, labelsize, items, disabled, frame)
-instanceinpfield = gui.InstanceInputField.new("an instance", nil, nil, nil, {{workspace.Hank}, {workspace.walter}})
+local instanceinpfield = gui.InstanceInputField.new("an instance", nil, nil, nil, {{game:GetService("Lighting")}, {Workspace}})
 instanceinpfield:Changed(function(result)
     for _, v in pairs(result) do
         print(v:GetFullName())
     end
 end)
-keybindinpfield = gui.KeybindInputField.new("new keybind", function() print("hi") end, nil, {{"N"}, {"LeftShift", "T"}}, nil, {{{"U"}, {"LeftShift", "L"}},{{"N"}, {"LeftShift", "K"}}})
+
+gui.KeybindInputField.new("new keybind", function() print("hi") end, nil, {{"N"}, {"LeftShift", "T"}}, nil, {{{"U"}, {"LeftShift", "L"}},{{"N"}, {"LeftShift", "K"}}})
 keybindinpfield2 = gui.KeybindInputField.new("second keybind")
 keybindinpfield2:Triggered(function()
     print("second keybind triggered!")
+end)
+
+local checkbox = gui.Checkbox.new(true)
+checkbox:Clicked(function(p)
+    print(checkbox.Toggled)
+    print(p)
+end)
+local toggle_checkbox = gui.Checkbox.new()
+toggle_checkbox:Clicked(function(p)
+    checkbox:SetDisabled(p)
 end)
 
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new("Dump GUI into workspace")
 dumpbutton:Clicked(function()
     print("Dumping GUI")
-    gui.Util.DumpGUI(widget)
+    gui.GUIUtil.DumpGUI(widget)
 end)
-

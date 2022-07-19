@@ -1,7 +1,7 @@
 local InputField = {}
 InputField.__index = InputField
 
-local util = require(script.Parent.Parent.Util)
+local util = require(script.Parent.Parent.GUIUtil)
 local LabeledObject = require(script.Parent.LabeledObject)
 local KeybindManager = require(script.Parent.Parent.KeybindManager)
 setmetatable(InputField,LabeledObject)
@@ -219,8 +219,6 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Di
     if Items then self:AddItems(Items) end
     self:SetDisabled(Disabled)
     self.Object = self.Input
-    self.MainMovable = self.MainFrame
-    self.Frame = self.MainMovable.Parent
     return self
 end
 

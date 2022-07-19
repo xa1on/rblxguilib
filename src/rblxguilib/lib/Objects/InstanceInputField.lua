@@ -1,7 +1,7 @@
 local InstanceInputField = {}
 InstanceInputField.__index = InstanceInputField
 
-local util = require(script.Parent.Parent.Util)
+local util = require(script.Parent.Parent.GUIUtil)
 local InputField = require(script.Parent.InputField)
 local Selection = game:GetService("Selection")
 setmetatable(InstanceInputField,InputField)

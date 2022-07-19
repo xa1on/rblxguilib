@@ -1,7 +1,7 @@
 local KeybindInputField = {}
 KeybindInputField.__index = KeybindInputField
 
-local util = require(script.Parent.Parent.Util)
+local util = require(script.Parent.Parent.GUIUtil)
 local KeybindManager = require(script.Parent.Parent.KeybindManager)
 local InputField = require(script.Parent.InputField)
 local GuiService = game:GetService("GuiService")
@@ -25,7 +25,7 @@ function KeybindInputField:SetKeybinds(Keybinds, Name)
     self.Binds = Keybinds
     if #Keybinds[1]>0 then self.Binds[#self.Binds + 1] = {} end
     Name = Name or KeybindManager.GenerateKeybindList(self.Binds)
-    KeybindManager.AddKeybind(self.Textbox.Text, self.Binds, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.Textbox.Text, self.Binds, self.TriggeredAction)
     self.Input.Text = Name
 end
 
@@ -35,7 +35,7 @@ function KeybindInputField:EditKeybind(Keybind, Complete)
         self.Binds[#self.Binds+1] = {}
     end
     local GeneratedList = KeybindManager.GenerateKeybindList(self.Binds)
-    KeybindManager.AddKeybind(self.Textbox.Text, self.Binds, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.Textbox.Text, self.Binds, self.TriggeredAction)
     self.Input.Text = GeneratedList
 end
 
@@ -51,7 +51,7 @@ function KeybindInputField:RecallItem(Name)
         self:SetKeybinds(self.ItemTable[Name])
         return self.ItemTable[Name]
     elseif #Name <= 0 then
-        self.Binds = {{}}
+        self:SetKeybinds({{}})
     end
     return self.Binds
 end
@@ -77,7 +77,7 @@ end
 
 function KeybindInputField:Triggered(func)
     self.TriggeredAction = func
-    KeybindManager.AddKeybind(self.Textbox.Text, self.Binds, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.Textbox.Text, self.Binds, self.TriggeredAction)
 end
 
 function KeybindInputField.new(Textbox, Action, Placeholder, DefaultKeybind, LabelSize, Keybinds, Disabled, Parent)

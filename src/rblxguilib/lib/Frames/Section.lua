@@ -1,7 +1,7 @@
 local Section = {}
 Section.__index = Section
 
-local util = require(script.Parent.Parent.Util)
+local util = require(script.Parent.Parent.GUIUtil)
 local GUIFrame = require(script.Parent.GUIFrame)
 local TextboxMod = require(script.Parent.Parent.Objects.Textbox)
 setmetatable(Section,GUIFrame)

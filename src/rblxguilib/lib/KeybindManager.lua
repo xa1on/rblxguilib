@@ -1,5 +1,5 @@
 local InputService = game:GetService("UserInputService")
-local util = require(script.Parent.Util)
+local util = require(script.Parent.GUIUtil)
 
 local m = {}
 
@@ -51,7 +51,7 @@ end
 
 m.Keybinds = {}
 
-function m.AddKeybind(Name, Keybind, Action)
+function m.UpdateKeybinds(Name, Keybind, Action)
     if not m.Keybinds[Name] then m.Keybinds[Name] = {} end
     if Action then m.Keybinds[Name].Action = Action end
     m.Keybinds[Name].Keybinds = Keybind
@@ -120,6 +120,7 @@ local function InputBegan(p)
     end
     local KeyName = m.RecallKeyName(p.KeyCode.Name)
     if KeyName == "Backspace" and m.FocusFunction.RemoveBind then m.FocusFunction.RemoveBind() return end
+    if KeyName == "Return" and m.FocusFunction.Unfocus then m.Unfocus() return end
     CurrentKeys[#CurrentKeys+1] = m.FilterKeyCode(p.KeyCode.Name)
     if CompleteBind then return end
     if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then

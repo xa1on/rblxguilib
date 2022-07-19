@@ -1,7 +1,7 @@
 local Button = {}
 Button.__index = Button
 
-local util = require(script.Parent.Parent.Util)
+local util = require(script.Parent.Parent.GUIUtil)
 local TextboxMod = require(script.Parent.Textbox)
 local GUIObject = require(script.Parent.GUIObject)
 setmetatable(Button,GUIObject)
@@ -93,7 +93,6 @@ function Button.new(Textbox, Size, Disabled, Parent)
 
 
     self.Object = self.Button
-    self.Frame = self.ButtonFrame.Parent
     self.MainMovable = self.ButtonFrame
     return self
 end

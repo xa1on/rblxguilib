@@ -1,7 +1,7 @@
 local BackgroundFrame = {}
 BackgroundFrame.__index = BackgroundFrame
 
-local util = require(script.Parent.Parent.Util)
+local util = require(script.Parent.Parent.GUIUtil)
 local GUIFrame = require(script.Parent.GUIFrame)
 setmetatable(BackgroundFrame,GUIFrame)
 
