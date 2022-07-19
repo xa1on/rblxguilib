@@ -79,39 +79,43 @@ local sectionwithin = gui.Section.new("another section", nil, false, newsection.
 gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 
--- inputfields - (Label, placeholder, default, labelscale, dropdownitems, DisableEditing, cleartextonfocus, disabled, frame)
-gui.InputField.new("Input:", nil, "default text", UDim.new(0.3,0), {{"bob","Bob"},"Steve"}, true)
-local inpfield = gui.InputField.new("another input:", "placeholder")
-inpfield:AddItems({"1", "2", "remove", {"1 thousand",1000}})
-inpfield:RemoveItem("remove")
+-- inputfields - (placeholder, default, dropdownitems, DisableEditing, cleartextonfocus, disabled, frame)
+gui.Labeled.new("input", 0.3, gui.InputField.new(nil, "default text", {{"bob","Bob"},"Steve"}, true))
+local inpfield = gui.Labeled.new("another input", nil, gui.InputField.new("placeholder"))
+inpfield.Object:AddItems({"1", "2", "remove", {"1 thousand",1000}})
+inpfield.Object:RemoveItem("remove")
 
-inpfield:Changed(function(text)
+inpfield.Object:Changed(function(text)
     print(text)
 end)
 
 local disablebutton = gui.Button.new("toggle previous")
 disablebutton:Clicked(function() inpfield:ToggleDisable() end)
 
--- instanceinputfield - (label, placeholder, defaultname, defaultvalue, labelsize, items, disabled, frame)
-local instanceinpfield = gui.InstanceInputField.new("an instance", nil, nil, nil, {{game:GetService("Lighting")}, {Workspace}})
+-- instanceinputfield - (defaultname, defaultvalue, items, disabled, frame)
+local instanceinpfield = gui.InstanceInputField.new(nil, nil, {{game:GetService("Lighting")}, {Workspace}})
+gui.Labeled.new("an instance", nil, instanceinpfield)
 instanceinpfield:Changed(function(result)
     for _, v in pairs(result) do
         print(v:GetFullName())
     end
 end)
 
-gui.KeybindInputField.new("new keybind", function() print("hi") end, nil, {{"N"}, {"LeftShift", "T"}}, nil, {{{"U"}, {"LeftShift", "L"}},{{"N"}, {"LeftShift", "K"}}})
-keybindinpfield2 = gui.KeybindInputField.new("second keybind")
-keybindinpfield2:Triggered(function()
+gui.Labeled.new("keybind", nil, gui.KeybindInputField.new(function() print("hi") end, nil, {{"N"}, {"LeftShift", "T"}}, {{{"U"}, {"LeftShift", "L"}},{{"N"}, {"LeftShift", "K"}}}))
+
+local keybindinpfield2 = gui.Labeled.new("another keybind", nil, gui.KeybindInputField.new())
+
+keybindinpfield2.Object:Triggered(function()
     print("second keybind triggered!")
 end)
 
-local checkbox = gui.Checkbox.new(true)
-checkbox:Clicked(function(p)
-    print(checkbox.Toggled)
+local checkbox = gui.Labeled.new("checkbox", 0.5, gui.Checkbox.new(true))
+checkbox.Object:Clicked(function(p)
     print(p)
+    keybindinpfield2:SetDisabled(not p)
 end)
 local toggle_checkbox = gui.Checkbox.new()
+gui.Labeled.new("Disable checkbox", 0.5, toggle_checkbox)
 toggle_checkbox:Clicked(function(p)
     checkbox:SetDisabled(p)
 end)

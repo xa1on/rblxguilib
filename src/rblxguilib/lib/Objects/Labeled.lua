@@ -6,7 +6,21 @@ local TextboxMod = require(script.Parent.Textbox)
 local GUIObject = require(script.Parent.GUIObject)
 setmetatable(LabeledObject,GUIObject)
 
-function LabeledObject.new(Textbox, LabelSize, Parent)
+function LabeledObject:SetDisabled(State)
+    self.Disabled = State
+    self.Object:SetDisabled(State)
+    if self.Disabled then
+        self.Label.TextTransparency = 0.5
+    else
+        self.Label.TextTransparency = 0
+    end
+end
+
+function LabeledObject:ToggleDisable()
+    self:SetDisabled(not self.Disabled)
+end
+
+function LabeledObject.new(Textbox, LabelSize, Object, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,LabeledObject)
     self.MainFrame = Instance.new("Frame", self.Frame)
@@ -24,30 +38,34 @@ function LabeledObject.new(Textbox, LabelSize, Parent)
         self.TextboxTable = Textbox
         Textbox:Move(self.MainFrame, true)
     end
-    self.Textbox = self.TextboxTable.Textbox
+    self.Label = self.TextboxTable.Textbox
     self.SecondaryFrame = Instance.new("Frame", self.MainFrame)
     self.SecondaryFrame.Name = "SecondaryFrame"
+    self.SecondaryFrame.BackgroundTransparency = 1
     if LabelSize then
         if type(LabelSize) == "userdata" then
-            self.Textbox.Size = UDim2.new(LabelSize.Scale, LabelSize.Offset, 0, 20)
+            self.Label.Size = UDim2.new(LabelSize.Scale, LabelSize.Offset, 0, 20)
             self.SecondaryFrame.Size = UDim2.new(1-LabelSize.Scale, -LabelSize.Offset, 0, 20)
         elseif type(LabelSize) == "number" then
-            self.Textbox.Size = UDim2.new(LabelSize, 0, 0, 20)
+            self.Label.Size = UDim2.new(LabelSize, 0, 0, 20)
             self.SecondaryFrame.Size = UDim2.new(1-LabelSize, 0, 0, 20)
         else
-            self.Textbox.Size = UDim2.new(0.5, 0, 0, 20)
+            self.Label.Size = UDim2.new(0.5, 0, 0, 20)
             self.SecondaryFrame.Size = UDim2.new(0.5, 0, 0, 20)
         end
     else
         local function sync()
-            self.Textbox.Size = UDim2.new(0,self.Textbox.TextBounds.X+self.Textbox.TextSize, 1, 0)
-            self.SecondaryFrame.Size = UDim2.new(1,-(self.Textbox.TextBounds.X+self.Textbox.TextSize), 0, 20)
+            self.Label.Size = UDim2.new(0,self.Label.TextBounds.X+self.Label.TextSize, 1, 0)
+            self.SecondaryFrame.Size = UDim2.new(1,-(self.Label.TextBounds.X+self.Label.TextSize), 0, 20)
         end
-        self.Textbox.Changed:Connect(function(p)
+        self.Label.Changed:Connect(function(p)
             if p == "TextBounds" then sync() end
         end)
         sync()
     end
+    Object:Move(self.SecondaryFrame, true)
+    Object.MainMovable.Size = UDim2.new(1,0,1,0)
+    self.Object = Object
     self.MainMovable = self.MainFrame
     return self
 end

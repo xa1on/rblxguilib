@@ -42,9 +42,9 @@ function InstanceInputField:StoreItem(Item)
     return {GeneratedList, Item}
 end
 
-function InstanceInputField.new(Textbox, Placeholder, DefaultInstances, LabelSize, Items, Disabled, Parent)
+function InstanceInputField.new(Placeholder, DefaultInstances, Items, Disabled, Parent)
     Placeholder = Placeholder or "Select object(s)"
-    local self = InputField.new(Textbox, Placeholder, nil, LabelSize, nil, true, true, Disabled, Parent)
+    local self = InputField.new(Placeholder, nil, nil, true, true, Disabled, Parent)
     setmetatable(self,InstanceInputField)
     if Items then self:AddItems(Items) end
     self.Focusable = true

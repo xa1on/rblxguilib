@@ -2,9 +2,9 @@ local InputField = {}
 InputField.__index = InputField
 
 local util = require(script.Parent.Parent.GUIUtil)
-local LabeledObject = require(script.Parent.LabeledObject)
+local GUIObject = require(script.Parent.GUIObject)
 local KeybindManager = require(script.Parent.Parent.KeybindManager)
-setmetatable(InputField,LabeledObject)
+setmetatable(InputField,GUIObject)
 
 InputField.Images = {
     Down = "http://www.roblox.com/asset/?id=10027472547"
@@ -14,9 +14,9 @@ function InputField:SetDisabled(State)
     self.Disabled = State
     if self.Disabled then
         self:SetDropdown(false)
-        self.Textbox.TextTransparency, self.SecondaryFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0.5,0.5,0.5,0.5
+        self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0.5,0.5,0.5,0.5
     else
-        self.Textbox.TextTransparency, self.SecondaryFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0,0,0,0
+        self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0,0,0,0
     end
     if self.TextEditable then
         self.Input.TextEditable = not State
@@ -104,14 +104,21 @@ function InputField:Changed(func)
     self.Action = func
 end
 
-function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, DisableEditing, ClearText, Disabled, Parent)
-    local self = LabeledObject.new(Textbox, LabelSize, Parent)
+function InputField.new(Placeholder, DefaultValue, Items, DisableEditing, ClearText, Disabled, Parent)
+    local self = GUIObject.new(Parent)
     setmetatable(self,InputField)
     self.ItemTable = {}
     self.Action = nil
-    util.ColorSync(self.SecondaryFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
-    util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
-    self.Input = Instance.new("TextBox", self.SecondaryFrame)
+    self.InputFieldContainer = Instance.new("Frame", self.Frame)
+    self.InputFieldContainer.BackgroundTransparency = 1
+    self.InputFieldFrame = Instance.new("Frame", self.InputFieldContainer)
+    self.InputFieldFrame.BackgroundTransparency = 1
+    self.InputFieldFrame.Size = UDim2.new(1,0,0,20)
+    self.InputFieldFrame.Position = UDim2.new(0.5,0,0.5,0)
+    self.InputFieldFrame.AnchorPoint = Vector2.new(0.5,0.5)
+    util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+    util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+    self.Input = Instance.new("TextBox", self.InputFieldFrame)
     self.Input.TextTruncate = Enum.TextTruncate.AtEnd
     self.Input.BackgroundTransparency = 1
     self.Input.Size = UDim2.new(1,-30,1,0)
@@ -140,35 +147,35 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Di
     util.ColorSync(self.Input, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     util.ColorSync(self.Input, "PlaceholderColor3", Enum.StudioStyleGuideColor.DimmedText)
     self.MouseInInput = false
-    self.SecondaryFrame.MouseMoved:Connect(function()
+    self.InputFieldFrame.MouseMoved:Connect(function()
         self.MouseInInput = true
         if not self.Disabled and not self.Input:IsFocused() and not self.Focused then
-            util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Hover)
+            util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Hover)
         elseif self.Focusable then
             _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Forbidden"
         end
     end)
-    self.SecondaryFrame.MouseLeave:Connect(function()
+    self.InputFieldFrame.MouseLeave:Connect(function()
         self.MouseInInput = false
         if not self.Disabled and not self.Input:IsFocused() and not self.Focused then
-            util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+            util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         end
         _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
     self.Input.Focused:Connect(function()
         KeybindManager.Unfocus()
         if not self.Disabled and self.Focusable then
-            util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
+            util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
         else
             self.Input:ReleaseFocus()
         end
     end)
     self.Input.FocusLost:Connect(function()
         if self.Focusable then
-            util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+            util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         end
     end)
-    self.DropdownButton = Instance.new("TextButton", self.SecondaryFrame)
+    self.DropdownButton = Instance.new("TextButton", self.InputFieldFrame)
     self.DropdownButton.Text = ""
     util.ColorSync(self.DropdownButton, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     self.DropdownButton.BorderSizePixel = 0
@@ -187,7 +194,7 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Di
     self.DropdownImage.Position = UDim2.new(0.5,0,0.5,0)
     self.DropdownImage.Size = UDim2.new(0,5,0,5)
     self.DropdownImage.Image = self.Images.Down
-    self.DropdownFrame = Instance.new("Frame", self.SecondaryFrame)
+    self.DropdownFrame = Instance.new("Frame", self.InputFieldFrame)
     self.DropdownFrame.Size = UDim2.new(1,0,0,0)
     self.DropdownFrame.Position = UDim2.new(0,0,1,0)
     util.ColorSync(self.DropdownFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
@@ -219,6 +226,7 @@ function InputField.new(Textbox, Placeholder, DefaultValue, LabelSize, Items, Di
     if Items then self:AddItems(Items) end
     self:SetDisabled(Disabled)
     self.Object = self.Input
+    self.MainMovable = self.InputFieldContainer
     return self
 end
 

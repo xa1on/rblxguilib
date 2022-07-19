@@ -6,6 +6,7 @@ local KeybindManager = require(script.Parent.Parent.KeybindManager)
 local InputField = require(script.Parent.InputField)
 local GuiService = game:GetService("GuiService")
 local InputService = game:GetService("UserInputService")
+local KeybindNum = 0
 setmetatable(KeybindInputField,InputField)
 
 --[[
@@ -25,7 +26,7 @@ function KeybindInputField:SetKeybinds(Keybinds, Name)
     self.Binds = Keybinds
     if #Keybinds[1]>0 then self.Binds[#self.Binds + 1] = {} end
     Name = Name or KeybindManager.GenerateKeybindList(self.Binds)
-    KeybindManager.UpdateKeybinds(self.Textbox.Text, self.Binds, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
     self.Input.Text = Name
 end
 
@@ -35,7 +36,7 @@ function KeybindInputField:EditKeybind(Keybind, Complete)
         self.Binds[#self.Binds+1] = {}
     end
     local GeneratedList = KeybindManager.GenerateKeybindList(self.Binds)
-    KeybindManager.UpdateKeybinds(self.Textbox.Text, self.Binds, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
     self.Input.Text = GeneratedList
 end
 
@@ -59,7 +60,7 @@ end
 function KeybindInputField:UnfocusInputField(ForceUnfocus)
     if not ForceUnfocus and self.MouseInInput then return false
     else
-        util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+        util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         self.Focused = false
     end
     return true
@@ -76,22 +77,27 @@ function KeybindInputField:StoreItem(Item)
 end
 
 function KeybindInputField:Triggered(func)
-    self.TriggeredAction = func
-    KeybindManager.UpdateKeybinds(self.Textbox.Text, self.Binds, self.TriggeredAction)
+    function self.TriggeredAction()
+        if not self.Disabled then func() end
+    end
+    KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
 end
 
-function KeybindInputField.new(Textbox, Action, Placeholder, DefaultKeybind, LabelSize, Keybinds, Disabled, Parent)
+function KeybindInputField.new(Action, Placeholder, DefaultKeybind, Keybinds, Disabled, Parent)
+    KeybindNum += 1
     Placeholder = Placeholder or "Set Keybind"
-    local self = InputField.new(Textbox, Placeholder, nil, LabelSize, nil, true, false, Disabled, Parent)
+    local self = InputField.new(Placeholder, nil, nil, true, false, Disabled, Parent)
     setmetatable(self,KeybindInputField)
-    self.TriggeredAction = Action
+    self.ID = KeybindNum
+    self:Triggered(Action)
     self.Binds = {{}}
     if Keybinds then self:AddItems(Keybinds) end
     self:SetKeybinds(DefaultKeybind)
     self.Input.Focused:Connect(function()
+        if self.Disabled then return end
         self.Focused = true
-        util.ColorSync(self.SecondaryFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
-        KeybindManager.FocusInputField(self.Textbox.Text, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
+        util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
+        KeybindManager.FocusInputField(self.ID, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
     end)
     return self
 end
