@@ -62,13 +62,7 @@ function Checkbox:SetToggle(Toggle)
 end
 
 function Checkbox:Clicked(func)
-    if self.Action then self.Action:Disconnect() end
-    self.Action = self.Checkbox.MouseButton1Click:Connect(function()
-        if not self.Disabled then
-            self:Toggle()
-            if func then func(self.Toggled) end
-        end
-    end)
+    self.Action = func
 end
 
 function Checkbox.new(DefaultValue, Disabled, Parent)
@@ -101,7 +95,12 @@ function Checkbox.new(DefaultValue, Disabled, Parent)
         task.wait(0)
         _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
-    self:Clicked()
+    self.Checkbox.MouseButton1Click:Connect(function()
+        if not self.Disabled then
+            self:Toggle()
+            if self.Action then self.Action(self.Toggled) end
+        end
+    end)
     self:SetToggle(self.Toggled)
     self:SetDisabled(self.Disabled)
     self.Object = self.Checkbox

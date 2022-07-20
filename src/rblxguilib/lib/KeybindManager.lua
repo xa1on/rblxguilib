@@ -126,12 +126,12 @@ local function InputBegan(p)
     if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then
         CompleteBind = true
         if m.FocusFunction.EditBind then
-            m.FocusFunction.EditBind(util.tablecopy(CurrentKeys), true)
+            m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true)
             return
         end
         m.CheckKeybinds(CurrentKeys)
     end
-    if m.FocusFunction.EditBind then m.FocusFunction.EditBind(util.tablecopy(CurrentKeys)) end
+    if m.FocusFunction.EditBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys)) end
 end
 
 local function InputEnded(p)
@@ -146,7 +146,7 @@ local function InputEnded(p)
             end
         end
     end
-    if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.tablecopy(CurrentKeys)) end
+    if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys)) end
 end
 
 function m.Run()

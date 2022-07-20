@@ -42,17 +42,10 @@ function LabeledObject.new(Textbox, LabelSize, Object, Parent)
     self.SecondaryFrame = Instance.new("Frame", self.MainFrame)
     self.SecondaryFrame.Name = "SecondaryFrame"
     self.SecondaryFrame.BackgroundTransparency = 1
+    LabelSize = util.GetScale(LabelSize)
     if LabelSize then
-        if type(LabelSize) == "userdata" then
-            self.Label.Size = UDim2.new(LabelSize.Scale, LabelSize.Offset, 0, 20)
-            self.SecondaryFrame.Size = UDim2.new(1-LabelSize.Scale, -LabelSize.Offset, 0, 20)
-        elseif type(LabelSize) == "number" then
-            self.Label.Size = UDim2.new(LabelSize, 0, 0, 20)
-            self.SecondaryFrame.Size = UDim2.new(1-LabelSize, 0, 0, 20)
-        else
-            self.Label.Size = UDim2.new(0.5, 0, 0, 20)
-            self.SecondaryFrame.Size = UDim2.new(0.5, 0, 0, 20)
-        end
+        self.Label.Size = UDim2.new(LabelSize.Scale, LabelSize.Offset, 0, 20)
+        self.SecondaryFrame.Size = UDim2.new(1-LabelSize.Scale, -LabelSize.Offset, 0, 20)
     else
         local function sync()
             self.Label.Size = UDim2.new(0,self.Label.TextBounds.X+self.Label.TextSize, 1, 0)

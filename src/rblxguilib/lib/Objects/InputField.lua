@@ -104,7 +104,7 @@ function InputField:Changed(func)
     self.Action = func
 end
 
-function InputField.new(Placeholder, DefaultValue, Items, DisableEditing, ClearText, Disabled, Parent)
+function InputField.new(Placeholder, DefaultValue, Items, Size, DisableEditing, ClearText, Disabled, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,InputField)
     self.ItemTable = {}
@@ -113,7 +113,8 @@ function InputField.new(Placeholder, DefaultValue, Items, DisableEditing, ClearT
     self.InputFieldContainer.BackgroundTransparency = 1
     self.InputFieldFrame = Instance.new("Frame", self.InputFieldContainer)
     self.InputFieldFrame.BackgroundTransparency = 1
-    self.InputFieldFrame.Size = UDim2.new(1,0,0,20)
+    Size = util.GetScale(Size) or UDim.new(1,-20)
+    self.InputFieldFrame.Size = UDim2.new(Size.Scale,Size.Offset,0,20)
     self.InputFieldFrame.Position = UDim2.new(0.5,0,0.5,0)
     self.InputFieldFrame.AnchorPoint = Vector2.new(0.5,0.5)
     util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)

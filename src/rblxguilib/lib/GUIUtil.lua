@@ -29,17 +29,6 @@ end
 
 function m.DumpTable(Table, Step)
     Step = Step or 1
-    --[[
-    if type(o) == 'table' then
-       local s = '{ '
-       for k,v in pairs(o) do
-          if type(k) ~= 'number' then k = '"'..k..'"' end
-          s = s .. '['..k..'] = ' .. m.DumpTable(v) .. ','
-       end
-       return s .. '} '
-    else
-       return tostring(o)
-    end]]
     if type(Table) == "table"then
         local result = "{\n" .. string.rep(":", Step)
         for i, v in pairs(Table) do
@@ -62,12 +51,26 @@ function m.HoverIcon(element, icon)
     end)
 end
 
-function m.tablecopy(t)
+function m.CopyTable(t)
     local newt = {}
     for i,v in pairs(t) do
         newt[i] = v
     end
     return newt
+end
+
+function m.GetScale(Scale)
+    if type(Scale) == "userdata" then
+        return Scale
+    elseif type(Scale) == "number" then
+        return UDim.new(Scale,0)
+    else
+        return nil
+    end
+end
+
+function m.RoundNumber(number, factor)
+    if factor == 0 then return number else return math.floor(number/factor+0.5)*factor end
 end
 
 return m

@@ -79,7 +79,7 @@ local sectionwithin = gui.Section.new("another section", nil, false, newsection.
 gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 
--- inputfields - (placeholder, default, dropdownitems, DisableEditing, cleartextonfocus, disabled, frame)
+-- inputfields - (placeholder, default, dropdownitems, scale, DisableEditing, cleartextonfocus, disabled, frame)
 gui.Labeled.new("input", 0.3, gui.InputField.new(nil, "default text", {{"bob","Bob"},"Steve"}, true))
 local inpfield = gui.Labeled.new("another input", nil, gui.InputField.new("placeholder"))
 inpfield.Object:AddItems({"1", "2", "remove", {"1 thousand",1000}})
@@ -92,7 +92,7 @@ end)
 local disablebutton = gui.Button.new("toggle previous")
 disablebutton:Clicked(function() inpfield:ToggleDisable() end)
 
--- instanceinputfield - (defaultname, defaultvalue, items, disabled, frame)
+-- instanceinputfield - (defaultname, defaultvalue, items, scale, disabled, frame)
 local instanceinpfield = gui.InstanceInputField.new(nil, nil, {{game:GetService("Lighting")}, {Workspace}})
 gui.Labeled.new("an instance", nil, instanceinpfield)
 instanceinpfield:Changed(function(result)
@@ -118,6 +118,17 @@ local toggle_checkbox = gui.Checkbox.new()
 gui.Labeled.new("Disable checkbox", 0.5, toggle_checkbox)
 toggle_checkbox:Clicked(function(p)
     checkbox:SetDisabled(p)
+end)
+
+local slider = gui.Labeled.new("Labled Slider", nil, gui.Slider.new(0,100,50,5))
+slider.Object:Changed(function(p)
+    print(p)
+end)
+
+local toggle_checkbox2 = gui.Checkbox.new()
+gui.Labeled.new("Disable Slider", 0.5, toggle_checkbox2)
+toggle_checkbox2:Clicked(function(p)
+    slider:SetDisabled(p)
 end)
 
 -- dumps the gui into workspace for debugging

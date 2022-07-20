@@ -56,14 +56,8 @@ function Button.new(Textbox, Size, Disabled, Parent)
     self.Textbox.ZIndex = 1
     -- button image
     self.Button = Instance.new("ImageButton", self.ButtonFrame)
-    if Size then
-        if type(Size) == "userdata" then
-            self.Button.Size = UDim2.new(Size.Scale,Size.Offset,1,0)
-        elseif type(Size) == "number" then
-            self.Button.Size = UDim2.new(Size,0,1,0)
-        else
-            self.Button.Size = UDim2.new(0.5,0,1,0)
-        end
+    Size = util.GetScale(Size)
+    if Size then self.Button.Size = UDim2.new(Size.Scale,Size.Offset,1,0)
     else
         local function sync()
             self.Button.Size = UDim2.new(0,self.Textbox.TextBounds.X+2*self.Textbox.TextSize, 1, 0)
@@ -82,7 +76,6 @@ function Button.new(Textbox, Size, Disabled, Parent)
     self.Button.Name = "Button"
     self.Button.ZIndex = 0
 
-    self:SetDisabled(Disabled)
     self.Button.MouseMoved:Connect(function()
         _G.PluginObject:GetMouse().Icon = self.CursorIcon
     end)
@@ -91,7 +84,7 @@ function Button.new(Textbox, Size, Disabled, Parent)
         _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
 
-
+    self:SetDisabled(Disabled)
     self.Object = self.Button
     self.MainMovable = self.ButtonFrame
     return self
