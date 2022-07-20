@@ -2,9 +2,6 @@ local Workspace = game:GetService("Workspace")
 --[[
     [RBLXGUILib]
     something#7597
-    todo:
-        Checkbox
-        Sliders
 ]]--
 
 
@@ -79,7 +76,7 @@ local sectionwithin = gui.Section.new("another section", nil, false, newsection.
 gui.Textbox.new("yep", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
 
--- inputfields - (placeholder, default, dropdownitems, scale, DisableEditing, cleartextonfocus, disabled, frame)
+-- inputfields - (placeholder, default, dropdownitems, scale, nodropdown, DisableEditing, cleartextonfocus, disabled, frame)
 gui.Labeled.new("input", 0.3, gui.InputField.new(nil, "default text", {{"bob","Bob"},"Steve"}, true))
 local inpfield = gui.Labeled.new("another input", nil, gui.InputField.new("placeholder"))
 inpfield.Object:AddItems({"1", "2", "remove", {"1 thousand",1000}})
@@ -120,9 +117,9 @@ toggle_checkbox:Clicked(function(p)
     checkbox:SetDisabled(p)
 end)
 
-local slider = gui.Labeled.new("Labled Slider", nil, gui.Slider.new(0,100,50,5))
-slider.Object:Changed(function(p)
-    print(p)
+local slider = gui.Labeled.new("Labled Slider", nil, {{gui.InputField.new(nil, 50, nil, 1, true, true), "display", 0.12},{gui.Slider.new(0,100,50,1), "slider"}})
+slider.slider:Changed(function(p)
+    slider.display:SetValue(p)
 end)
 
 local toggle_checkbox2 = gui.Checkbox.new()

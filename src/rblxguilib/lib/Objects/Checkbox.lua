@@ -26,7 +26,7 @@ function Checkbox:SetDisabled(State)
     else
         self.CursorIcon = "rbxasset://SystemCursors/PointingHand"
         self.Checkbox.ImageTransparency, self.CheckImage.ImageTransparency = 0, 0
-        self:UpdateColors()
+        self:UpdateTheme()
     end
 end
 
@@ -34,7 +34,7 @@ function Checkbox:ToggleDisable()
     self:SetDisabled(not self.Disabled)
 end
 
-function Checkbox:UpdateColors()
+function Checkbox:UpdateTheme()
     local theme = settings().Studio.Theme
     self.Checkbox.Image = self.Images[tostring(theme)].Box
     self.Checkbox.HoverImage = self.Images[tostring(theme)].Hover
@@ -52,13 +52,13 @@ function Checkbox:UpdateColors()
 end
 
 function Checkbox:Toggle()
-    self:SetToggle(not self.Toggled)
+    self:SetValue(not self.Toggled)
 end
 
-function Checkbox:SetToggle(Toggle)
+function Checkbox:SetValue(Toggle)
     self.Toggled = Toggle
     self.CheckImage.Visible = Toggle
-    self:UpdateColors()
+    self:UpdateTheme()
 end
 
 function Checkbox:Clicked(func)
@@ -87,7 +87,7 @@ function Checkbox.new(DefaultValue, Disabled, Parent)
     self.CheckImage.Image = self.Images.check
     self.CheckImage.BackgroundTransparency = 1
     self.CheckImage.Name = "CheckIndicator"
-    settings().Studio.ThemeChanged:Connect(function() self:UpdateColors() end)
+    settings().Studio.ThemeChanged:Connect(function() self:UpdateTheme() end)
     self.Checkbox.MouseMoved:Connect(function()
         _G.PluginObject:GetMouse().Icon = self.CursorIcon
     end)
@@ -101,7 +101,7 @@ function Checkbox.new(DefaultValue, Disabled, Parent)
             if self.Action then self.Action(self.Toggled) end
         end
     end)
-    self:SetToggle(self.Toggled)
+    self:SetValue(self.Toggled)
     self:SetDisabled(self.Disabled)
     self.Object = self.Checkbox
     self.MainMovable = self.CheckboxFrame

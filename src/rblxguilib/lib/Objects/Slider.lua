@@ -17,6 +17,25 @@ function Slider:SetDisabled(State)
     end
 end
 
+function Slider:SetValue(Value)
+    self.Value = Value
+    self:UpdatePosition()
+end
+
+function Slider:SetRange(Min, Max)
+    self.Min = Min
+    self.Max = Max
+    self:UpdatePosition()
+end
+
+function Slider:UpdatePosition()
+    self.SlideButton.Position = UDim2.new((self.Value-self.Min)/(self.Max - self.Min), 0, 0.5, 0)
+    if self.Value ~= self.PreviousValue then
+        self.PreviousValue = self.Value
+        if self.Action then self.Action(self.Value) end
+    end
+end
+
 function Slider:ToggleDisable()
     self:SetDisabled(not self.Disabled)
 end
@@ -28,8 +47,10 @@ end
 function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,Slider)
-    Increment = Increment or 0
-    InitalValue = InitalValue or Min
+    self.Increment = Increment or 0
+    self.Value = InitalValue or Min
+    self.Min = Min
+    self.Max = Max
     self.SliderFrame = Instance.new("Frame", self.Frame)
     self.SliderFrame.BackgroundTransparency = 1
     self.SlideBar = Instance.new("Frame", self.SliderFrame)
@@ -41,7 +62,7 @@ function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
     self.SlideButton = Instance.new("TextButton", self.SlideBar)
     self.SlideButton.Text = ""
     self.SlideButton.AnchorPoint = Vector2.new(0.5,0.5)
-    self.SlideButton.Position = UDim2.new((InitalValue-Min)/(Max-Min),0,0.5,0)
+    self:UpdatePosition()
     self.SlideButton.Size = UDim2.new(0,8,0,16)
     util.ColorSync(self.SlideButton, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     util.ColorSync(self.SlideButton, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
@@ -53,15 +74,11 @@ function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
         self.SliderSelected = true
         self.InitialX = self.SlideButton.AbsolutePosition.X - x
     end)
-    self.PreviousValue = InitalValue
+    self.PreviousValue = self.Value
     _G.InputFrame.MouseMoved:Connect(function(x)
         if not self.SliderSelected then return end
-        self.Value = util.RoundNumber(math.clamp((x + self.InitialX - self.SlideBar.AbsolutePosition.X + self.SlideButton.Size.X.Offset / 2)/self.SlideBar.AbsoluteSize.X, 0, 1) * (Max - Min) + Min, Increment)
-        self.SlideButton.Position = UDim2.new((self.Value-Min)/(Max - Min), 0, 0.5, 0)
-        if self.Value ~= self.PreviousValue then
-            self.PreviousValue = self.Value
-            if self.Action then self.Action(self.Value) end
-        end
+        self.Value = util.RoundNumber(math.clamp((x + self.InitialX - self.SlideBar.AbsolutePosition.X + self.SlideButton.Size.X.Offset / 2)/self.SlideBar.AbsoluteSize.X, 0, 1) * (self.Max - self.Min) + self.Min, self.Increment)
+        self:UpdatePosition()
     end)
     _G.InputFrame.InputEnded:Connect(function(p)
         if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then self.SliderSelected = false end

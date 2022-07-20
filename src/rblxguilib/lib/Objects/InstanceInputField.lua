@@ -18,12 +18,11 @@ function InstanceInputField.GenerateInstanceList(Instances)
     return GeneratedList
 end
 
-function InstanceInputField:SetSelection(Instances, Name)
+function InstanceInputField:SetValue(Instances)
     if not Instances then return end
     if type(Instances) ~= "table" then Instances = {Instances} end
-    self.Selection = Instances
-    Name = Name or self.GenerateInstanceList(Instances)
-    self.Input.Text = Name
+    self.Value = Instances
+    self.Input.Text = self.GenerateInstanceList(Instances)
 end
 
 function InstanceInputField:RecallItem(Name)
@@ -31,9 +30,9 @@ function InstanceInputField:RecallItem(Name)
         if type(self.ItemTable[Name]) == "table" then return self.ItemTable[Name]
         else return {self.ItemTable[Name]} end
     elseif #Name <= 0 then
-        self.Selection = {}
+        self.Value = {}
     end
-    return self.Selection
+    return self.Value
 end
 
 function InstanceInputField:StoreItem(Item)
@@ -42,23 +41,23 @@ function InstanceInputField:StoreItem(Item)
     return {GeneratedList, Item}
 end
 
-function InstanceInputField.new(Placeholder, DefaultInstances, Items, Size, Disabled, Parent)
+function InstanceInputField.new(Placeholder, DefaultInstances, Items, Size, NoDropdown, Disabled, Parent)
     Placeholder = Placeholder or "Select object(s)"
-    local self = InputField.new(Placeholder, nil, nil, Size, true, true, Disabled, Parent)
+    local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown,  true, true, Disabled, Parent)
     setmetatable(self,InstanceInputField)
     if Items then self:AddItems(Items) end
     self.Focusable = true
-    self:SetSelection(DefaultInstances)
+    self:SetValue(DefaultInstances)
     self.Input.Focused:Connect(function()
         if self.Disabled then return end
         local CurrentSelection = Selection:Get()
-        if #CurrentSelection > 0 then self:SetSelection(CurrentSelection) end
+        if #CurrentSelection > 0 then self:SetValue(CurrentSelection) end
     end)
     Selection.SelectionChanged:Connect(function()
         if self.Disabled then return end
         if self.Input:IsFocused() then
             local CurrentSelection = Selection:Get()
-            if #CurrentSelection > 0 then self:SetSelection(CurrentSelection) end
+            if #CurrentSelection > 0 then self:SetValue(CurrentSelection) end
         end
     end)
     return self

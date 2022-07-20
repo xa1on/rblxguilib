@@ -45,16 +45,15 @@ end
 
 function InputField:RecallItem(Name)
     if self.ItemTable[Name] then return self.ItemTable[Name]
-    else return Name end
+    else return self.Value end
 end
 
 function InputField:StoreItem(Item)
     if type(Item) == "table" then
         self.ItemTable[Item[1]] = Item[2]
         return Item
-    else
-        return {Item, Item}
     end
+    return {Item, Item}
 end
 
 function InputField:AddItem(Item)
@@ -100,11 +99,18 @@ function InputField:RemoveItems(Items)
     for _, v in pairs(Items) do self:RemoveItem(v) end
 end
 
+function InputField:SetValue(Value, Name)
+    local StoredItem = Value
+    if Name then StoredItem = {Name, Value} end
+    local StoredValue = self:StoreItem(StoredItem)
+    self.Input.Text = StoredValue[1]
+end
+
 function InputField:Changed(func)
     self.Action = func
 end
 
-function InputField.new(Placeholder, DefaultValue, Items, Size, DisableEditing, ClearText, Disabled, Parent)
+function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, DisableEditing, ClearText, Disabled, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,InputField)
     self.ItemTable = {}
@@ -122,11 +128,10 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, DisableEditing, 
     self.Input = Instance.new("TextBox", self.InputFieldFrame)
     self.Input.TextTruncate = Enum.TextTruncate.AtEnd
     self.Input.BackgroundTransparency = 1
-    self.Input.Size = UDim2.new(1,-30,1,0)
+    if NoDropdown then self.Input.Size = UDim2.new(1,-10,1,0) else self.Input.Size = UDim2.new(1,-30,1,0) end
     self.Input.Font = Enum.Font.SourceSans
     DefaultValue = DefaultValue or ""
-    local StoredValue = self:StoreItem(DefaultValue)
-    self.Input.Text = StoredValue[1]
+    self:SetValue(DefaultValue)
     self.Input.TextSize = 14
     if Placeholder then self.Input.PlaceholderText = Placeholder end
     self.Input.TextXAlignment = Enum.TextXAlignment.Left
@@ -177,6 +182,7 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, DisableEditing, 
         end
     end)
     self.DropdownButton = Instance.new("TextButton", self.InputFieldFrame)
+    if NoDropdown then self.DropdownButton.Visible = false end
     self.DropdownButton.Text = ""
     util.ColorSync(self.DropdownButton, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     self.DropdownButton.BorderSizePixel = 0

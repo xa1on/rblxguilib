@@ -15,7 +15,7 @@ setmetatable(KeybindInputField,InputField)
     {{"Keybind Preset",{{LeftControl, LeftAlt, Zero},{P}}}}
 ]]--
 
-function KeybindInputField:SetKeybinds(Keybinds, Name)
+function KeybindInputField:SetValue(Keybinds)
     Keybinds = Keybinds or {{}}
     if type(Keybinds) ~= "table" then Keybinds = {{Keybinds}}
     else
@@ -23,9 +23,8 @@ function KeybindInputField:SetKeybinds(Keybinds, Name)
     end
     self.Binds = Keybinds
     if #Keybinds[1]>0 then self.Binds[#self.Binds + 1] = {} end
-    Name = Name or KeybindManager.GenerateKeybindList(self.Binds)
     KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
-    self.Input.Text = Name
+    self.Input.Text = KeybindManager.GenerateKeybindList(self.Binds)
 end
 
 function KeybindInputField:EditKeybind(Keybind, Complete)
@@ -47,10 +46,10 @@ end
 
 function KeybindInputField:RecallItem(Name)
     if self.ItemTable[Name] then
-        self:SetKeybinds(self.ItemTable[Name])
+        self:SetValue(self.ItemTable[Name])
         return self.ItemTable[Name]
     elseif #Name <= 0 then
-        self:SetKeybinds({{}})
+        self:SetValue({{}})
     end
     return self.Binds
 end
@@ -81,16 +80,16 @@ function KeybindInputField:Triggered(func)
     KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
 end
 
-function KeybindInputField.new(Action, Placeholder, DefaultKeybind, Keybinds, Size, Disabled, Parent)
+function KeybindInputField.new(Action, Placeholder, DefaultKeybind, Keybinds, Size, NoDropdown, Disabled, Parent)
     KeybindNum += 1
     Placeholder = Placeholder or "Set Keybind"
-    local self = InputField.new(Placeholder, nil, nil, Size, true, false, Disabled, Parent)
+    local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown, true, false, Disabled, Parent)
     setmetatable(self,KeybindInputField)
     self.ID = KeybindNum
     self:Triggered(Action)
     self.Binds = {{}}
     if Keybinds then self:AddItems(Keybinds) end
-    self:SetKeybinds(DefaultKeybind)
+    self:SetValue(DefaultKeybind)
     self.Input.Focused:Connect(function()
         if self.Disabled then return end
         self.Focused = true
