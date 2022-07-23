@@ -24,7 +24,7 @@ function Textbox.new(Text, Font, Alignment, TextSize, Parent)
     Alignment = Alignment or Enum.TextXAlignment.Center
     Font = Font or Enum.Font.SourceSans
     TextSize = TextSize or 15
-    self.Textbox = Instance.new("TextLabel", self.Frame)
+    self.Textbox = Instance.new("TextLabel", self.Parent)
     self.Textbox.BackgroundTransparency = 1
     self.Textbox.Size = UDim2.new(1,0,1,0)
     self.Textbox.TextXAlignment = Alignment

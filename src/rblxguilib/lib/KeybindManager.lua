@@ -149,11 +149,11 @@ local function InputEnded(p)
     if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys)) end
 end
 
-function m.Run()
-    _G.InputFrame.InputBegan:Connect(InputBegan)
-    InputService.InputBegan:Connect(InputBegan)
-    _G.InputFrame.InputEnded:Connect(InputEnded)
-    InputService.InputEnded:Connect(InputEnded)
+function m.AddInputFields(Field)
+    Field.InputBegan:Connect(InputBegan)
+    Field.InputEnded:Connect(InputEnded)
 end
+
+m.AddInputFields(InputService)
 
 return m

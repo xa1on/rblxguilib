@@ -12,14 +12,19 @@ local gui = require(script.Parent.RBLXGUILib.initialize)(plugin)
 toolbar = plugin:CreateToolbar("rblxgui")
 
 -- generate widget
-local widget = gui.PluginWidget.new("rblxgui").WidgetObject
+local widget = gui.PluginWidget.new("rblxgui").Content
 
 -- toolbar button to toggle the widget
 local b_toggle = toolbar:CreateButton("","open widget","")
 b_toggle.Click:Connect(function() widget.Enabled = not widget.Enabled end)
 
+local mainmenu = gui.PageMenu.new(widget)
+local mainpage = gui.Page.new("MAIN", mainmenu, true)
+
+local settingspage = gui.Page.new("SETTINGS", mainmenu)
+
 -- scrolling frame(lets you scroll through the gui): usage - (parent)
-local mainframe = gui.ScrollingFrame.new(widget)
+local mainframe = gui.ScrollingFrame.new(nil, mainpage.Content)
 -- sets mainframe as the main element(everything will go here by default unless you specify a parent)
 mainframe:SetMain()
 
@@ -34,7 +39,7 @@ gui.Textbox.new("WELCOME TO RBLXGUI!", Enum.Font.SourceSansBold, nil, nil, acool
 -- buttons: usage - (text/textbox, size, disabled, frame)
 local button1 = gui.Button.new("hi")
 button1:Clicked(function() print("hi") end)
-local button2 = gui.Button.new("Hello", 1, nil, button1.Frame)
+local button2 = gui.Button.new("Hello", 1, nil, button1.Parent)
 button2:Clicked(function() print("Hello") button1:ToggleDisable() end)
 
 
@@ -66,7 +71,7 @@ button3:Clicked(function()
         button3:Move(frame1.Content)
         button3.Textbox.Text = "press to go down"
     end
-    print("im in "..button3.Frame.Name.."!")
+    print("im in "..button3.Parent.Name.."!")
     buttonup = not buttonup
 end)
 
@@ -81,6 +86,10 @@ gui.Labeled.new("input", 0.3, gui.InputField.new(nil, "default text", {{"bob","B
 local inpfield = gui.Labeled.new("another input", nil, gui.InputField.new("placeholder"))
 inpfield.Object:AddItems({"1", "2", "remove", {"1 thousand",1000}})
 inpfield.Object:RemoveItem("remove")
+for i=4,100 do
+    inpfield.Object:AddItem(i)
+end
+
 
 inpfield.Object:Changed(function(text)
     print(text)

@@ -71,7 +71,7 @@ function Checkbox.new(DefaultValue, Disabled, Parent)
     if type(DefaultValue) ~= "boolean" then DefaultValue = false end
     self.Toggled = DefaultValue
     self.Disabled = Disabled
-    self.CheckboxFrame = Instance.new("Frame", self.Frame)
+    self.CheckboxFrame = Instance.new("Frame", self.Parent)
     self.CheckboxFrame.BackgroundTransparency = 1
     self.CheckboxFrame.Name = "CheckboxFrame"
     self.Checkbox = Instance.new("ImageButton", self.CheckboxFrame)

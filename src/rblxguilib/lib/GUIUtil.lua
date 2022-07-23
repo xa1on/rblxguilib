@@ -1,13 +1,22 @@
 local m = {}
 
 -- syncs colors with studio theme
-function m.ColorSync(element, property, enum, enum2)
-    local function sync()
-        element[property] = settings().Studio.Theme:GetColor(enum, enum2)
-    end
-    settings().Studio.ThemeChanged:Connect(sync)
-	sync()
+local syncedelements = {}
+
+function m.MatchColor(element, property, enum, enum2)
+    element[property] = settings().Studio.Theme:GetColor(enum, enum2)
 end
+
+function m.ColorSync(element, property, enum, enum2)
+    syncedelements[#syncedelements + 1] = {element, property, enum, enum2}
+    m.MatchColor(element, property, enum, enum2)
+end
+
+settings().Studio.ThemeChanged:Connect(function()
+    for _, v in pairs(syncedelements) do
+        m.MatchColor(v[1], v[2], v[3], v[4])
+    end
+end)
 
 -- dumps the gui into workspace for debugging
 function m.DumpGUI(parent)

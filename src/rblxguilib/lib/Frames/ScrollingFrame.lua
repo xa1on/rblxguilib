@@ -18,13 +18,13 @@ function ScrollingFrame:UpdateFrameSize()
     self.ScrollbarBackground.Visible = ScrollbarVisibility
 end
 
-function ScrollingFrame.new(Parent)
+function ScrollingFrame.new(BarSize, Parent)
     local self = GUIFrame.new(Parent)
     setmetatable(self, ScrollingFrame)
     -- scroll bar background
     self.ScrollbarBackground = Instance.new("Frame", self.Parent)
-    self.ScrollbarBackground.Size = UDim2.new(0,15,1,0)
-    self.ScrollbarBackground.Position = UDim2.new(1,-15,0,0)
+    self.ScrollbarBackground.Size = UDim2.new(0,BarSize or 15,1,0)
+    self.ScrollbarBackground.Position = UDim2.new(1,-(BarSize or 15),0,0)
     self.ScrollbarBackground.Name = "ScrollbarBackground"
     util.ColorSync(self.ScrollbarBackground, "BackgroundColor3", Enum.StudioStyleGuideColor.ScrollBarBackground)
 
@@ -32,7 +32,7 @@ function ScrollingFrame.new(Parent)
     self.Content = Instance.new("ScrollingFrame", self.Parent)
     self.Content.BackgroundTransparency = 1
     self.Content.Size = UDim2.new(1,0,1,0)
-    self.Content.ScrollBarThickness = 15
+    self.Content.ScrollBarThickness = BarSize or 15
     self.Content.BottomImage, self.Content.MidImage, self.Content.TopImage = self.Images.bottom, self.Images.mid, self.Images.top
     self.Content.ScrollingDirection = Enum.ScrollingDirection.Y
     self.Content.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar

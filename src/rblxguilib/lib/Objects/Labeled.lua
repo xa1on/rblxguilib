@@ -44,7 +44,7 @@ function LabeledObject.new(Textbox, LabelSize, Objects, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,LabeledObject)
     self.Objects = {}
-    self.MainFrame = Instance.new("Frame", self.Frame)
+    self.MainFrame = Instance.new("Frame", self.Parent)
     self.MainFrame.BackgroundTransparency = 1
     self.MainFrame.Name = "MainFrame"
     self.MainLayout = Instance.new("UIListLayout", self.MainFrame)

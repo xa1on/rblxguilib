@@ -41,7 +41,7 @@ function Button.new(Textbox, Size, Disabled, Parent)
     setmetatable(self,Button)
     self.TextboxTable = nil
     -- creating a frame to hold the button
-    self.ButtonFrame = Instance.new("Frame", self.Frame)
+    self.ButtonFrame = Instance.new("Frame", self.Parent)
     self.ButtonFrame.BackgroundTransparency = 1
     self.ButtonFrame.Name = "ButtonFrame"
     self.ButtonFrame.Size = UDim2.new(1,0,1,0)

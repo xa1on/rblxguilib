@@ -7,7 +7,7 @@ setmetatable(GUIObject,GUIElement)
 function GUIObject.new(Frame)
     local self = GUIElement.new()
     Frame = Frame or ListFrame.new().Content
-    self.Frame = Frame
+    self.Parent = Frame
     setmetatable(self,GUIObject)
     self.Object = nil
     self.MainMovable = nil
@@ -15,9 +15,9 @@ function GUIObject.new(Frame)
 end
 
 function GUIObject:Move(NewFrame, WithFrame)
-    local PreviousParent = self.Frame
+    local PreviousParent = self.Parent
     self.MainMovable.Parent = NewFrame
-    self.Frame = NewFrame
+    self.Parent = NewFrame
     if PreviousParent:IsA("Frame") and WithFrame then
         for _, i in pairs(PreviousParent:GetChildren()) do
             if i:IsA("Frame") then

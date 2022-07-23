@@ -3,6 +3,7 @@ InputField.__index = InputField
 
 local util = require(script.Parent.Parent.GUIUtil)
 local GUIObject = require(script.Parent.GUIObject)
+local ScrollingFrame = require(script.Parent.Parent.Frames.ScrollingFrame)
 local KeybindManager = require(script.Parent.Parent.KeybindManager)
 setmetatable(InputField,GUIObject)
 
@@ -14,9 +15,9 @@ function InputField:SetDisabled(State)
     self.Disabled = State
     if self.Disabled then
         self:SetDropdown(false)
-        self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0.5,0.5,0.5,0.5
+        self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0.5,0.5,0.5
     else
-        self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0,0,0,0
+        self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0,0,0
     end
     if self.TextEditable then
         self.Input.TextEditable = not State
@@ -35,17 +36,17 @@ function InputField:SetDropdown(State)
     self.DropdownOpen = State
     self.DropdownFrame.Visible = State
     if State then
-        self.Frame.ZIndex = 2
+        self.Parent.ZIndex = 2
         self.DropdownFrame.ZIndex = 2
     else
-        self.Frame.ZIndex = 0
+        self.Parent.ZIndex = 0
         self.DropdownFrame.ZIndex = 2
     end
 end
 
 function InputField:RecallItem(Name)
     if self.ItemTable[Name] then return self.ItemTable[Name]
-    else return self.Value end
+    else return Name end
 end
 
 function InputField:StoreItem(Item)
@@ -58,11 +59,11 @@ end
 
 function InputField:AddItem(Item)
     local StoredItem = self:StoreItem(Item)
-    local ItemButton = Instance.new("TextButton", self.DropdownFrame)
+    local ItemButton = Instance.new("TextButton", self.DropdownScroll.Content)
     ItemButton.Name = StoredItem[1]
     ItemButton.Size = UDim2.new(1,0,0,18)
     ItemButton.BorderSizePixel = 0
-    util.ColorSync(ItemButton, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
+    util.ColorSync(ItemButton, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     ItemButton.Text = ""
     local ItemLabel = Instance.new("TextLabel", ItemButton)
     ItemLabel.BackgroundTransparency = 1
@@ -88,7 +89,7 @@ function InputField:AddItems(Items)
 end
 
 function InputField:RemoveItem(Item)
-    local Target = self.DropdownFrame:FindFirstChild(Item)
+    local Target = self.DropdownScroll.Content:FindFirstChild(Item)
     if Target then
         Target:Destroy()
         if self.ItemTable[Item] then self.ItemTable[Item] = nil end
@@ -115,7 +116,7 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
     setmetatable(self,InputField)
     self.ItemTable = {}
     self.Action = nil
-    self.InputFieldContainer = Instance.new("Frame", self.Frame)
+    self.InputFieldContainer = Instance.new("Frame", self.Parent)
     self.InputFieldContainer.BackgroundTransparency = 1
     self.InputFieldFrame = Instance.new("Frame", self.InputFieldContainer)
     self.InputFieldFrame.BackgroundTransparency = 1
@@ -204,32 +205,37 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
     self.DropdownFrame = Instance.new("Frame", self.InputFieldFrame)
     self.DropdownFrame.Size = UDim2.new(1,0,0,0)
     self.DropdownFrame.Position = UDim2.new(0,0,1,0)
-    util.ColorSync(self.DropdownFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
-    util.ColorSync(self.DropdownFrame, "BorderColor3", Enum.StudioStyleGuideColor.Border)
+    util.ColorSync(self.DropdownFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+    util.ColorSync(self.DropdownFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     self.DropdownFrame.Visible = false
     self.DropdownFrame.Name = "DropdownFrame"
     self.MouseInDropdownMenu = false
     self.DropdownFrame.MouseEnter:Connect(function() self.MouseInDropdownMenu = true end)
     self.DropdownFrame.MouseLeave:Connect(function() self.MouseInDropdownMenu = false end)
-    self.DropdownLayout = Instance.new("UIListLayout", self.DropdownFrame)
-    self.DropdownLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    self.DropdownScroll = ScrollingFrame.new(10, self.DropdownFrame)
     self:SetDropdown(false)
     local function syncframe()
-        self.DropdownFrame.Size = UDim2.new(1,0,0,self.DropdownLayout.AbsoluteContentSize.Y)
+        if self.DropdownScroll.Layout.AbsoluteContentSize.Y > 100 then
+            self.DropdownFrame.Size = UDim2.new(1,0,0,100)
+            return
+        end
+        self.DropdownFrame.Size = UDim2.new(1,0,0,self.DropdownScroll.Layout.AbsoluteContentSize.Y)
     end
-    self.DropdownLayout.Changed:Connect(function(p)
+    self.DropdownScroll.Layout.Changed:Connect(function(p)
         if p == "AbsoluteContentSize" then syncframe() end
     end)
     syncframe()
-    _G.InputFrame.InputBegan:Connect(function(p)
-        task.wait(0)
-        if self.DropdownOpen and p.UserInputType == Enum.UserInputType.MouseButton1 and not self.MouseInDropdownMenu and not self.MouseInDropdownButton then
-            self:SetDropdown(false)
-        end
-        if p.UserInputType == Enum.UserInputType.MouseButton2 and self.MouseInInput then
-            self.Input.Text = ""
-        end
-    end)
+    for _, v in pairs(_G.InputFrames) do
+        v.InputBegan:Connect(function(p)
+            task.wait(0)
+            if self.DropdownOpen and p.UserInputType == Enum.UserInputType.MouseButton1 and not self.MouseInDropdownMenu and not self.MouseInDropdownButton then
+                self:SetDropdown(false)
+            end
+            if p.UserInputType == Enum.UserInputType.MouseButton2 and self.MouseInInput then
+                self.Input.Text = ""
+            end
+        end)
+    end
     if Items then self:AddItems(Items) end
     self:SetDisabled(Disabled)
     self.Object = self.Input
