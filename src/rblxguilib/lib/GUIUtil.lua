@@ -20,9 +20,10 @@ end)
 
 -- dumps the gui into workspace for debugging
 function m.DumpGUI(parent)
-    local temp = Instance.new("ScreenGui", workspace)
-    if workspace:FindFirstChild("Dump") then
-        workspace.Dump.Parent = nil
+    local StarterGUI = game:GetService("StarterGui")
+    local temp = Instance.new("ScreenGui", StarterGUI)
+    if StarterGUI:FindFirstChild("Dump") then
+        StarterGUI.Dump.Parent = nil
     end
     temp.Name = "Dump"
     for _, i in pairs(parent:GetChildren()) do

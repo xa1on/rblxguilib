@@ -21,17 +21,15 @@ function Section:Toggle()
     self:SetState(not self.Open)
 end
 
-function Section.new(Name, Text, Open, Parent)
+function Section.new(Text, Open, Parent)
     local self = GUIFrame.new(Parent)
     setmetatable(self, Section)
-    Text = Text or Name
     self.Open = Open
 
     self.Collapse = Instance.new("Frame", self.Parent)
     self.Collapse.BackgroundTransparency = 1
     self.Collapse.Size = UDim2.new(1,0,0,0)
     self.Collapse.AutomaticSize = Enum.AutomaticSize.Y
-    self.Collapse.Name = "Section - "..Name
 
     self.CollapseLayout = Instance.new("UIListLayout", self.Collapse)
     self.CollapseLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -80,6 +78,7 @@ function Section.new(Name, Text, Open, Parent)
         Text:Move(self.CollapseTextboxFrame)
     end
     self.Textbox = self.TextboxTable.Textbox
+    self.Collapse.Name = "Section - " .. self.Textbox.Text
     self.Textbox.AnchorPoint = Vector2.new(0,0.5)
     self.Textbox.Position = UDim2.new(0,0,0.5,0)
 

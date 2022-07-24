@@ -20,22 +20,14 @@ function LabeledObject:ToggleDisable()
     self:SetDisabled(not self.Disabled)
 end
 
-function LabeledObject:AddObject(Object, Name, Scale)
+function LabeledObject:AddObject(Object, Name, Size)
     Object:Move(self.Content, true)
-    if not Scale or self.TotalUsedSpace+Scale > 1 then
-        if self.TotalUsedSpace >= 1 then
-            local ReservedSpace = self.TotalUsedSpace + Scale - 1
-            for _, v in pairs(self.Objects) do
-                v.MainMovable.Size = UDim2.new(v.MainMovable.Size.X.Scale-(ReservedSpace/#self.Objects),0,1,0)
-            end
-            self.TotalUsedSpace = 1 - ReservedSpace
-        else
-            Scale = 1-self.TotalUsedSpace
-        end
-    end
-    Object.MainMovable.Size = UDim2.new(Scale,0,1,0)
-    Object.MainMovable.Position = UDim2.new(self.TotalUsedSpace,0,0,0)
-    self.TotalUsedSpace += Scale
+    Size = util.GetScale(Size)
+    if not Size then Size = UDim.new(1-self.TotalUsedScale, -self.TotalUsedOffset) end
+    Object.MainMovable.Size = UDim2.new(Size.Scale,Size.Offset,1,0)
+    Object.MainMovable.Position = UDim2.new(self.TotalUsedScale,self.TotalUsedOffset,0,0)
+    self.TotalUsedScale += Size.Scale
+    self.TotalUsedOffset += Size.Offset
     self[Name] = Object
     self.Objects[#self.Objects+1] = Object
 end
@@ -44,6 +36,8 @@ function LabeledObject.new(Textbox, LabelSize, Objects, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,LabeledObject)
     self.Objects = {}
+    self.TotalUsedScale = 0
+    self.TotalUsedOffset = 0
     self.MainFrame = Instance.new("Frame", self.Parent)
     self.MainFrame.BackgroundTransparency = 1
     self.MainFrame.Name = "MainFrame"
@@ -77,7 +71,7 @@ function LabeledObject.new(Textbox, LabelSize, Objects, Parent)
         end)
         sync()
     end
-    self.TotalUsedSpace = 0
+    self.TotalUsedScale = 0
     if type(Objects) == "table" and Objects[1] and type(Objects[1] == "table") then
         for _, v in pairs(Objects) do
             self:AddObject(v[1], v[2], v[3])

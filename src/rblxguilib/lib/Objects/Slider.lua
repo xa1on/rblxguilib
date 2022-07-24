@@ -84,7 +84,7 @@ function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
         v.InputEnded:Connect(function(p)
             if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then self.SliderSelected = false end
         end)
-        v.MouseLeave:Connect(function() if self.SliderSelected then self.SliderSelected = false end end)
+        v.MouseLeave:Connect(function() self.SliderSelected = false end)
     end
     self.SlideButton.MouseMoved:Connect(function()
         _G.PluginObject:GetMouse().Icon = self.CursorIcon

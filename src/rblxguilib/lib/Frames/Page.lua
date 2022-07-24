@@ -36,6 +36,7 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
     self.Tab.Font = Enum.Font.SourceSans
     self.Tab.Text = PageName
     self.Tab.TextSize = 14
+    self.Tab.Name = "Tab"
     if not TabSize then
         local function sync()
             self.TabFrame.Size = UDim2.new(0,self.Tab.TextBounds.X+2*self.Tab.TextSize, 0, 30)
@@ -45,22 +46,41 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
         end)
         sync()
     end
-    self.Tab.MouseButton1Click:Connect(function()
+    self.Tab.MouseButton1Down:Connect(function(x)
         PageMenu:SetActive(self.ID)
+        self.TabSelected = true
+        self.InitalX = self.TabFrame.Position.X.Offset - x
     end)
+    for _, v in pairs(_G.InputFrames) do
+        v.MouseMoved:Connect(function(x)
+            if not self.TabSelected then return end
+            self.TabFrame.Position = UDim2.new(0,x + self.InitalX, 0,0)
+            PageMenu:BeingDragged(self.ID)
+        end)
+        v.InputEnded:Connect(function(p)
+            if p.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+            if self.TabSelected then self.TabSelected = false PageMenu:FixPageLayout() end
+        end)
+        v.MouseLeave:Connect(function()
+            if self.TabSelected then self.TabSelected = false PageMenu:FixPageLayout() end
+        end)
+    end
     util.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText)
     self.TopBorder = Instance.new("Frame", self.TabFrame)
     self.TopBorder.Size = UDim2.new(1,0,0,1)
     self.TopBorder.BorderSizePixel = 0
+    self.TopBorder.Name = "TopBorder"
     util.ColorSync(self.TopBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.RibbonTabTopBar)
     self.LeftBorder = Instance.new("Frame", self.TabFrame)
     self.LeftBorder.Size = UDim2.new(0,1,0,24)
     self.LeftBorder.BorderSizePixel = 0
+    self.LeftBorder.Name = "LeftBorder"
     util.ColorSync(self.LeftBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     self.RightBorder = Instance.new("Frame", self.TabFrame)
     self.RightBorder.Size = UDim2.new(0,1,0,24)
     self.RightBorder.Position = UDim2.new(1,0,0,0)
     self.RightBorder.BorderSizePixel = 0
+    self.RightBorder.Name = "RightBorder"
     util.ColorSync(self.RightBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     self.Content = Instance.new("Frame", PageMenu.ContentContainers)
     self.Content.BackgroundTransparency = 1
