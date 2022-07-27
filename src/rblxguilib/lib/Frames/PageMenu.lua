@@ -21,6 +21,12 @@ function PageMenu:AddPage(Page)
     self.Pages[#self.Pages+1] = Page
 end
 
+function PageMenu:RemovePage(Page)
+    table.remove(self.Pages, self:GetIDIndex(Page.ID))
+    self.ScrollingMenu.CanvasSize = UDim2.new(0,self.ScrollingMenu.CanvasSize.Width.Offset - Page.TabFrame.Size.X.Offset,0,0)
+    self:FixPageLayout()
+end
+
 function PageMenu:SetActive(ID)
     for _, v in pairs(self.Pages) do
         v:SetState(v.ID == ID)

@@ -3,7 +3,6 @@ Page.__index = Page
 
 local util = require(script.Parent.Parent.GUIUtil)
 local GUIFrame = require(script.Parent.GUIFrame)
-local PageMenu = require(script.Parent.PageMenu)
 setmetatable(Page,GUIFrame)
 local PageNum = 0
 
@@ -24,7 +23,7 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
     PageNum += 1
     self.ID = PageNum
     self.PageMenu = PageMenu
-    self.TabFrame = Instance.new("Frame", PageMenu.TabContainer)
+    self.TabFrame = Instance.new("Frame", self.PageMenu.TabContainer)
     self.TabFrame.Name = self.ID
     self.TabFrame.Size = UDim2.new(0,TabSize, 0, 30)
     self.TabFrame.BorderSizePixel = 0
@@ -37,6 +36,7 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
     self.Tab.Text = PageName
     self.Tab.TextSize = 14
     self.Tab.Name = "Tab"
+    self.InsideWidget = true
     if not TabSize then
         local function sync()
             self.TabFrame.Size = UDim2.new(0,self.Tab.TextBounds.X+2*self.Tab.TextSize, 0, 30)
@@ -47,22 +47,35 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
         sync()
     end
     self.Tab.MouseButton1Down:Connect(function(x)
-        PageMenu:SetActive(self.ID)
+        if self.TabSelected then return end
+        _G.SelectedPage = self
+        self.PageMenu:SetActive(self.ID)
         self.TabSelected = true
         self.InitalX = self.TabFrame.Position.X.Offset - x
+        self.InsideWidget = true
     end)
     for _, v in pairs(_G.InputFrames) do
         v.MouseMoved:Connect(function(x)
             if not self.TabSelected then return end
             self.TabFrame.Position = UDim2.new(0,x + self.InitalX, 0,0)
-            PageMenu:BeingDragged(self.ID)
+            if self.InsideWidget then self.PageMenu:BeingDragged(self.ID) end
         end)
         v.InputEnded:Connect(function(p)
-            if p.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
-            if self.TabSelected then self.TabSelected = false PageMenu:FixPageLayout() end
+            if p.UserInputType ~= Enum.UserInputType.MouseButton1 or not self.TabSelected then return end
+            _G.SelectedPage = nil
+            self.TabSelected = false
+            self.PageMenu:FixPageLayout()
         end)
         v.MouseLeave:Connect(function()
-            if self.TabSelected then self.TabSelected = false PageMenu:FixPageLayout() end
+            if not self.TabSelected then return end
+            self.InsideWidget = false
+            _G.PluginObject:StartDrag({})
+            self.PageMenu:RemovePage(self)
+        end)
+        v.MouseEnter:Connect(function()
+            if self.InsideWidget or not self.TabSelected then return end
+            self.TabSelected = false
+            self.PageMenu:AddPage(self)
         end)
     end
     util.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText)
@@ -82,12 +95,12 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
     self.RightBorder.BorderSizePixel = 0
     self.RightBorder.Name = "RightBorder"
     util.ColorSync(self.RightBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
-    self.Content = Instance.new("Frame", PageMenu.ContentContainers)
+    self.Content = Instance.new("Frame", self.PageMenu.ContentContainers)
     self.Content.BackgroundTransparency = 1
     self.Content.Size = UDim2.new(1,0,1,0)
     self.Content.Name = self.ID
-    PageMenu:AddPage(self)
-    if OpenByDefault then PageMenu:SetActive(self.ID) else self:SetState(false) end
+    self.PageMenu:AddPage(self)
+    if OpenByDefault then self.PageMenu:SetActive(self.ID) else self:SetState(false) end
     return self
 end
 

@@ -12,26 +12,20 @@ local gui = require(script.Parent.RBLXGUILib.initialize)(plugin)
 toolbar = plugin:CreateToolbar("rblxgui")
 
 -- generate widget
-local widget = gui.PluginWidget.new("rblxgui").Content
+local widget = gui.PluginWidget.new("rblxgui", nil, true, Enum.InitialDockState.Left)
 
 -- toolbar button to toggle the widget
 local b_toggle = toolbar:CreateButton("","open widget","")
-b_toggle.Click:Connect(function() widget.Enabled = not widget.Enabled end)
+b_toggle.Click:Connect(function() widget.Content.Enabled = not widget.Content.Enabled end)
 
-local mainmenu = gui.PageMenu.new(widget)
-local mainpage = gui.Page.new("MAIN", mainmenu, true)
+local mainpage = gui.Page.new("MAIN", widget.Menu, true)
 
-local settingspage = gui.Page.new("SETTINGS", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
-gui.Page.new("PAGE", mainmenu)
+gui.Page.new("SETTINGS", widget.Menu)
+gui.Page.new("PAGE", widget.Menu)
+gui.Page.new("PAGE", widget.Menu)
+gui.Page.new("PAGE", widget.Menu)
+gui.Page.new("PAGE", widget.Menu)
+gui.Page.new("PAGE", widget.Menu)
 
 -- scrolling frame(lets you scroll through the gui): usage - (parent)
 local mainframe = gui.ScrollingFrame.new(nil, mainpage.Content)
@@ -151,5 +145,10 @@ end)
 local dumpbutton = gui.Button.new("Dump GUI into workspace")
 dumpbutton:Clicked(function()
     print("Dumping GUI")
-    gui.GUIUtil.DumpGUI(widget)
+    gui.GUIUtil.DumpGUI(widget.Content)
+end)
+
+local newwindow = gui.Button.new("Create a new window")
+newwindow:Clicked(function()
+    gui.PluginWidget.new(nil, nil, true, nil, true)
 end)
