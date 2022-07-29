@@ -13,9 +13,12 @@ function PageMenu:GetIDTab(ID)
 end
 
 function PageMenu:AddPage(Page)
+    self:FixPageLayout()
     if #self.Pages > 0 then
         local LatestPage = self.Pages[#self.Pages]
         Page.TabFrame.Position = UDim2.new(0,LatestPage.TabFrame.Position.X.Offset + LatestPage.TabFrame.Size.X.Offset,0,0)
+    else
+        Page.TabFrame.Position = UDim2.new(0,0,0,0)
     end
     self.ScrollingMenu.CanvasSize = UDim2.new(0,Page.TabFrame.Position.X.Offset + Page.TabFrame.Size.X.Offset,0,0)
     self.Pages[#self.Pages+1] = Page

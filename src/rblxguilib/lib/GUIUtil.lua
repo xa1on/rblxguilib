@@ -83,4 +83,32 @@ function m.RoundNumber(number, factor)
     if factor == 0 then return number else return math.floor(number/factor+0.5)*factor end
 end
 
+
+local InputFrameConnections = {}
+function m.AddInputFrameConnection(Connection, func)
+    InputFrameConnections[#InputFrameConnections+1] = {Connection, func}
+    for _, v in pairs(_G.InputFrames) do
+        v[Connection]:Connect(func)
+    end
+end
+
+function m.AddInputFrame(Frame)
+    _G.InputFrames[#_G.InputFrames + 1] = Frame
+    for _, v in pairs(InputFrameConnections) do
+        Frame[v[1]]:Connect(v[2])
+    end
+end
+
+local connectionlist = {}
+
+function m.CreateConnection(Object, Connection, func)
+    connectionlist[#connectionlist+1] = Object[Connection]:Connect(func)
+end
+
+_G.PluginObject.Unloading:Connect(function()
+    for _, v in pairs(connectionlist) do
+        v:Disconnect()
+    end
+end)
+
 return m

@@ -6,7 +6,6 @@ local plugin = _G.PluginObject
 local util = require(script.Parent.Parent.GUIUtil)
 local GUIFrame = require(script.Parent.GUIFrame)
 local PageMenu = require(script.Parent.PageMenu)
-local KeybindManager = require(script.Parent.Parent.KeybindManager)
 local BackgroundFrame = require(script.Parent.BackgroundFrame)
 setmetatable(Widget,GUIFrame)
 _G.InputFrames = {}
@@ -27,18 +26,15 @@ function Widget.new(name, title, IncludePageMenu, DockState, InitiallyEnabled, O
     self.InputFrame.Size = UDim2.new(1,0,1,0)
     self.InputFrame.ZIndex = 100
     self.InputFrame.Name = "InputFrame"
-    _G.InputFrames[#_G.InputFrames + 1] = self.InputFrame
-    KeybindManager.AddInputFields(self.InputFrame)
+    util.AddInputFrame(self.InputFrame)
     if IncludePageMenu then self.Menu = PageMenu.new(self.WidgetObject) end
     self.WidgetObject.PluginDragDropped:Connect(function()
         if(_G.SelectedPage and self.Menu) then
             _G.SelectedPage.TabFrame.Parent = self.Menu.TabContainer
             _G.SelectedPage.Content.Parent = self.Menu.ContentContainers
             _G.SelectedPage.PageMenu = self.Menu
-            _G.SelectedPage.TabSelected = false
             _G.SelectedPage.InsideWidget = true
             self.Menu:AddPage(_G.SelectedPage)
-            self.Menu:FixPageLayout()
             self.Menu:SetActive(_G.SelectedPage.ID)
             _G.SelectedPage = nil
         end

@@ -52,32 +52,29 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
         self.PageMenu:SetActive(self.ID)
         self.TabSelected = true
         self.InitalX = self.TabFrame.Position.X.Offset - x
-        self.InsideWidget = true
     end)
-    for _, v in pairs(_G.InputFrames) do
-        v.MouseMoved:Connect(function(x)
-            if not self.TabSelected then return end
-            self.TabFrame.Position = UDim2.new(0,x + self.InitalX, 0,0)
-            if self.InsideWidget then self.PageMenu:BeingDragged(self.ID) end
-        end)
-        v.InputEnded:Connect(function(p)
-            if p.UserInputType ~= Enum.UserInputType.MouseButton1 or not self.TabSelected then return end
-            _G.SelectedPage = nil
-            self.TabSelected = false
-            self.PageMenu:FixPageLayout()
-        end)
-        v.MouseLeave:Connect(function()
-            if not self.TabSelected then return end
-            self.InsideWidget = false
-            _G.PluginObject:StartDrag({})
-            self.PageMenu:RemovePage(self)
-        end)
-        v.MouseEnter:Connect(function()
-            if self.InsideWidget or not self.TabSelected then return end
-            self.TabSelected = false
+    util.AddInputFrameConnection("InputEnded", function(p)
+        if not self.TabSelected or p.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+        if not self.InsideWidget then
             self.PageMenu:AddPage(self)
-        end)
-    end
+            self.InsideWidget = true
+        end
+        _G.SelectedPage = nil
+        self.TabSelected = false
+        self.PageMenu:FixPageLayout()
+    end)
+    util.AddInputFrameConnection("MouseMoved", function(x)
+        if not self.TabSelected then return end
+        self.TabFrame.Position = UDim2.new(0,x + self.InitalX, 0,0)
+        if self.InsideWidget then self.PageMenu:BeingDragged(self.ID) end
+    end)
+    util.AddInputFrameConnection("MouseLeave", function()
+        if not self.TabSelected then return end
+        self.TabSelected = false
+        self.InsideWidget = false
+        _G.PluginObject:StartDrag({})
+        self.PageMenu:RemovePage(self)
+    end)
     util.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText)
     self.TopBorder = Instance.new("Frame", self.TabFrame)
     self.TopBorder.Size = UDim2.new(1,0,0,1)

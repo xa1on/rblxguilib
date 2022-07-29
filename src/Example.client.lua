@@ -13,6 +13,7 @@ toolbar = plugin:CreateToolbar("rblxgui")
 
 -- generate widget
 local widget = gui.PluginWidget.new("rblxgui", nil, true, Enum.InitialDockState.Left)
+local widget2 = gui.PluginWidget.new("rblxgui2", nil, true, nil, true)
 
 -- toolbar button to toggle the widget
 local b_toggle = toolbar:CreateButton("","open widget","")
@@ -145,7 +146,7 @@ end)
 local dumpbutton = gui.Button.new("Dump GUI into workspace")
 dumpbutton:Clicked(function()
     print("Dumping GUI")
-    gui.GUIUtil.DumpGUI(widget.Content)
+    gui.GUIUtil.DumpGUI(widget2.Content)
 end)
 
 local newwindow = gui.Button.new("Create a new window")

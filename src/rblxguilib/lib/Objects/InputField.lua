@@ -225,17 +225,15 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
         if p == "AbsoluteContentSize" then syncframe() end
     end)
     syncframe()
-    for _, v in pairs(_G.InputFrames) do
-        v.InputBegan:Connect(function(p)
-            task.wait(0)
-            if self.DropdownOpen and p.UserInputType == Enum.UserInputType.MouseButton1 and not self.MouseInDropdownMenu and not self.MouseInDropdownButton then
-                self:SetDropdown(false)
-            end
-            if p.UserInputType == Enum.UserInputType.MouseButton2 and self.MouseInInput then
-                self.Input.Text = ""
-            end
-        end)
-    end
+    util.AddInputFrameConnection("InputBegan", function(p)
+        task.wait(0)
+        if self.DropdownOpen and p.UserInputType == Enum.UserInputType.MouseButton1 and not self.MouseInDropdownMenu and not self.MouseInDropdownButton then
+            self:SetDropdown(false)
+        end
+        if p.UserInputType == Enum.UserInputType.MouseButton2 and self.MouseInInput then
+            self.Input.Text = ""
+        end
+    end)
     if Items then self:AddItems(Items) end
     self:SetDisabled(Disabled)
     self.Object = self.Input

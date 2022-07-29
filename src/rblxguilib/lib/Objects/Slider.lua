@@ -75,17 +75,15 @@ function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
         self.InitialX = self.SlideButton.AbsolutePosition.X - x
     end)
     self.PreviousValue = self.Value
-    for _, v in pairs(_G.InputFrames) do
-        v.MouseMoved:Connect(function(x)
-            if not self.SliderSelected then return end
-            self.Value = util.RoundNumber(math.clamp((x + self.InitialX - self.SlideBar.AbsolutePosition.X + self.SlideButton.Size.X.Offset / 2)/self.SlideBar.AbsoluteSize.X, 0, 1) * (self.Max - self.Min) + self.Min, self.Increment)
-            self:UpdatePosition()
-        end)
-        v.InputEnded:Connect(function(p)
-            if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then self.SliderSelected = false end
-        end)
-        v.MouseLeave:Connect(function() self.SliderSelected = false end)
-    end
+    util.AddInputFrameConnection("MouseMoved", function(x)
+        if not self.SliderSelected then return end
+        self.Value = util.RoundNumber(math.clamp((x + self.InitialX - self.SlideBar.AbsolutePosition.X + self.SlideButton.Size.X.Offset / 2)/self.SlideBar.AbsoluteSize.X, 0, 1) * (self.Max - self.Min) + self.Min, self.Increment)
+        self:UpdatePosition()
+    end)
+    util.AddInputFrameConnection("InputEnded", function(p)
+        if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then self.SliderSelected = false end
+    end)
+    util.AddInputFrameConnection("MouseLeave", function() self.SliderSelected = false end)
     self.SlideButton.MouseMoved:Connect(function()
         _G.PluginObject:GetMouse().Icon = self.CursorIcon
     end)
