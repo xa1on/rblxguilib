@@ -1,18 +1,20 @@
 local m = {}
 
+local EventManager = require(script.Parent.EventManager)
+
 -- syncs colors with studio theme
 local syncedelements = {}
-
-function m.MatchColor(element, property, enum, enum2)
-    element[property] = settings().Studio.Theme:GetColor(enum, enum2)
-end
 
 function m.ColorSync(element, property, enum, enum2)
     syncedelements[#syncedelements + 1] = {element, property, enum, enum2}
     m.MatchColor(element, property, enum, enum2)
 end
 
-settings().Studio.ThemeChanged:Connect(function()
+function m.MatchColor(element, property, enum, enum2)
+    element[property] = settings().Studio.Theme:GetColor(enum, enum2)
+end
+
+EventManager.AddConnection(settings().Studio.ThemeChanged, function()
     for _, v in pairs(syncedelements) do
         m.MatchColor(v[1], v[2], v[3], v[4])
     end
@@ -83,32 +85,5 @@ function m.RoundNumber(number, factor)
     if factor == 0 then return number else return math.floor(number/factor+0.5)*factor end
 end
 
-
-local InputFrameConnections = {}
-function m.AddInputFrameConnection(Connection, func)
-    InputFrameConnections[#InputFrameConnections+1] = {Connection, func}
-    for _, v in pairs(_G.InputFrames) do
-        v[Connection]:Connect(func)
-    end
-end
-
-function m.AddInputFrame(Frame)
-    _G.InputFrames[#_G.InputFrames + 1] = Frame
-    for _, v in pairs(InputFrameConnections) do
-        Frame[v[1]]:Connect(v[2])
-    end
-end
-
-local connectionlist = {}
-
-function m.CreateConnection(Object, Connection, func)
-    connectionlist[#connectionlist+1] = Object[Connection]:Connect(func)
-end
-
-_G.PluginObject.Unloading:Connect(function()
-    for _, v in pairs(connectionlist) do
-        v:Disconnect()
-    end
-end)
 
 return m

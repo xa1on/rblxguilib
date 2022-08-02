@@ -12,8 +12,9 @@ local gui = require(script.Parent.RBLXGUILib.initialize)(plugin)
 toolbar = plugin:CreateToolbar("rblxgui")
 
 -- generate widget
-local widget = gui.PluginWidget.new("rblxgui", nil, true, Enum.InitialDockState.Left)
-local widget2 = gui.PluginWidget.new("rblxgui2", nil, true, nil, true)
+-- name, title, InitiallyEnabled, NoPageMenu, DockState, OverrideRestore
+local widget = gui.PluginWidget.new("rblxgui", nil, true, nil, Enum.InitialDockState.Left)
+local widget2 = gui.PluginWidget.new("rblxgui2", nil, true)
 
 -- toolbar button to toggle the widget
 local b_toggle = toolbar:CreateButton("","open widget","")
@@ -142,14 +143,14 @@ toggle_checkbox2:Clicked(function(p)
     slider:SetDisabled(p)
 end)
 
+local newwindow = gui.Button.new("Create a new window")
+newwindow:Clicked(function()
+    gui.PluginWidget.new(nil, nil, true)
+end)
+
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new("Dump GUI into workspace")
 dumpbutton:Clicked(function()
     print("Dumping GUI")
-    gui.GUIUtil.DumpGUI(widget2.Content)
-end)
-
-local newwindow = gui.Button.new("Create a new window")
-newwindow:Clicked(function()
-    gui.PluginWidget.new(nil, nil, true, nil, true)
+    gui.GUIUtil.DumpGUI(widget.Content)
 end)

@@ -5,6 +5,7 @@ local util = require(script.Parent.Parent.GUIUtil)
 local GUIObject = require(script.Parent.GUIObject)
 local ScrollingFrame = require(script.Parent.Parent.Frames.ScrollingFrame)
 local KeybindManager = require(script.Parent.Parent.KeybindManager)
+local InputManager = require(script.Parent.Parent.InputManager)
 setmetatable(InputField,GUIObject)
 
 InputField.Images = {
@@ -225,7 +226,7 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
         if p == "AbsoluteContentSize" then syncframe() end
     end)
     syncframe()
-    util.AddInputFrameConnection("InputBegan", function(p)
+    InputManager.AddInputEvent("InputBegan", function(p)
         task.wait(0)
         if self.DropdownOpen and p.UserInputType == Enum.UserInputType.MouseButton1 and not self.MouseInDropdownMenu and not self.MouseInDropdownButton then
             self:SetDropdown(false)

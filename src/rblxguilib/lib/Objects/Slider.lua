@@ -3,6 +3,7 @@ Slider.__index = Slider
 
 local util = require(script.Parent.Parent.GUIUtil)
 local GUIObject = require(script.Parent.GUIObject)
+local InputManager = require(script.Parent.Parent.InputManager)
 setmetatable(Slider,GUIObject)
 
 function Slider:SetDisabled(State)
@@ -75,15 +76,15 @@ function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
         self.InitialX = self.SlideButton.AbsolutePosition.X - x
     end)
     self.PreviousValue = self.Value
-    util.AddInputFrameConnection("MouseMoved", function(x)
+    InputManager.AddInputEvent("MouseMoved", function(x)
         if not self.SliderSelected then return end
         self.Value = util.RoundNumber(math.clamp((x + self.InitialX - self.SlideBar.AbsolutePosition.X + self.SlideButton.Size.X.Offset / 2)/self.SlideBar.AbsoluteSize.X, 0, 1) * (self.Max - self.Min) + self.Min, self.Increment)
         self:UpdatePosition()
     end)
-    util.AddInputFrameConnection("InputEnded", function(p)
+    InputManager.AddInputEvent("InputEnded", function(p)
         if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then self.SliderSelected = false end
     end)
-    util.AddInputFrameConnection("MouseLeave", function() self.SliderSelected = false end)
+    InputManager.AddInputEvent("MouseLeave", function() self.SliderSelected = false end)
     self.SlideButton.MouseMoved:Connect(function()
         _G.PluginObject:GetMouse().Icon = self.CursorIcon
     end)

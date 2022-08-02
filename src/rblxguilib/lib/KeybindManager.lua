@@ -1,5 +1,7 @@
 local InputService = game:GetService("UserInputService")
 local util = require(script.Parent.GUIUtil)
+local InputManager = require(script.Parent.InputManager)
+local EventManager = require(script.Parent.EventManager)
 
 local m = {}
 
@@ -150,9 +152,9 @@ local function InputEnded(p)
 end
 
 
-util.AddInputFrameConnection("InputBegan", InputBegan)
-util.AddInputFrameConnection("InputEnded", InputEnded)
-util.CreateConnection(InputService, "InputBegan", InputBegan)
-util.CreateConnection(InputService, "InputEnded", InputEnded)
+InputManager.AddInputEvent("InputBegan", InputBegan)
+InputManager.AddInputEvent("InputEnded", InputEnded)
+EventManager.AddConnection(InputService.InputBegan, InputBegan)
+EventManager.AddConnection(InputService.InputEnded, InputEnded)
 
 return m

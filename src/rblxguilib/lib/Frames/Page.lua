@@ -2,6 +2,7 @@ local Page = {}
 Page.__index = Page
 
 local util = require(script.Parent.Parent.GUIUtil)
+local InputManager = require(script.Parent.Parent.InputManager)
 local GUIFrame = require(script.Parent.GUIFrame)
 setmetatable(Page,GUIFrame)
 local PageNum = 0
@@ -47,30 +48,41 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
         sync()
     end
     self.Tab.MouseButton1Down:Connect(function(x)
-        if self.TabSelected then return end
+        if self.TabDragging then return end
         _G.SelectedPage = self
         self.PageMenu:SetActive(self.ID)
-        self.TabSelected = true
-        self.InitalX = self.TabFrame.Position.X.Offset - x
+        self.TabDragging = true
+        self.InitialX = self.TabFrame.Position.X.Offset - x - self.PageMenu.ScrollingMenu.CanvasPosition.X
     end)
-    util.AddInputFrameConnection("InputEnded", function(p)
-        if not self.TabSelected or p.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
-        if not self.InsideWidget then
-            self.PageMenu:AddPage(self)
-            self.InsideWidget = true
-        end
+    InputManager.AddInputEvent("InputEnded", function(p)
+        if not self.TabDragging or p.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
         _G.SelectedPage = nil
-        self.TabSelected = false
+        self.TabDragging = false
         self.PageMenu:FixPageLayout()
     end)
-    util.AddInputFrameConnection("MouseMoved", function(x)
-        if not self.TabSelected then return end
-        self.TabFrame.Position = UDim2.new(0,x + self.InitalX, 0,0)
+    InputManager.AddInputEvent("MouseEnter", function()
+        if not self.TabDragging and self.InsideWidget then return end
+        self.PageMenu:AddPage(self)
+        self.InsideWidget = true
+        _G.SelectedPage = nil
+        self.TabDragging = false
+        self.PageMenu:FixPageLayout()
+    end)
+    local PreviousMouseX = 0
+    InputManager.AddInputEvent("MouseMoved", function(x)
+        PreviousMouseX = x
+        if not self.TabDragging then return end
+        self.TabFrame.Position = UDim2.new(0,x + self.InitialX + self.PageMenu.ScrollingMenu.CanvasPosition.X,0,0)
         if self.InsideWidget then self.PageMenu:BeingDragged(self.ID) end
     end)
-    util.AddInputFrameConnection("MouseLeave", function()
-        if not self.TabSelected then return end
-        self.TabSelected = false
+    self.PageMenu.ScrollingMenu.Changed:Connect(function(p)
+        if not p == "CanvasPosition" or not self.TabDragging then return end
+        self.TabFrame.Position = UDim2.new(0,PreviousMouseX + self.InitialX + self.PageMenu.ScrollingMenu.CanvasPosition.X,0,0)
+        if self.InsideWidget then self.PageMenu:BeingDragged(self.ID) end
+    end)
+    InputManager.AddInputEvent("MouseLeave", function()
+        if not self.TabDragging then return end
+        self.TabDragging = false
         self.InsideWidget = false
         _G.PluginObject:StartDrag({})
         self.PageMenu:RemovePage(self)
