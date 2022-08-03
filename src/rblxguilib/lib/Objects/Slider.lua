@@ -59,14 +59,14 @@ function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
     self.SlideBar.Position = UDim2.new(0.5,0,0.5,0)
     Size = util.GetScale(Size) or UDim.new(1,-20)
     self.SlideBar.Size = UDim2.new(Size.Scale, Size.Offset, 0, 5)
-    util.ColorSync(self.SlideBar, "BackgroundColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Hover)
+    util.ColorSync(self.SlideBar, "BackgroundColor3", Enum.StudioStyleGuideColor.FilterButtonAccent)
     self.SlideButton = Instance.new("TextButton", self.SlideBar)
     self.SlideButton.Text = ""
+    self.SlideButton.BorderSizePixel = 0
     self.SlideButton.AnchorPoint = Vector2.new(0.5,0.5)
     self:UpdatePosition()
-    self.SlideButton.Size = UDim2.new(0,8,0,16)
-    util.ColorSync(self.SlideButton, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
-    util.ColorSync(self.SlideButton, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+    self.SlideButton.Size = UDim2.new(0,9,0,18)
+    util.ColorSync(self.SlideButton, "BackgroundColor3", Enum.StudioStyleGuideColor.Dark)
     self.SlideBar.BorderSizePixel = 0
     self.SliderSelected = false
     self.InitialX = 0

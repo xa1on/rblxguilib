@@ -14,7 +14,6 @@ toolbar = plugin:CreateToolbar("rblxgui")
 -- generate widget
 -- name, title, InitiallyEnabled, NoPageMenu, DockState, OverrideRestore
 local widget = gui.PluginWidget.new("rblxgui", nil, true, nil, Enum.InitialDockState.Left)
-local widget2 = gui.PluginWidget.new("rblxgui2", nil, true)
 
 -- toolbar button to toggle the widget
 local b_toggle = toolbar:CreateButton("","open widget","")
@@ -23,11 +22,11 @@ b_toggle.Click:Connect(function() widget.Content.Enabled = not widget.Content.En
 local mainpage = gui.Page.new("MAIN", widget.Menu, true)
 
 gui.Page.new("SETTINGS", widget.Menu)
-gui.Page.new("PAGE", widget.Menu)
-gui.Page.new("PAGE", widget.Menu)
-gui.Page.new("PAGE", widget.Menu)
-gui.Page.new("PAGE", widget.Menu)
-gui.Page.new("PAGE", widget.Menu)
+gui.Page.new("PAGE1", widget.Menu)
+gui.Page.new("PAGE2", widget.Menu)
+gui.Page.new("PAGE3", widget.Menu)
+gui.Page.new("PAGE4", widget.Menu)
+gui.Page.new("PAGE5", widget.Menu)
 
 -- scrolling frame(lets you scroll through the gui): usage - (parent)
 local mainframe = gui.ScrollingFrame.new(nil, mainpage.Content)
