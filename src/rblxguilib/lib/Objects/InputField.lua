@@ -134,6 +134,7 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
     self.Input.Font = Enum.Font.SourceSans
     DefaultValue = DefaultValue or ""
     self:SetValue(DefaultValue)
+    self.Value = self:RecallItem(self.Input.Text)
     self.Input.TextSize = 14
     if Placeholder then self.Input.PlaceholderText = Placeholder end
     self.Input.TextXAlignment = Enum.TextXAlignment.Left
@@ -143,6 +144,7 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
     self.Input.Changed:Connect(function(p)
         if p == "Text" then
             local RecalledItem = self:RecallItem(self.Input.Text)
+            self.Value = RecalledItem
             if self.Action then self.Action(RecalledItem) end
         end
     end)

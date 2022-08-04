@@ -100,8 +100,8 @@ inpfield.Object:Changed(function(text)
     print(text)
 end)
 
-local disablebutton = gui.Button.new("toggle previous")
-disablebutton:Clicked(function() inpfield:ToggleDisable() end)
+local disablebutton = gui.ToggleableButton.new("toggle previous")
+disablebutton:Clicked(function(p) inpfield:SetDisabled(p) end)
 
 -- instanceinputfield - (defaultname, defaultvalue, items, scale, disabled, frame)
 local instanceinpfield = gui.InstanceInputField.new(nil, nil, {{game:GetService("Lighting")}, {Workspace}})

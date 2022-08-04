@@ -43,7 +43,7 @@ function Checkbox:UpdateTheme()
         self.Checkbox.ImageColor3 = Color3.new(1,1,1)
     else
         self.CheckImage.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator)
-        if self.Toggled then
+        if self.Value then
             self.Checkbox.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBackground, Enum.StudioStyleGuideModifier.Selected)
         else
             self.Checkbox.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBackground)
@@ -52,11 +52,12 @@ function Checkbox:UpdateTheme()
 end
 
 function Checkbox:Toggle()
-    self:SetValue(not self.Toggled)
+    self:SetValue(not self.Value)
+    return self.Value
 end
 
 function Checkbox:SetValue(Toggle)
-    self.Toggled = Toggle
+    self.Value = Toggle
     self.CheckImage.Visible = Toggle
     self:UpdateTheme()
 end
@@ -69,7 +70,7 @@ function Checkbox.new(DefaultValue, Disabled, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,Checkbox)
     if type(DefaultValue) ~= "boolean" then DefaultValue = false end
-    self.Toggled = DefaultValue
+    self.Value = DefaultValue
     self.Disabled = Disabled
     self.CheckboxFrame = Instance.new("Frame", self.Parent)
     self.CheckboxFrame.BackgroundTransparency = 1
@@ -98,10 +99,10 @@ function Checkbox.new(DefaultValue, Disabled, Parent)
     self.Checkbox.MouseButton1Click:Connect(function()
         if not self.Disabled then
             self:Toggle()
-            if self.Action then self.Action(self.Toggled) end
+            if self.Action then self.Action(self.Value) end
         end
     end)
-    self:SetValue(self.Toggled)
+    self:SetValue(self.Value)
     self:SetDisabled(self.Disabled)
     self.Object = self.Checkbox
     self.MainMovable = self.CheckboxFrame
