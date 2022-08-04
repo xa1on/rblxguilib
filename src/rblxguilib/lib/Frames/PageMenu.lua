@@ -80,6 +80,7 @@ function PageMenu.new(Parent)
     self.ScrollingMenu.ScrollBarThickness = 0
     self.ScrollingMenu.ScrollingDirection = Enum.ScrollingDirection.X
     self.ScrollingMenu.ZIndex = 2
+    self.ScrollingMenu.ClipsDescendants = false
     self.TabContainer = Instance.new("Frame", self.ScrollingMenu)
     self.TabContainer.BackgroundTransparency = 1
     self.TabContainer.Size = UDim2.new(1,0,1,0)

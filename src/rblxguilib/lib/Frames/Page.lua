@@ -40,7 +40,7 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
     self.InsideWidget = true
     if not TabSize then
         local function sync()
-            self.TabFrame.Size = UDim2.new(0,self.Tab.TextBounds.X+2*self.Tab.TextSize, 0, 30)
+            self.TabFrame.Size = UDim2.new(0,self.Tab.TextBounds.X+2*self.Tab.TextSize, 0, 24)
         end
         self.Tab.Changed:Connect(function(p)
             if p == "TextBounds" then sync() end
