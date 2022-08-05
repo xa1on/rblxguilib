@@ -85,6 +85,7 @@ function KeybindInputField.new(Action, Placeholder, DefaultKeybind, Keybinds, Si
     Placeholder = Placeholder or "Set Keybind"
     local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown, true, false, Disabled, Parent)
     setmetatable(self,KeybindInputField)
+    self.TextEditable = true
     self.ID = KeybindNum
     self:Triggered(Action)
     self.Binds = {{}}
@@ -94,6 +95,7 @@ function KeybindInputField.new(Action, Placeholder, DefaultKeybind, Keybinds, Si
         if self.Disabled then return end
         self.Focused = true
         util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
+        task.wait()
         KeybindManager.FocusInputField(self.ID, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
     end)
     return self

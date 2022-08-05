@@ -16,17 +16,21 @@ function Page:SetState(State)
     self.TabFrame.BackgroundTransparency, self.TopBorder.BackgroundTransparency, self.LeftBorder.BackgroundTransparency, self.RightBorder.BackgroundTransparency = Transparency, Transparency, Transparency, Transparency
     self.Tab.BackgroundTransparency = OppositeTransparency
     self.TabFrame.ZIndex, self.Tab.ZIndex, self.TopBorder.ZIndex, self.LeftBorder.ZIndex, self.RightBorder.ZIndex = OppositeTransparency + 1, OppositeTransparency + 1, OppositeTransparency + 1, OppositeTransparency + 1, OppositeTransparency + 1
+    if State then
+        util.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.MainText)
+    else
+        util.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText)
+    end
 end
 
-function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
-    local self = GUIFrame.new(PageMenu.Content)
+function Page.new(Name, PageMenu, OpenByDefault, Size)
+    local self = GUIFrame.new(PageMenu.PageMenu)
     setmetatable(self,Page)
     PageNum += 1
     self.ID = PageNum
     self.PageMenu = PageMenu
     self.TabFrame = Instance.new("Frame", self.PageMenu.TabContainer)
     self.TabFrame.Name = self.ID
-    self.TabFrame.Size = UDim2.new(0,TabSize, 0, 30)
     self.TabFrame.BorderSizePixel = 0
     util.ColorSync(self.TabFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
     self.Tab = Instance.new("TextButton", self.TabFrame)
@@ -34,18 +38,20 @@ function Page.new(PageName, PageMenu, OpenByDefault, TabSize)
     util.ColorSync(self.Tab, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
     self.Tab.BorderSizePixel = 0
     self.Tab.Font = Enum.Font.SourceSans
-    self.Tab.Text = PageName
+    self.Tab.Text = Name
     self.Tab.TextSize = 14
     self.Tab.Name = "Tab"
     self.InsideWidget = true
-    if not TabSize then
+    if not Size then
         local function sync()
-            self.TabFrame.Size = UDim2.new(0,self.Tab.TextBounds.X+2*self.Tab.TextSize, 0, 24)
+            self.TabFrame.Size = UDim2.new(0,self.Tab.TextBounds.X+1.5*self.Tab.TextSize, 0, 24)
         end
         self.Tab.Changed:Connect(function(p)
             if p == "TextBounds" then sync() end
         end)
         sync()
+    else
+        self.TabFrame.Size = UDim2.new(0,Size,0,30)
     end
     self.Tab.MouseButton1Down:Connect(function(x)
         if self.TabDragging then return end

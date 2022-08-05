@@ -6,7 +6,7 @@ setmetatable(GUIFrame,GUIElement)
 _G.MainGUI = nil
 
 function GUIFrame.new(Parent)
-    local self = GUIElement.new()
+    local self = GUIElement.new(Parent)
     setmetatable(self,GUIFrame)
     self.Content = nil
     Parent = Parent or _G.MainGUI

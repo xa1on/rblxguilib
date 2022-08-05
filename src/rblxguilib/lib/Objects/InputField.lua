@@ -8,6 +8,11 @@ local KeybindManager = require(script.Parent.Parent.KeybindManager)
 local InputManager = require(script.Parent.Parent.InputManager)
 setmetatable(InputField,GUIObject)
 
+local RightClickMenu = _G.PluginObject:CreatePluginMenu(math.random(), "RightClickMenu - InputField")
+RightClickMenu:AddNewAction("Edit", "Edit")
+RightClickMenu:AddNewAction("Clear", "Clear Input")
+
+
 InputField.Images = {
     Down = "http://www.roblox.com/asset/?id=10027472547"
 }
@@ -20,7 +25,7 @@ function InputField:SetDisabled(State)
     else
         self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0,0,0
     end
-    if self.TextEditable then
+    if self.TextboxEditable then
         self.Input.TextEditable = not State
     end
 end
@@ -149,10 +154,12 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
         end
     end)
     self.Focusable = true
+    self.TextEditable = true
     if DisableEditing then
         self.Input.TextEditable = false
-        self.TextEditable = false
+        self.TextboxEditable = false
         self.Focusable = false
+        self.TextEditable = false
     end
     util.ColorSync(self.Input, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     util.ColorSync(self.Input, "PlaceholderColor3", Enum.StudioStyleGuideColor.DimmedText)
@@ -233,8 +240,12 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
         if self.DropdownOpen and p.UserInputType == Enum.UserInputType.MouseButton1 and not self.MouseInDropdownMenu and not self.MouseInDropdownButton then
             self:SetDropdown(false)
         end
-        if p.UserInputType == Enum.UserInputType.MouseButton2 and self.MouseInInput then
-            self.Input.Text = ""
+        if self.TextEditable and p.UserInputType == Enum.UserInputType.MouseButton2 and self.MouseInInput then
+            local Response = RightClickMenu:ShowAsync()
+            if Response then 
+                if Response.Text == "Clear Input" then self.Input.Text = ""
+                elseif Response.Text == "Edit" then self.Input:CaptureFocus() end
+            end
         end
     end)
     if Items then self:AddItems(Items) end

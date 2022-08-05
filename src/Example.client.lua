@@ -1,9 +1,9 @@
 local Workspace = game:GetService("Workspace")
+
 --[[
     [RBLXGUILib]
     something#7597
 ]]--
-
 
 -- loads the library
 local gui = require(script.Parent.RBLXGUILib.initialize)(plugin)
@@ -20,6 +20,7 @@ local b_toggle = toolbar:CreateButton("","open widget","")
 b_toggle.Click:Connect(function() widget.Content.Enabled = not widget.Content.Enabled end)
 
 local mainpage = gui.Page.new("MAIN", widget.Menu, true)
+gui.TitlebarButton.new("BUTTON", widget.Menu)
 
 gui.Page.new("SETTINGS", widget.Menu)
 gui.Page.new("PAGE1", widget.Menu)
@@ -104,7 +105,7 @@ local disablebutton = gui.ToggleableButton.new("toggle previous")
 disablebutton:Clicked(function(p) inpfield:SetDisabled(p) end)
 
 -- instanceinputfield - (defaultname, defaultvalue, items, scale, disabled, frame)
-local instanceinpfield = gui.InstanceInputField.new(nil, nil, {{game:GetService("Lighting")}, {Workspace}})
+local instanceinpfield = gui.InstanceInputField.new(nil, nil, {{game:GetService("Lighting")}, {workspace}})
 gui.Labeled.new("an instance", nil, instanceinpfield)
 instanceinpfield:Changed(function(result)
     for _, v in pairs(result) do

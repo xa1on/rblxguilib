@@ -122,7 +122,7 @@ local function InputBegan(p)
     end
     local KeyName = m.RecallKeyName(p.KeyCode.Name)
     if KeyName == "Backspace" and m.FocusFunction.RemoveBind then m.FocusFunction.RemoveBind() return end
-    if KeyName == "Return" and m.FocusFunction.Unfocus then m.Unfocus() return end
+    if KeyName == "Escape" and m.FocusFunction.Unfocus then m.Unfocus() return end
     CurrentKeys[#CurrentKeys+1] = m.FilterKeyCode(p.KeyCode.Name)
     if CompleteBind then return end
     if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then

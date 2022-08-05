@@ -4,10 +4,8 @@ local GUIElement = require(script.Parent.Parent.GUIElement)
 local ListFrame = require(script.Parent.Parent.Frames.ListFrame)
 setmetatable(GUIObject,GUIElement)
 
-function GUIObject.new(Frame)
-    local self = GUIElement.new()
-    Frame = Frame or ListFrame.new().Content
-    self.Parent = Frame
+function GUIObject.new(Parent)
+    local self = GUIElement.new(Parent or ListFrame.new().Content)
     setmetatable(self,GUIObject)
     self.Object = nil
     self.MainMovable = nil

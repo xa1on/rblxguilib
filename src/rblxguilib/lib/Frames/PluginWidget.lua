@@ -44,6 +44,7 @@ function Widget.new(name, title, InitiallyEnabled, NoPageMenu, DockState, Overri
             _G.SelectedPage.Content.Parent = self.Menu.ContentContainers
             _G.SelectedPage.PageMenu = self.Menu
             _G.SelectedPage.InsideWidget = true
+            _G.SelectedPage.Parent = self.Menu
             self.Menu:AddPage(_G.SelectedPage)
             FixPosition = true
             FixPage = _G.SelectedPage

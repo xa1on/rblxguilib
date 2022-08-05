@@ -47,6 +47,7 @@ function InstanceInputField.new(Placeholder, DefaultInstances, Items, Size, NoDr
     setmetatable(self,InstanceInputField)
     if Items then self:AddItems(Items) end
     self.Focusable = true
+    self.TextEditable = true
     self:SetValue(DefaultInstances)
     self.Input.Focused:Connect(function()
         if self.Disabled then return end

@@ -1,3 +1,4 @@
+local StarterPlayer = game:GetService("StarterPlayer")
 local PageMenu = {}
 PageMenu.__index = PageMenu
 local GUIFrame = require(script.Parent.GUIFrame)
@@ -73,21 +74,49 @@ function PageMenu.new(Parent)
     self.PageMenu.Size = UDim2.new(1,0,0,24)
     util.ColorSync(self.PageMenu, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
     self.PageMenu.BorderSizePixel = 0
+    self.ButtonsFrame = Instance.new("Frame", self.PageMenu)
+    self.ButtonsFrame.Size = UDim2.new(0,0,0,24)
+    self.ButtonsFrame.ZIndex = 3
+    util.ColorSync(self.ButtonsFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
+    self.ButtonsFrame.BorderSizePixel = 0
+    self.ButtonsFrame.Name = "ButtonsFrame"
+    local ButtonsFrameBorder = Instance.new("Frame", self.ButtonsFrame)
+    ButtonsFrameBorder.Position = UDim2.new(0,0,1,-1)
+    ButtonsFrameBorder.Size = UDim2.new(1,0,0,1)
+    ButtonsFrameBorder.BorderSizePixel = 0
+    util.ColorSync(ButtonsFrameBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
+    ButtonsFrameBorder.Name = "Border"
+    ButtonsFrameBorder.ZIndex = 4
+    self.ButtonContainer = Instance.new("Frame", self.ButtonsFrame)
+    self.ButtonContainer.BackgroundTransparency = 1
+    self.ButtonContainer.BorderSizePixel = 0
+    self.ButtonContainer.Size = UDim2.new(1,0,1,0)
+    self.ButtonContainer.Name = "ButtonContainer"
+    local ButtonContainerLayout = Instance.new("UIListLayout", self.ButtonContainer)
+    ButtonContainerLayout.FillDirection = Enum.FillDirection.Horizontal
+    ButtonContainerLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self.ScrollingMenu = Instance.new("ScrollingFrame", self.PageMenu)
     self.ScrollingMenu.BackgroundTransparency = 1
+    self.ScrollingMenu.Position = UDim2.new(1,0,0,0)
+    self.ScrollingMenu.AnchorPoint = Vector2.new(1,0)
     self.ScrollingMenu.Size = UDim2.new(1,0,1,0)
     self.ScrollingMenu.CanvasSize = UDim2.new(0,0,0,0)
     self.ScrollingMenu.ScrollBarThickness = 0
     self.ScrollingMenu.ScrollingDirection = Enum.ScrollingDirection.X
     self.ScrollingMenu.ZIndex = 2
     self.ScrollingMenu.ClipsDescendants = false
+    ButtonContainerLayout.Changed:Connect(function(p)
+        if p ~= "AbsoluteContentSize" then return end
+        self.ButtonsFrame.Size = UDim2.new(0,ButtonContainerLayout.AbsoluteContentSize.X, 1,0)
+        self.ScrollingMenu.Size = UDim2.new(1,-ButtonContainerLayout.AbsoluteContentSize.X,1,0)
+    end)
     self.TabContainer = Instance.new("Frame", self.ScrollingMenu)
     self.TabContainer.BackgroundTransparency = 1
     self.TabContainer.Size = UDim2.new(1,0,1,0)
     self.TabContainer.ZIndex = 2
     self.TabContainer.Name = "TabContainer"
-    local TabContainerPadding = Instance.new("UIPadding", self.TabContainer)
-    TabContainerPadding.PaddingLeft, TabContainerPadding.PaddingRight = UDim.new(0,5), UDim.new(0,5)
+    --local TabContainerPadding = Instance.new("UIPadding", self.TabContainer)
+    --TabContainerPadding.PaddingLeft, TabContainerPadding.PaddingRight = UDim.new(0,5), UDim.new(0,5)
     local TabContainerBorder = Instance.new("Frame", self.PageMenu)
     TabContainerBorder.Name = "Border"
     TabContainerBorder.Position = UDim2.new(0,0,1,-1)
