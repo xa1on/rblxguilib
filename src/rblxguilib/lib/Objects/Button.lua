@@ -1,9 +1,9 @@
 local Button = {}
 Button.__index = Button
 
-local util = require(script.Parent.Parent.GUIUtil)
-local TextboxMod = require(script.Parent.Textbox)
-local GUIObject = require(script.Parent.GUIObject)
+local util = require(_G.LibraryDir.GUIUtil)
+local TextboxMod = require(_G.ObjectsDir.Textbox)
+local GUIObject = require(_G.ObjectsDir.GUIObject)
 setmetatable(Button,GUIObject)
 
 Button.Images = {
@@ -45,7 +45,7 @@ function Button.new(Textbox, Size, Disabled, Parent)
 
     -- set up a textbox for the button
     if type(Textbox) == "string" then
-        self.TextboxTable = TextboxMod.new(Textbox, nil, nil, nil, self.ButtonFrame)
+        self.TextboxTable = TextboxMod.new(Textbox, nil, nil, nil, self.Button)
     else
         self.TextboxTable = Textbox
         Textbox:Move(self.Button, true)
@@ -62,7 +62,6 @@ function Button.new(Textbox, Size, Disabled, Parent)
         self.Textbox.Changed:Connect(function(p)
             if p == "TextBounds" then sync() end
         end)
-        sync()
     end
     self.Button.Position = UDim2.new(0.5, 0, 0, 0)
     self.Button.AnchorPoint = Vector2.new(0.5,0)

@@ -1,6 +1,6 @@
 local GUIFrame = {}
 GUIFrame.__index = GUIFrame
-local GUIElement = require(script.Parent.Parent.GUIElement)
+local GUIElement = require(_G.LibraryDir.GUIElement)
 setmetatable(GUIFrame,GUIElement)
 
 _G.MainGUI = nil

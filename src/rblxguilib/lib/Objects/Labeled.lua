@@ -1,9 +1,9 @@
 local LabeledObject = {}
 LabeledObject.__index = LabeledObject
 
-local util = require(script.Parent.Parent.GUIUtil)
-local TextboxMod = require(script.Parent.Textbox)
-local GUIObject = require(script.Parent.GUIObject)
+local util = require(_G.LibraryDir.GUIUtil)
+local TextboxMod = require(_G.ObjectsDir.Textbox)
+local GUIObject = require(_G.ObjectsDir.GUIObject)
 setmetatable(LabeledObject,GUIObject)
 
 function LabeledObject:SetDisabled(State)
@@ -69,7 +69,6 @@ function LabeledObject.new(Textbox, LabelSize, Objects, Parent)
         self.Label.Changed:Connect(function(p)
             if p == "TextBounds" then sync() end
         end)
-        sync()
     end
     self.TotalUsedScale = 0
     if type(Objects) == "table" and Objects[1] and type(Objects[1] == "table") then

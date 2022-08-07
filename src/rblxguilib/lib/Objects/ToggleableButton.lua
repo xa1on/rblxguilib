@@ -1,8 +1,8 @@
 local ToggleableButton = {}
 ToggleableButton.__index = ToggleableButton
 
-local util = require(script.Parent.Parent.GUIUtil)
-local Button = require(script.Parent.Button)
+local util = require(_G.LibraryDir.GUIUtil)
+local Button = require(_G.ObjectsDir.Button)
 setmetatable(ToggleableButton,Button)
 
 function ToggleableButton:Toggle()

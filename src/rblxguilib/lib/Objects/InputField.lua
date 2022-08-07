@@ -1,11 +1,11 @@
 local InputField = {}
 InputField.__index = InputField
 
-local util = require(script.Parent.Parent.GUIUtil)
-local GUIObject = require(script.Parent.GUIObject)
-local ScrollingFrame = require(script.Parent.Parent.Frames.ScrollingFrame)
-local KeybindManager = require(script.Parent.Parent.KeybindManager)
-local InputManager = require(script.Parent.Parent.InputManager)
+local util = require(_G.LibraryDir.GUIUtil)
+local GUIObject = require(_G.ObjectsDir.GUIObject)
+local ScrollingFrame = require(_G.FramesDir.ScrollingFrame)
+local KeybindManager = require(_G.ManagersDir.KeybindManager)
+local InputManager = require(_G.ManagersDir.InputManager)
 setmetatable(InputField,GUIObject)
 
 local RightClickMenu = _G.PluginObject:CreatePluginMenu(math.random(), "RightClickMenu - InputField")
@@ -124,12 +124,14 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
     self.Action = nil
     self.InputFieldContainer = Instance.new("Frame", self.Parent)
     self.InputFieldContainer.BackgroundTransparency = 1
+    self.InputFieldContainer.Name = "InputFieldContainer"
     self.InputFieldFrame = Instance.new("Frame", self.InputFieldContainer)
     self.InputFieldFrame.BackgroundTransparency = 1
     Size = util.GetScale(Size) or UDim.new(1,-20)
     self.InputFieldFrame.Size = UDim2.new(Size.Scale,Size.Offset,0,20)
     self.InputFieldFrame.Position = UDim2.new(0.5,0,0.5,0)
     self.InputFieldFrame.AnchorPoint = Vector2.new(0.5,0.5)
+    self.InputFieldFrame.Name = "InputFieldFrame"
     util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     self.Input = Instance.new("TextBox", self.InputFieldFrame)

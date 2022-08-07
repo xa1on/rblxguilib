@@ -1,5 +1,3 @@
-local Workspace = game:GetService("Workspace")
-
 --[[
     [RBLXGUILib]
     something#7597
@@ -20,7 +18,31 @@ local b_toggle = toolbar:CreateButton("","open widget","")
 b_toggle.Click:Connect(function() widget.Content.Enabled = not widget.Content.Enabled end)
 
 local mainpage = gui.Page.new("MAIN", widget.Menu, true)
-gui.TitlebarButton.new("BUTTON", widget.Menu)
+
+local randommenu = plugin:CreatePluginMenu(math.random(), "Random Menu")
+randommenu:AddNewAction("1", "Option 1", "rbxasset://textures/loading/robloxTiltRed.png")
+randommenu:AddNewAction("2", "Option 2", "rbxasset://textures/loading/robloxTilt.png")
+local subMenu = plugin:CreatePluginMenu(math.random(), "C", "rbxasset://textures/explosion.png")
+subMenu.Name = "Sub Menu"
+subMenu:AddNewAction("ActionD", "D", "rbxasset://textures/whiteCircle.png")
+subMenu:AddNewAction("ActionE", "E", "rbxasset://textures/icon_ROBUX.png")
+ 
+randommenu:AddMenu(subMenu)
+
+gui.Alert.new("yo mama", "", {"Sup noob", "fuc u!!!!"})
+
+local titlebarbutton = gui.TitlebarButton.new("BUTTON", widget.Menu, nil, nil, randommenu)
+titlebarbutton:Clicked(function()
+    print("Titlebar button pressed!")
+end)
+titlebarbutton:SelectedAction(function(SelectedAction)
+    if SelectedAction then
+        print("Selected Action:", SelectedAction.Text, "with ActionId:", SelectedAction.ActionId)
+    else
+        print("User did not select an action!")
+    end
+end)
+
 
 gui.Page.new("SETTINGS", widget.Menu)
 gui.Page.new("PAGE1", widget.Menu)

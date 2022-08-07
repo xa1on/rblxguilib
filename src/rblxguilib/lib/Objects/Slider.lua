@@ -1,9 +1,9 @@
 local Slider = {}
 Slider.__index = Slider
 
-local util = require(script.Parent.Parent.GUIUtil)
-local GUIObject = require(script.Parent.GUIObject)
-local InputManager = require(script.Parent.Parent.InputManager)
+local util = require(_G.LibraryDir.GUIUtil)
+local GUIObject = require(_G.ObjectsDir.GUIObject)
+local InputManager = require(_G.ManagersDir.InputManager)
 setmetatable(Slider,GUIObject)
 
 function Slider:SetDisabled(State)

@@ -1,6 +1,6 @@
 local m = {}
 
-local EventManager = require(script.Parent.EventManager)
+local EventManager = require(_G.ManagersDir.EventManager)
 
 -- syncs colors with studio theme
 local syncedelements = {}

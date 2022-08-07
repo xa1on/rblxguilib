@@ -1,8 +1,8 @@
 local ScrollingFrame = {}
 ScrollingFrame.__index = ScrollingFrame
 
-local util = require(script.Parent.Parent.GUIUtil)
-local GUIFrame = require(script.Parent.GUIFrame)
+local util = require(_G.LibraryDir.GUIUtil)
+local GUIFrame = require(_G.FramesDir.GUIFrame)
 setmetatable(ScrollingFrame,GUIFrame)
 
 ScrollingFrame.Images = {

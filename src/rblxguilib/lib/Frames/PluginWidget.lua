@@ -3,11 +3,11 @@ local Widget = {}
 Widget.__index = Widget
 
 local plugin = _G.PluginObject
-local util = require(script.Parent.Parent.GUIUtil)
-local InputManager = require(script.Parent.Parent.InputManager)
-local GUIFrame = require(script.Parent.GUIFrame)
-local PageMenu = require(script.Parent.PageMenu)
-local BackgroundFrame = require(script.Parent.BackgroundFrame)
+local util = require(_G.LibraryDir.GUIUtil)
+local InputManager = require(_G.ManagersDir.InputManager)
+local GUIFrame = require(_G.FramesDir.GUIFrame)
+local PageMenu = require(_G.FramesDir.PageMenu)
+local BackgroundFrame = require(_G.FramesDir.BackgroundFrame)
 setmetatable(Widget,GUIFrame)
 
 function Widget.new(name, title, InitiallyEnabled, NoPageMenu, DockState, OverrideRestore)

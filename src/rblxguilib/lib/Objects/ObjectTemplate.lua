@@ -1,8 +1,8 @@
 local temp = {}
 temp.__index = temp
 
-local util = require(script.Parent.Parent.GUIUtil)
-local GUIObject = require(script.Parent.GUIObject)
+local util = require(_G.LibraryDir.GUIUtil)
+local GUIObject = require(_G.ObjectsDir.GUIObject)
 setmetatable(temp,GUIObject)
 
 function temp.new(Parent)

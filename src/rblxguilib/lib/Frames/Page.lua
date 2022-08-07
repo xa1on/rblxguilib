@@ -1,9 +1,9 @@
 local Page = {}
 Page.__index = Page
 
-local util = require(script.Parent.Parent.GUIUtil)
-local InputManager = require(script.Parent.Parent.InputManager)
-local GUIFrame = require(script.Parent.GUIFrame)
+local util = require(_G.LibraryDir.GUIUtil)
+local InputManager = require(_G.ManagersDir.InputManager)
+local GUIFrame = require(_G.FramesDir.GUIFrame)
 setmetatable(Page,GUIFrame)
 local PageNum = 0
 
@@ -49,7 +49,6 @@ function Page.new(Name, PageMenu, OpenByDefault, Size)
         self.Tab.Changed:Connect(function(p)
             if p == "TextBounds" then sync() end
         end)
-        sync()
     else
         self.TabFrame.Size = UDim2.new(0,Size,0,30)
     end

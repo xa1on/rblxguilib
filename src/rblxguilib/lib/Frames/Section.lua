@@ -1,9 +1,9 @@
 local Section = {}
 Section.__index = Section
 
-local util = require(script.Parent.Parent.GUIUtil)
-local GUIFrame = require(script.Parent.GUIFrame)
-local TextboxMod = require(script.Parent.Parent.Objects.Textbox)
+local util = require(_G.LibraryDir.GUIUtil)
+local GUIFrame = require(_G.FramesDir.GUIFrame)
+local TextboxMod = require(_G.ObjectsDir.Textbox)
 setmetatable(Section,GUIFrame)
 
 Section.Images = {
