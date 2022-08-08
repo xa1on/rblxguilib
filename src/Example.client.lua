@@ -28,10 +28,13 @@ subMenu:AddNewAction("ActionD", "D", "rbxasset://textures/whiteCircle.png")
 subMenu:AddNewAction("ActionE", "E", "rbxasset://textures/icon_ROBUX.png")
 randommenu:AddMenu(subMenu)
 
-local titlebarbutton = gui.TitlebarButton.new("BUTTON", widget.Menu, nil, nil, randommenu)
+local titlebarbutton = gui.TitlebarButton.new("B", widget.Menu, nil, nil, randommenu)
 titlebarbutton:Clicked(function()
     print("Titlebar button pressed!")
 end)
+
+local viewbutton = gui.ViewWidgetsButton.new(widget.Menu)
+
 titlebarbutton:SelectedAction(function(SelectedAction)
     if SelectedAction then
         print("Selected Action:", SelectedAction.Text, "with ActionId:", SelectedAction.ActionId)
@@ -173,11 +176,6 @@ local toggle_checkbox2 = gui.Checkbox.new()
 gui.Labeled.new("Disable Slider", 0.5, toggle_checkbox2)
 toggle_checkbox2:Clicked(function(p)
     slider:SetDisabled(p)
-end)
-
-local newwindow = gui.Button.new("Create a new window")
-newwindow:Clicked(function()
-    gui.PluginWidget.new(nil, nil, true)
 end)
 
 -- dumps the gui into workspace for debugging

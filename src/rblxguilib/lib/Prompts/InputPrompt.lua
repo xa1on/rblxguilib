@@ -18,6 +18,7 @@ function InputPrompt.new(Title, Textbox, Buttons, InputField)
         self.InputField = InputField
     end
     self.InputField.InputFieldContainer.Size = UDim2.new(1,0,0,25)
+    self.InputField.DropdownMaxY = 30
     self.ButtonsFrame.Parent = nil
     self.InputField:Move(self.TextPromptContainer, true)
     self.ButtonsFrame.Parent = self.TextPromptContainer

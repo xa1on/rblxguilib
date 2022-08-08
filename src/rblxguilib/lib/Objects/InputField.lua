@@ -141,7 +141,11 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
     if NoDropdown then self.Input.Size = UDim2.new(1,-10,1,0) else self.Input.Size = UDim2.new(1,-30,1,0) end
     self.Input.Font = Enum.Font.SourceSans
     DefaultValue = DefaultValue or ""
-    self:SetValue(DefaultValue)
+    if type(DefaultValue) == "string" or type(DefaultValue) == "number" then
+        self:SetValue(DefaultValue)
+    elseif type(DefaultValue) == "table" then
+        self:SetValue(DefaultValue[2], DefaultValue[1])
+    end
     self.Value = self:RecallItem(self.Input.Text)
     self.Input.TextSize = 14
     if Placeholder then self.Input.PlaceholderText = Placeholder end
@@ -227,9 +231,10 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
     self.DropdownFrame.MouseLeave:Connect(function() self.MouseInDropdownMenu = false end)
     self.DropdownScroll = ScrollingFrame.new(10, self.DropdownFrame)
     self:SetDropdown(false)
+    self.DropdownMaxY = 100
     local function syncframe()
-        if self.DropdownScroll.Layout.AbsoluteContentSize.Y > 100 then
-            self.DropdownFrame.Size = UDim2.new(1,0,0,100)
+        if self.DropdownScroll.Layout.AbsoluteContentSize.Y > self.DropdownMaxY then
+            self.DropdownFrame.Size = UDim2.new(1,0,0,self.DropdownMaxY)
             return
         end
         self.DropdownFrame.Size = UDim2.new(1,0,0,self.DropdownScroll.Layout.AbsoluteContentSize.Y)

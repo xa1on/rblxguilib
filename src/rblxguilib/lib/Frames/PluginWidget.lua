@@ -10,12 +10,21 @@ local GUIFrame = require(GV.FramesDir.GUIFrame)
 local PageMenu = require(GV.FramesDir.PageMenu)
 local BackgroundFrame = require(GV.FramesDir.BackgroundFrame)
 setmetatable(Widget,GUIFrame)
+GV.PluginWidgets = {}
+local Unnamed = 0
 
 function Widget.new(name, title, InitiallyEnabled, NoPageMenu, DockState, OverrideRestore)
     local self = GUIFrame.new()
     setmetatable(self, Widget)
     self.Name = name or math.random()
-    title = title or name or ""
+    if not title then
+        title = name
+        if not title then
+            Unnamed += 1
+            title = "Unnamed #" .. tostring(Unnamed)
+        end
+    end
+    title = title or name or "Unnamed"
     DockState = DockState or Enum.InitialDockState.Float
     if InitiallyEnabled then InitiallyEnabled = true else InitiallyEnabled = false end
     if OverrideRestore then OverrideRestore = true else OverrideRestore = false end
@@ -55,6 +64,7 @@ function Widget.new(name, title, InitiallyEnabled, NoPageMenu, DockState, Overri
     end)
     self.Parent = self.WidgetObject
     self.Content = self.WidgetObject
+    GV.PluginWidgets[#GV.PluginWidgets+1] = self
     return self
 end
 
