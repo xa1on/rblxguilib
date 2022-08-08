@@ -26,10 +26,7 @@ local subMenu = plugin:CreatePluginMenu(math.random(), "C", "rbxasset://textures
 subMenu.Name = "Sub Menu"
 subMenu:AddNewAction("ActionD", "D", "rbxasset://textures/whiteCircle.png")
 subMenu:AddNewAction("ActionE", "E", "rbxasset://textures/icon_ROBUX.png")
- 
 randommenu:AddMenu(subMenu)
-
-gui.Alert.new("yo mama", "", {"Sup noob", "fuc u!!!!"})
 
 local titlebarbutton = gui.TitlebarButton.new("BUTTON", widget.Menu, nil, nil, randommenu)
 titlebarbutton:Clicked(function()
@@ -83,7 +80,12 @@ buttonsection:SetMain()
 -- textbox inside button for custom text
 local fancybuttonlabel = gui.Textbox.new("fancier button", Enum.Font.Arcade)
 local button2 = gui.Button.new(fancybuttonlabel)
-button2.Object.MouseButton1Click:Connect(function() print("fancy") end)
+button2.Object.MouseButton1Click:Connect(function()
+    local textprompt = gui.TextPrompt.new("The Fancy Button", "Hello!", {"Hi!", "Hello!"})
+    textprompt:Clicked(function(p)
+        print(p)
+    end)
+end)
 
 -- using frames to move a button
 local frame1 = gui.ListFrame.new("the first frame")
@@ -107,7 +109,15 @@ mainframe:SetMain()
 local newsection = gui.Section.new("section with a section inside it", true)
 local sectionwithin = gui.Section.new("another section", true, newsection.Content)
 gui.Textbox.new("test", nil, nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
-gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
+local testbutton = gui.Button.new("test", nil, nil, gui.ListFrame.new(nil, nil, sectionwithin.Content).Content)
+testbutton:Clicked(function()
+    local inputprompt = gui.InputPrompt.new("Input Prompt title", "hey, this is an inputprompt", nil, "hi")
+    inputprompt:Clicked(function(p)
+        print("option " .. p .. " chosen")
+        print("entered text:" .. inputprompt.Input.Text)
+    end)
+end)
+
 
 -- inputfields - (placeholder, default, dropdownitems, scale, nodropdown, DisableEditing, cleartextonfocus, disabled, frame)
 gui.Labeled.new("input", 0.3, gui.InputField.new(nil, "default text", {{"bob","Bob"},"Steve"}, true))

@@ -49,6 +49,7 @@ function Page.new(Name, PageMenu, OpenByDefault, Size)
         self.Tab.Changed:Connect(function(p)
             if p == "TextBounds" then sync() end
         end)
+        sync()
     else
         self.TabFrame.Size = UDim2.new(0,Size,0,30)
     end

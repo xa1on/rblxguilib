@@ -1,28 +1,28 @@
-local Alert = {}
-Alert.__index = Alert
+local TextPrompt = {}
+TextPrompt.__index = TextPrompt
 
 local util = require(_G.LibraryDir.GUIUtil)
 local Prompt = require(_G.PromptsDir.Prompt)
 local TextboxMod = require(_G.ObjectsDir.Textbox)
 local Button = require(_G.ObjectsDir.Button)
-setmetatable(Alert, Prompt)
+setmetatable(TextPrompt, Prompt)
 
-function Alert:Clicked(func)
+function TextPrompt:Clicked(func)
     self.Action = func
 end
 
-function Alert.new(Title, Textbox, Buttons, Action)
+function TextPrompt.new(Title, Textbox, Buttons)
     local self = Prompt.new()
-    setmetatable(self,Alert)
-    self.Action = Action
-    self.AlertContainer = Instance.new("Frame")
-    self.AlertContainer.BackgroundTransparency = 1
-    self.AlertContainer.BorderSizePixel = 0
-    self.AlertContainer.Size = UDim2.new(1,0,1,0)
-    self.AlertContainer.Name = "AlertContainer"
-    self.AlertLayout = Instance.new("UIListLayout", self.AlertContainer)
-    self.AlertLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    self.TextFrame = Instance.new("Frame", self.AlertContainer)
+    setmetatable(self,TextPrompt)
+    Buttons = Buttons or {"OK"}
+    self.TextPromptContainer = Instance.new("Frame", self.Parent)
+    self.TextPromptContainer.BackgroundTransparency = 1
+    self.TextPromptContainer.BorderSizePixel = 0
+    self.TextPromptContainer.Size = UDim2.new(1,0,1,0)
+    self.TextPromptContainer.Name = "TextPromptContainer"
+    self.TextPromptLayout = Instance.new("UIListLayout", self.TextPromptContainer)
+    self.TextPromptLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    self.TextFrame = Instance.new("Frame", self.TextPromptContainer)
     self.TextFrame.Name = "TextFrame"
     self.TextFrame.Size = UDim2.new(0,0,0,35)
     self.TextFrame.BackgroundTransparency = 1
@@ -35,12 +35,13 @@ function Alert.new(Title, Textbox, Buttons, Action)
     end
     self.Textbox = self.TextboxTable.Textbox
     self.Textbox.ZIndex = 1
+    self.Textbox.TextXAlignment = Enum.TextXAlignment.Left
     self.Textbox.AnchorPoint = Vector2.new(0.5,0.5)
     self.Textbox.Position = UDim2.new(0.5,0,0.6,0)
     self.Textbox.Size = UDim2.new(1,-24,0,14)
-    self.ButtonsFrame = Instance.new("Frame", self.AlertContainer)
+    self.ButtonsFrame = Instance.new("Frame", self.TextPromptContainer)
     self.ButtonsFrame.Name = "ButtonsFrame"
-    self.ButtonsFrame.Size = UDim2.new(0,0,0,40)
+    self.ButtonsFrame.Size = UDim2.new(1,0,0,40)
     self.ButtonsFrame.BackgroundTransparency = 1
     self.ButtonsFrame.BorderSizePixel = 0
     local ButtonsFramePadding = Instance.new("UIPadding", self.ButtonsFrame)
@@ -49,8 +50,10 @@ function Alert.new(Title, Textbox, Buttons, Action)
     self.ButtonsFrameLayout.FillDirection = Enum.FillDirection.Horizontal
     self.ButtonsFrameLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
     self.ButtonsFrameLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    for i = #Buttons, 1, -1 do
-        local v = Buttons[i]
+    if (#Buttons*82)+14 > 260 then
+        self.ButtonsFrame.Size = UDim2.new(0,(#Buttons*82)+14,0,40)
+    end
+    for i,v in pairs(Buttons) do
         local NewButton = v
         if type(v) == "string" then
             NewButton = Button.new(v, 0.95, false, self.ButtonsFrame)
@@ -62,32 +65,23 @@ function Alert.new(Title, Textbox, Buttons, Action)
         end)
     end
     local function syncTextFrame()
-        self.TextFrame.Size = UDim2.new(0,self.Textbox.TextBounds.X+24,0,35)
+        self.TextFrame.Size = UDim2.new(0,self.Textbox.TextBounds.X+24,0,self.Textbox.TextBounds.Y+21)
     end
     self.Textbox.Changed:Connect(function(p)
         if p == "TextBounds" then
             syncTextFrame()
         end
     end)
-    local function syncButtonsFrame()
-        self.ButtonsFrame.Size = UDim2.new(0,self.ButtonsFrameLayout.X+14,0,40)
+    local function syncTextPromptSize()
+        self:Reset(Title, self.TextPromptLayout.AbsoluteContentSize.X, self.TextPromptLayout.AbsoluteContentSize.Y)
+        self.TextPromptContainer.Parent = self.Parent
     end
-    self.ButtonsFrameLayout.Changed:Connect(function(p)
+    self.TextPromptLayout.Changed:Connect(function(p)
         if p == "AbsoluteContentSize" then
-            syncButtonsFrame()
-        end
-    end)
-    local function syncAlertSize()
-        self:Reset(Title, self.AlertLayout.AbsoluteContentSize.X, self.AlertLayout.AbsoluteContentSize.Y)
-        self.AlertContainer.Parent = self.Parent
-    end
-    self.AlertLayout.Changed:Connect(function(p)
-        if p == "AbsoluteContentSize" then
-            print(self.AlertLayout.AbsoluteContentSize)
-            syncAlertSize()
+            syncTextPromptSize()
         end
     end)
     return self
 end
 
-return Alert
+return TextPrompt
