@@ -1,8 +1,9 @@
 local TitlebarButton = {}
 TitlebarButton.__index = TitlebarButton
 
-local util = require(_G.LibraryDir.GUIUtil)
-local GUIObject = require(_G.ObjectsDir.GUIObject)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local GUIObject = require(GV.ObjectsDir.GUIObject)
 setmetatable(TitlebarButton,GUIObject)
 
 function TitlebarButton:SetDisabled(State)
@@ -53,11 +54,11 @@ function TitlebarButton.new(Name, PageMenu, Size, Disabled, PluginMenu)
         self.Button.Size = UDim2.new(0,Size,1,0)
     end
     self.Button.MouseMoved:Connect(function()
-        _G.PluginObject:GetMouse().Icon = self.CursorIcon
+        GV.PluginObject:GetMouse().Icon = self.CursorIcon
     end)
     self.Button.MouseLeave:Connect(function()
         task.wait(0)
-        _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+        GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
     self.Button.MouseButton1Click:Connect(function()
         if self.Disabled then return end

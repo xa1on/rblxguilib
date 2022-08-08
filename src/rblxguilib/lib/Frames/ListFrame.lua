@@ -1,6 +1,7 @@
 local ListFrame = {}
 ListFrame.__index = ListFrame
-local GUIFrame = require(_G.FramesDir.GUIFrame)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local GUIFrame = require(GV.FramesDir.GUIFrame)
 setmetatable(ListFrame,GUIFrame)
 local Count = 0
 

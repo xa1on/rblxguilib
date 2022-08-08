@@ -1,7 +1,8 @@
 local GUIObject = {}
 GUIObject.__index = GUIObject
-local GUIElement = require(_G.LibraryDir.GUIElement)
-local ListFrame = require(_G.FramesDir.ListFrame)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local GUIElement = require(GV.LibraryDir.GUIElement)
+local ListFrame = require(GV.FramesDir.ListFrame)
 setmetatable(GUIObject,GUIElement)
 
 function GUIObject.new(Parent)

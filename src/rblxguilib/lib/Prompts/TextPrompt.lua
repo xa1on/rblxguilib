@@ -1,10 +1,11 @@
 local TextPrompt = {}
 TextPrompt.__index = TextPrompt
 
-local util = require(_G.LibraryDir.GUIUtil)
-local Prompt = require(_G.PromptsDir.Prompt)
-local TextboxMod = require(_G.ObjectsDir.Textbox)
-local Button = require(_G.ObjectsDir.Button)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local Prompt = require(GV.PromptsDir.Prompt)
+local TextboxMod = require(GV.ObjectsDir.Textbox)
+local Button = require(GV.ObjectsDir.Button)
 setmetatable(TextPrompt, Prompt)
 
 function TextPrompt:Clicked(func)

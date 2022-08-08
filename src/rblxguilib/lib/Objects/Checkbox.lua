@@ -1,8 +1,9 @@
 local Checkbox = {}
 Checkbox.__index = Checkbox
 
-local util = require(_G.LibraryDir.GUIUtil)
-local GUIObject = require(_G.ObjectsDir.GUIObject)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local GUIObject = require(GV.ObjectsDir.GUIObject)
 setmetatable(Checkbox,GUIObject)
 
 Checkbox.Images = {
@@ -90,11 +91,11 @@ function Checkbox.new(DefaultValue, Disabled, Parent)
     self.CheckImage.Name = "CheckIndicator"
     settings().Studio.ThemeChanged:Connect(function() self:UpdateTheme() end)
     self.Checkbox.MouseMoved:Connect(function()
-        _G.PluginObject:GetMouse().Icon = self.CursorIcon
+        GV.PluginObject:GetMouse().Icon = self.CursorIcon
     end)
     self.Checkbox.MouseLeave:Connect(function()
         task.wait(0)
-        _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+        GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
     self.Checkbox.MouseButton1Click:Connect(function()
         if not self.Disabled then

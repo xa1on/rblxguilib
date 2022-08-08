@@ -1,8 +1,9 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local PageMenu = {}
 PageMenu.__index = PageMenu
-local GUIFrame = require(_G.FramesDir.GUIFrame)
-local util = require(_G.LibraryDir.GUIUtil)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local GUIFrame = require(GV.FramesDir.GUIFrame)
+local util = require(GV.LibraryDir.GUIUtil)
 setmetatable(PageMenu,GUIFrame)
 
 function PageMenu:GetIDIndex(ID)

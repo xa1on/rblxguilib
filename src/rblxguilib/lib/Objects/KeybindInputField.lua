@@ -1,9 +1,10 @@
 local KeybindInputField = {}
 KeybindInputField.__index = KeybindInputField
 
-local util = require(_G.LibraryDir.GUIUtil)
-local KeybindManager = require(_G.ManagersDir.KeybindManager)
-local InputField = require(_G.ObjectsDir.InputField)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local KeybindManager = require(GV.ManagersDir.KeybindManager)
+local InputField = require(GV.ObjectsDir.InputField)
 local KeybindNum = 0
 setmetatable(KeybindInputField,InputField)
 

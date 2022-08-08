@@ -1,7 +1,8 @@
 local InputService = game:GetService("UserInputService")
-local util = require(_G.LibraryDir.GUIUtil)
-local InputManager = require(_G.ManagersDir.InputManager)
-local EventManager = require(_G.ManagersDir.EventManager)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local InputManager = require(GV.ManagersDir.InputManager)
+local EventManager = require(GV.ManagersDir.EventManager)
 
 local m = {}
 

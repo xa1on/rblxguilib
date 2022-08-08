@@ -1,7 +1,7 @@
 -- template for classes
 
 --inheritance
---local GUIElement = require(_G.LibraryDir.GUIElement)
+--local GUIElement = require(GV.LibraryDir.GUIElement)
 --setmetatable(,GUIElement)
 
 local temp = {}

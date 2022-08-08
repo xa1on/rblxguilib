@@ -1,9 +1,10 @@
 local InputPrompt = {}
 InputPrompt.__index = InputPrompt
 
-local util = require(_G.LibraryDir.GUIUtil)
-local TextPrompt = require(_G.PromptsDir.TextPrompt)
-local InputFieldMod = require(_G.ObjectsDir.InputField)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local TextPrompt = require(GV.PromptsDir.TextPrompt)
+local InputFieldMod = require(GV.ObjectsDir.InputField)
 
 setmetatable(InputPrompt, TextPrompt)
 

@@ -2,12 +2,13 @@ local GuiService = game:GetService("GuiService")
 local Widget = {}
 Widget.__index = Widget
 
-local plugin = _G.PluginObject
-local util = require(_G.LibraryDir.GUIUtil)
-local InputManager = require(_G.ManagersDir.InputManager)
-local GUIFrame = require(_G.FramesDir.GUIFrame)
-local PageMenu = require(_G.FramesDir.PageMenu)
-local BackgroundFrame = require(_G.FramesDir.BackgroundFrame)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local plugin = GV.PluginObject
+local util = require(GV.LibraryDir.GUIUtil)
+local InputManager = require(GV.ManagersDir.InputManager)
+local GUIFrame = require(GV.FramesDir.GUIFrame)
+local PageMenu = require(GV.FramesDir.PageMenu)
+local BackgroundFrame = require(GV.FramesDir.BackgroundFrame)
 setmetatable(Widget,GUIFrame)
 
 function Widget.new(name, title, InitiallyEnabled, NoPageMenu, DockState, OverrideRestore)
@@ -39,17 +40,17 @@ function Widget.new(name, title, InitiallyEnabled, NoPageMenu, DockState, Overri
     InputManager.AddInput(self.InputFrame)
     if not NoPageMenu then self.Menu = PageMenu.new(self.WidgetObject) end
     self.WidgetObject.PluginDragDropped:Connect(function()
-        if(_G.SelectedPage and self.Menu) then
-            _G.SelectedPage.TabFrame.Parent = self.Menu.TabContainer
-            _G.SelectedPage.Content.Parent = self.Menu.ContentContainers
-            _G.SelectedPage.PageMenu = self.Menu
-            _G.SelectedPage.InsideWidget = true
-            _G.SelectedPage.Parent = self.Menu
-            self.Menu:AddPage(_G.SelectedPage)
+        if(GV.SelectedPage and self.Menu) then
+            GV.SelectedPage.TabFrame.Parent = self.Menu.TabContainer
+            GV.SelectedPage.Content.Parent = self.Menu.ContentContainers
+            GV.SelectedPage.PageMenu = self.Menu
+            GV.SelectedPage.InsideWidget = true
+            GV.SelectedPage.Parent = self.Menu
+            self.Menu:AddPage(GV.SelectedPage)
             FixPosition = true
-            FixPage = _G.SelectedPage
-            self.Menu:SetActive(_G.SelectedPage.ID)
-            _G.SelectedPage = nil
+            FixPage = GV.SelectedPage
+            self.Menu:SetActive(GV.SelectedPage.ID)
+            GV.SelectedPage = nil
         end
     end)
     self.Parent = self.WidgetObject

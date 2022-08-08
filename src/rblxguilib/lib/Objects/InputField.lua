@@ -1,14 +1,15 @@
 local InputField = {}
 InputField.__index = InputField
 
-local util = require(_G.LibraryDir.GUIUtil)
-local GUIObject = require(_G.ObjectsDir.GUIObject)
-local ScrollingFrame = require(_G.FramesDir.ScrollingFrame)
-local KeybindManager = require(_G.ManagersDir.KeybindManager)
-local InputManager = require(_G.ManagersDir.InputManager)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local GUIObject = require(GV.ObjectsDir.GUIObject)
+local ScrollingFrame = require(GV.FramesDir.ScrollingFrame)
+local KeybindManager = require(GV.ManagersDir.KeybindManager)
+local InputManager = require(GV.ManagersDir.InputManager)
 setmetatable(InputField,GUIObject)
 
-local RightClickMenu = _G.PluginObject:CreatePluginMenu(math.random(), "RightClickMenu - InputField")
+local RightClickMenu = GV.PluginObject:CreatePluginMenu(math.random(), "RightClickMenu - InputField")
 RightClickMenu:AddNewAction("Edit", "Edit")
 RightClickMenu:AddNewAction("Clear", "Clear Input")
 
@@ -171,7 +172,7 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
         if not self.Disabled and not self.Input:IsFocused() and not self.Focused then
             util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Hover)
         elseif self.Focusable then
-            _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Forbidden"
+            GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Forbidden"
         end
     end)
     self.InputFieldFrame.MouseLeave:Connect(function()
@@ -179,7 +180,7 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Disa
         if not self.Disabled and not self.Input:IsFocused() and not self.Focused then
             util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         end
-        _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+        GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
     self.Input.Focused:Connect(function()
         KeybindManager.Unfocus()

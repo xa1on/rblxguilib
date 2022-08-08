@@ -1,6 +1,7 @@
 local m = {}
 
-local EventManager = require(_G.ManagersDir.EventManager)
+local GV = require(script.Parent.PluginGlobalVariables)
+local EventManager = require(GV.ManagersDir.EventManager)
 
 -- syncs colors with studio theme
 local syncedelements = {}
@@ -55,11 +56,11 @@ end
 function m.HoverIcon(element, icon)
     icon = icon or "rbxasset://SystemCursors/PointingHand"
     element.MouseMoved:Connect(function()
-        _G.PluginObject:GetMouse().Icon = icon
+        GV.PluginObject:GetMouse().Icon = icon
     end)
     element.MouseLeave:Connect(function()
         task.wait(0)
-        _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+        GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
 end
 

@@ -1,8 +1,9 @@
 local ScrollingFrame = {}
 ScrollingFrame.__index = ScrollingFrame
 
-local util = require(_G.LibraryDir.GUIUtil)
-local GUIFrame = require(_G.FramesDir.GUIFrame)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local GUIFrame = require(GV.FramesDir.GUIFrame)
 setmetatable(ScrollingFrame,GUIFrame)
 
 ScrollingFrame.Images = {

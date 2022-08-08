@@ -1,10 +1,6 @@
-_G.LibraryDir = script.Parent.lib
-_G.FramesDir = _G.LibraryDir.Frames
-_G.ObjectsDir = _G.LibraryDir.Objects
-_G.ManagersDir = _G.LibraryDir.Managers
-_G.PromptsDir = _G.LibraryDir.Prompts
+local GV = require(script.Parent.lib.PluginGlobalVariables)
 local function requireall(p)
-    _G.PluginObject = p
+    GV.PluginObject = p
     local library = {}
     for _, i in pairs(script.Parent.lib:GetDescendants()) do
         if i:IsA("ModuleScript") then

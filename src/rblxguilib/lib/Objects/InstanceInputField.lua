@@ -1,8 +1,9 @@
 local InstanceInputField = {}
 InstanceInputField.__index = InstanceInputField
 
-local util = require(_G.LibraryDir.GUIUtil)
-local InputField = require(_G.ObjectsDir.InputField)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local InputField = require(GV.ObjectsDir.InputField)
 local Selection = game:GetService("Selection")
 setmetatable(InstanceInputField,InputField)
 --{{"bob", workspace.bob}, {"bob", {workspace.bob1, workspace.bob2}}, workspace.bob}

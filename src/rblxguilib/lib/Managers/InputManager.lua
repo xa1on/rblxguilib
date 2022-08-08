@@ -1,6 +1,7 @@
 local m = {}
 
-local EventManager = require(_G.ManagersDir.EventManager)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local EventManager = require(GV.ManagersDir.EventManager)
 
 m.InputFieldEvents = {}
 m.InputFrames = {}

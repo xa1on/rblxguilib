@@ -1,8 +1,9 @@
 local Textbox = {}
 Textbox.__index = Textbox
 
-local util = require(_G.LibraryDir.GUIUtil)
-local GUIObject = require(_G.ObjectsDir.GUIObject)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local GUIObject = require(GV.ObjectsDir.GUIObject)
 setmetatable(Textbox,GUIObject)
 
 function Textbox:SetDisabled(State)

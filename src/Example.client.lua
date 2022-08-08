@@ -145,7 +145,7 @@ instanceinpfield:Changed(function(result)
     end
 end)
 
-gui.Labeled.new("keybind", nil, gui.KeybindInputField.new(function() print("hi") end, nil, {{"N"}, {"LeftShift", "T"}}, {{{"U"}, {"LeftShift", "L"}},{{"N"}, {"LeftShift", "K"}}}))
+gui.Labeled.new("keybind", nil, gui.KeybindInputField.new(function() print("keybind1 pressed!") end, nil, {{"N"}, {"LeftShift", "T"}}, {{{"U"}, {"LeftShift", "L"}},{{"N"}, {"LeftShift", "K"}}}))
 
 local keybindinpfield2 = gui.Labeled.new("another keybind", nil, gui.KeybindInputField.new())
 

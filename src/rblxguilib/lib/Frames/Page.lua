@@ -1,9 +1,10 @@
 local Page = {}
 Page.__index = Page
 
-local util = require(_G.LibraryDir.GUIUtil)
-local InputManager = require(_G.ManagersDir.InputManager)
-local GUIFrame = require(_G.FramesDir.GUIFrame)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local InputManager = require(GV.ManagersDir.InputManager)
+local GUIFrame = require(GV.FramesDir.GUIFrame)
 setmetatable(Page,GUIFrame)
 local PageNum = 0
 
@@ -55,14 +56,14 @@ function Page.new(Name, PageMenu, OpenByDefault, Size)
     end
     self.Tab.MouseButton1Down:Connect(function(x)
         if self.TabDragging then return end
-        _G.SelectedPage = self
+        GV.SelectedPage = self
         self.PageMenu:SetActive(self.ID)
         self.TabDragging = true
         self.InitialX = self.TabFrame.Position.X.Offset - x - self.PageMenu.ScrollingMenu.CanvasPosition.X
     end)
     InputManager.AddInputEvent("InputEnded", function(p)
         if not self.TabDragging or p.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
-        _G.SelectedPage = nil
+        GV.SelectedPage = nil
         self.TabDragging = false
         self.PageMenu:FixPageLayout()
     end)
@@ -70,7 +71,7 @@ function Page.new(Name, PageMenu, OpenByDefault, Size)
         if not self.TabDragging and self.InsideWidget then return end
         self.PageMenu:AddPage(self)
         self.InsideWidget = true
-        _G.SelectedPage = nil
+        GV.SelectedPage = nil
         self.TabDragging = false
         self.PageMenu:FixPageLayout()
     end)
@@ -90,7 +91,7 @@ function Page.new(Name, PageMenu, OpenByDefault, Size)
         if not self.TabDragging then return end
         self.TabDragging = false
         self.InsideWidget = false
-        _G.PluginObject:StartDrag({})
+        GV.PluginObject:StartDrag({})
         self.PageMenu:RemovePage(self)
     end)
     util.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText)

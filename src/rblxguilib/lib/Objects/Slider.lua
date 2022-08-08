@@ -1,9 +1,10 @@
 local Slider = {}
 Slider.__index = Slider
 
-local util = require(_G.LibraryDir.GUIUtil)
-local GUIObject = require(_G.ObjectsDir.GUIObject)
-local InputManager = require(_G.ManagersDir.InputManager)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local GUIObject = require(GV.ObjectsDir.GUIObject)
+local InputManager = require(GV.ManagersDir.InputManager)
 setmetatable(Slider,GUIObject)
 
 function Slider:SetDisabled(State)
@@ -86,11 +87,11 @@ function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
     end)
     InputManager.AddInputEvent("MouseLeave", function() self.SliderSelected = false end)
     self.SlideButton.MouseMoved:Connect(function()
-        _G.PluginObject:GetMouse().Icon = self.CursorIcon
+        GV.PluginObject:GetMouse().Icon = self.CursorIcon
     end)
     self.SlideButton.MouseLeave:Connect(function()
         task.wait(0)
-        _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+        GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
     self:SetDisabled(Disabled)
     self.Object = self.SlideButton

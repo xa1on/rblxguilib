@@ -1,9 +1,10 @@
 local Button = {}
 Button.__index = Button
 
-local util = require(_G.LibraryDir.GUIUtil)
-local TextboxMod = require(_G.ObjectsDir.Textbox)
-local GUIObject = require(_G.ObjectsDir.GUIObject)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local TextboxMod = require(GV.ObjectsDir.Textbox)
+local GUIObject = require(GV.ObjectsDir.GUIObject)
 setmetatable(Button,GUIObject)
 
 Button.Images = {
@@ -85,14 +86,14 @@ function Button.new(Textbox, Size, Disabled, Parent)
     self.Toggleable = false
     local Pressed = false
     self.Button.MouseMoved:Connect(function()
-        _G.PluginObject:GetMouse().Icon = self.CursorIcon
+        GV.PluginObject:GetMouse().Icon = self.CursorIcon
         if self.Disabled or Pressed or self.Toggleable then return end
         util.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Hover)
         util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Hover)
     end)
     self.Button.MouseLeave:Connect(function()
         task.wait(0)
-        _G.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+        GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
         if self.Disabled or self.Toggleable then return end
         Pressed = false
         util.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)

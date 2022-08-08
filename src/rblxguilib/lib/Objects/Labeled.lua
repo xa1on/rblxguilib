@@ -1,9 +1,10 @@
 local LabeledObject = {}
 LabeledObject.__index = LabeledObject
 
-local util = require(_G.LibraryDir.GUIUtil)
-local TextboxMod = require(_G.ObjectsDir.Textbox)
-local GUIObject = require(_G.ObjectsDir.GUIObject)
+local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
+local TextboxMod = require(GV.ObjectsDir.Textbox)
+local GUIObject = require(GV.ObjectsDir.GUIObject)
 setmetatable(LabeledObject,GUIObject)
 
 function LabeledObject:SetDisabled(State)
