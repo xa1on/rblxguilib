@@ -10,14 +10,14 @@ local gui = require(script.Parent.RBLXGUILib.initialize)(plugin)
 toolbar = plugin:CreateToolbar("rblxgui")
 
 -- generate widget
--- name, title, InitiallyEnabled, NoPageMenu, DockState, OverrideRestore
+-- name, title, InitiallyEnabled, NoTitlebarMenu, DockState, OverrideRestore
 local widget = gui.PluginWidget.new("rblxgui", nil, true, nil, Enum.InitialDockState.Left)
 
 -- toolbar button to toggle the widget
 local b_toggle = toolbar:CreateButton("","open widget","")
 b_toggle.Click:Connect(function() widget.Content.Enabled = not widget.Content.Enabled end)
 
-local mainpage = gui.Page.new("MAIN", widget.Menu, true)
+local mainpage = gui.Page.new("MAIN", widget.TitlebarMenu, true)
 
 local randommenu = plugin:CreatePluginMenu(math.random(), "Random Menu")
 randommenu:AddNewAction("1", "Option 1", "rbxasset://textures/loading/robloxTiltRed.png")
@@ -28,12 +28,12 @@ subMenu:AddNewAction("ActionD", "D", "rbxasset://textures/whiteCircle.png")
 subMenu:AddNewAction("ActionE", "E", "rbxasset://textures/icon_ROBUX.png")
 randommenu:AddMenu(subMenu)
 
-local titlebarbutton = gui.TitlebarButton.new("B", widget.Menu, nil, nil, randommenu)
+gui.ViewWidgetsButton.new()
+
+local titlebarbutton = gui.TitlebarButton.new("BUTTON", nil, nil, randommenu)
 titlebarbutton:Clicked(function()
     print("Titlebar button pressed!")
 end)
-
-local viewbutton = gui.ViewWidgetsButton.new(widget.Menu)
 
 titlebarbutton:SelectedAction(function(SelectedAction)
     if SelectedAction then
@@ -44,12 +44,12 @@ titlebarbutton:SelectedAction(function(SelectedAction)
 end)
 
 
-gui.Page.new("SETTINGS", widget.Menu)
-gui.Page.new("PAGE1", widget.Menu)
-gui.Page.new("PAGE2", widget.Menu)
-gui.Page.new("PAGE3", widget.Menu)
-gui.Page.new("PAGE4", widget.Menu)
-gui.Page.new("PAGE5", widget.Menu)
+gui.Page.new("SETTINGS", widget.TitlebarMenu)
+gui.Page.new("PAGE1", widget.TitlebarMenu)
+gui.Page.new("PAGE2", widget.TitlebarMenu)
+gui.Page.new("PAGE3", widget.TitlebarMenu)
+gui.Page.new("PAGE4", widget.TitlebarMenu)
+gui.Page.new("PAGE5", widget.TitlebarMenu)
 
 -- scrolling frame(lets you scroll through the gui): usage - (parent)
 local mainframe = gui.ScrollingFrame.new(nil, mainpage.Content)

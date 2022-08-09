@@ -7,13 +7,13 @@ local plugin = GV.PluginObject
 local util = require(GV.LibraryDir.GUIUtil)
 local InputManager = require(GV.ManagersDir.InputManager)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
-local PageMenu = require(GV.FramesDir.PageMenu)
+local TitlebarMenu = require(GV.FramesDir.TitlebarMenu)
 local BackgroundFrame = require(GV.FramesDir.BackgroundFrame)
 setmetatable(Widget,GUIFrame)
 GV.PluginWidgets = {}
 local Unnamed = 0
 
-function Widget.new(name, title, InitiallyEnabled, NoPageMenu, DockState, OverrideRestore)
+function Widget.new(name, title, InitiallyEnabled, NoTitlebarMenu, DockState, OverrideRestore)
     local self = GUIFrame.new()
     setmetatable(self, Widget)
     self.Name = name or math.random()
@@ -42,26 +42,29 @@ function Widget.new(name, title, InitiallyEnabled, NoPageMenu, DockState, Overri
         if not FixPosition then return end
         FixPosition = false
         local MousePos = self.WidgetObject:GetRelativeMousePosition()
-        FixPage.TabFrame.Position = UDim2.new(0,MousePos.X + FixPage.InitialX + self.Menu.ScrollingMenu.CanvasPosition.X, 0,0)
-        self.Menu:BeingDragged(FixPage.ID)
-        self.Menu:FixPageLayout()
+        FixPage.TabFrame.Position = UDim2.new(0,MousePos.X + FixPage.InitialX + self.TitlebarMenu.ScrollingMenu.CanvasPosition.X, 0,0)
+        self.TitlebarMenu:BeingDragged(FixPage.ID)
+        self.TitlebarMenu:FixPageLayout()
     end)
     InputManager.AddInput(self.InputFrame)
-    if not NoPageMenu then self.Menu = PageMenu.new(self.WidgetObject) end
+    if not NoTitlebarMenu then self.TitlebarMenu = TitlebarMenu.new(self.WidgetObject) end
     self.WidgetObject.PluginDragDropped:Connect(function()
-        if(GV.SelectedPage and self.Menu) then
-            GV.SelectedPage.TabFrame.Parent = self.Menu.TabContainer
-            GV.SelectedPage.Content.Parent = self.Menu.ContentContainers
-            GV.SelectedPage.PageMenu = self.Menu
+        if(GV.SelectedPage and self.TitlebarMenu) then
+            GV.SelectedPage.TabFrame.Parent = self.TitlebarMenu.TabContainer
+            GV.SelectedPage.Content.Parent = self.TitlebarMenu.ContentContainers
+            GV.SelectedPage.TitlebarMenu = self.TitlebarMenu
             GV.SelectedPage.InsideWidget = true
-            GV.SelectedPage.Parent = self.Menu
-            self.Menu:AddPage(GV.SelectedPage)
+            GV.SelectedPage.Parent = self.TitlebarMenu
+            self.TitlebarMenu:AddPage(GV.SelectedPage)
             FixPosition = true
             FixPage = GV.SelectedPage
-            self.Menu:SetActive(GV.SelectedPage.ID)
+            self.TitlebarMenu:SetActive(GV.SelectedPage.ID)
             GV.SelectedPage = nil
         end
     end)
+    for _, v in pairs(GV.TitleBarButtons) do
+        v:CreateCopy(self.TitlebarMenu)
+    end
     self.Parent = self.WidgetObject
     self.Content = self.WidgetObject
     GV.PluginWidgets[#GV.PluginWidgets+1] = self

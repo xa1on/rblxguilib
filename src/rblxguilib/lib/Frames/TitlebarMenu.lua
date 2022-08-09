@@ -1,20 +1,20 @@
 local StarterPlayer = game:GetService("StarterPlayer")
-local PageMenu = {}
-PageMenu.__index = PageMenu
+local TitlebarMenu = {}
+TitlebarMenu.__index = TitlebarMenu
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
 local util = require(GV.LibraryDir.GUIUtil)
-setmetatable(PageMenu,GUIFrame)
+setmetatable(TitlebarMenu,GUIFrame)
 
-function PageMenu:GetIDIndex(ID)
+function TitlebarMenu:GetIDIndex(ID)
     for i,v in pairs(self.Pages) do if v.ID == ID then return i end end
 end
 
-function PageMenu:GetIDTab(ID)
+function TitlebarMenu:GetIDTab(ID)
     return self.Pages[self:GetIDIndex(ID)]
 end
 
-function PageMenu:AddPage(Page)
+function TitlebarMenu:AddPage(Page)
     self:FixPageLayout()
     if #self.Pages > 0 then
         local LatestPage = self.Pages[#self.Pages]
@@ -26,19 +26,19 @@ function PageMenu:AddPage(Page)
     self.Pages[#self.Pages+1] = Page
 end
 
-function PageMenu:RemovePage(Page)
+function TitlebarMenu:RemovePage(Page)
     table.remove(self.Pages, self:GetIDIndex(Page.ID))
     self.ScrollingMenu.CanvasSize = UDim2.new(0,self.ScrollingMenu.CanvasSize.Width.Offset - Page.TabFrame.Size.X.Offset,0,0)
     self:FixPageLayout()
 end
 
-function PageMenu:SetActive(ID)
+function TitlebarMenu:SetActive(ID)
     for _, v in pairs(self.Pages) do
         v:SetState(v.ID == ID)
     end
 end
 
-function PageMenu:FixPageLayout(IgnoreID)
+function TitlebarMenu:FixPageLayout(IgnoreID)
     local PreviousPageSize = 0
     for _, v in pairs(self.Pages) do
         if IgnoreID ~= v.ID then
@@ -48,7 +48,7 @@ function PageMenu:FixPageLayout(IgnoreID)
     end
 end
 
-function PageMenu:MovePage(ID, Index, IgnoreID)
+function TitlebarMenu:MovePage(ID, Index, IgnoreID)
     local PageIndex = self:GetIDIndex(ID)
     if PageIndex == Index then return end
     local Page = self.Pages[PageIndex]
@@ -57,7 +57,7 @@ function PageMenu:MovePage(ID, Index, IgnoreID)
     if IgnoreID then self:FixPageLayout(ID) end
 end
 
-function PageMenu:BeingDragged(ID)
+function TitlebarMenu:BeingDragged(ID)
     local tab = self:GetIDTab(ID)
     local xpos = tab.TabFrame.Position.X.Offset + tab.TabFrame.Size.X.Offset / 2
     for i, v in pairs(self.Pages) do
@@ -67,15 +67,15 @@ function PageMenu:BeingDragged(ID)
     end
 end
 
-function PageMenu.new(Parent)
+function TitlebarMenu.new(Parent)
     local self = GUIFrame.new(Parent)
-    setmetatable(self,PageMenu)
-    self.PageMenu = Instance.new("Frame", self.Parent)
-    self.PageMenu.Name = "PageMenu"
-    self.PageMenu.Size = UDim2.new(1,0,0,24)
-    util.ColorSync(self.PageMenu, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
-    self.PageMenu.BorderSizePixel = 0
-    self.ButtonsFrame = Instance.new("Frame", self.PageMenu)
+    setmetatable(self,TitlebarMenu)
+    self.TitlebarMenu = Instance.new("Frame", self.Parent)
+    self.TitlebarMenu.Name = "TitlebarMenu"
+    self.TitlebarMenu.Size = UDim2.new(1,0,0,24)
+    util.ColorSync(self.TitlebarMenu, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
+    self.TitlebarMenu.BorderSizePixel = 0
+    self.ButtonsFrame = Instance.new("Frame", self.TitlebarMenu)
     self.ButtonsFrame.Size = UDim2.new(0,0,0,24)
     self.ButtonsFrame.ZIndex = 3
     util.ColorSync(self.ButtonsFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
@@ -96,7 +96,7 @@ function PageMenu.new(Parent)
     local ButtonContainerLayout = Instance.new("UIListLayout", self.ButtonContainer)
     ButtonContainerLayout.FillDirection = Enum.FillDirection.Horizontal
     ButtonContainerLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    self.ScrollingMenu = Instance.new("ScrollingFrame", self.PageMenu)
+    self.ScrollingMenu = Instance.new("ScrollingFrame", self.TitlebarMenu)
     self.ScrollingMenu.BackgroundTransparency = 1
     self.ScrollingMenu.Position = UDim2.new(1,0,0,0)
     self.ScrollingMenu.AnchorPoint = Vector2.new(1,0)
@@ -118,7 +118,7 @@ function PageMenu.new(Parent)
     self.TabContainer.Name = "TabContainer"
     --local TabContainerPadding = Instance.new("UIPadding", self.TabContainer)
     --TabContainerPadding.PaddingLeft, TabContainerPadding.PaddingRight = UDim.new(0,5), UDim.new(0,5)
-    local TabContainerBorder = Instance.new("Frame", self.PageMenu)
+    local TabContainerBorder = Instance.new("Frame", self.TitlebarMenu)
     TabContainerBorder.Name = "Border"
     TabContainerBorder.Position = UDim2.new(0,0,1,-1)
     TabContainerBorder.Size = UDim2.new(1,0,0,1)
@@ -134,4 +134,4 @@ function PageMenu.new(Parent)
     return self
 end
 
-return PageMenu
+return TitlebarMenu

@@ -24,13 +24,13 @@ function Page:SetState(State)
     end
 end
 
-function Page.new(Name, PageMenu, OpenByDefault, Size)
-    local self = GUIFrame.new(PageMenu.PageMenu)
+function Page.new(Name, TitlebarMenu, OpenByDefault, Size)
+    local self = GUIFrame.new(TitlebarMenu.TitlebarMenu)
     setmetatable(self,Page)
     PageNum += 1
     self.ID = PageNum
-    self.PageMenu = PageMenu
-    self.TabFrame = Instance.new("Frame", self.PageMenu.TabContainer)
+    self.TitlebarMenu = TitlebarMenu
+    self.TabFrame = Instance.new("Frame", self.TitlebarMenu.TabContainer)
     self.TabFrame.Name = self.ID
     self.TabFrame.BorderSizePixel = 0
     util.ColorSync(self.TabFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
@@ -57,42 +57,42 @@ function Page.new(Name, PageMenu, OpenByDefault, Size)
     self.Tab.MouseButton1Down:Connect(function(x)
         if self.TabDragging then return end
         GV.SelectedPage = self
-        self.PageMenu:SetActive(self.ID)
+        self.TitlebarMenu:SetActive(self.ID)
         self.TabDragging = true
-        self.InitialX = self.TabFrame.Position.X.Offset - x - self.PageMenu.ScrollingMenu.CanvasPosition.X
+        self.InitialX = self.TabFrame.Position.X.Offset - x - self.TitlebarMenu.ScrollingMenu.CanvasPosition.X
     end)
     InputManager.AddInputEvent("InputEnded", function(p)
         if not self.TabDragging or p.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
         GV.SelectedPage = nil
         self.TabDragging = false
-        self.PageMenu:FixPageLayout()
+        self.TitlebarMenu:FixPageLayout()
     end)
     InputManager.AddInputEvent("MouseEnter", function()
         if not self.TabDragging and self.InsideWidget then return end
-        self.PageMenu:AddPage(self)
+        self.TitlebarMenu:AddPage(self)
         self.InsideWidget = true
         GV.SelectedPage = nil
         self.TabDragging = false
-        self.PageMenu:FixPageLayout()
+        self.TitlebarMenu:FixPageLayout()
     end)
     local PreviousMouseX = 0
     InputManager.AddInputEvent("MouseMoved", function(x)
         PreviousMouseX = x
         if not self.TabDragging then return end
-        self.TabFrame.Position = UDim2.new(0,x + self.InitialX + self.PageMenu.ScrollingMenu.CanvasPosition.X,0,0)
-        if self.InsideWidget then self.PageMenu:BeingDragged(self.ID) end
+        self.TabFrame.Position = UDim2.new(0,x + self.InitialX + self.TitlebarMenu.ScrollingMenu.CanvasPosition.X,0,0)
+        if self.InsideWidget then self.TitlebarMenu:BeingDragged(self.ID) end
     end)
-    self.PageMenu.ScrollingMenu.Changed:Connect(function(p)
+    self.TitlebarMenu.ScrollingMenu.Changed:Connect(function(p)
         if not p == "CanvasPosition" or not self.TabDragging then return end
-        self.TabFrame.Position = UDim2.new(0,PreviousMouseX + self.InitialX + self.PageMenu.ScrollingMenu.CanvasPosition.X,0,0)
-        if self.InsideWidget then self.PageMenu:BeingDragged(self.ID) end
+        self.TabFrame.Position = UDim2.new(0,PreviousMouseX + self.InitialX + self.TitlebarMenu.ScrollingMenu.CanvasPosition.X,0,0)
+        if self.InsideWidget then self.TitlebarMenu:BeingDragged(self.ID) end
     end)
     InputManager.AddInputEvent("MouseLeave", function()
         if not self.TabDragging then return end
         self.TabDragging = false
         self.InsideWidget = false
         GV.PluginObject:StartDrag({})
-        self.PageMenu:RemovePage(self)
+        self.TitlebarMenu:RemovePage(self)
     end)
     util.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText)
     self.TopBorder = Instance.new("Frame", self.TabFrame)
@@ -111,12 +111,12 @@ function Page.new(Name, PageMenu, OpenByDefault, Size)
     self.RightBorder.BorderSizePixel = 0
     self.RightBorder.Name = "RightBorder"
     util.ColorSync(self.RightBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
-    self.Content = Instance.new("Frame", self.PageMenu.ContentContainers)
+    self.Content = Instance.new("Frame", self.TitlebarMenu.ContentContainers)
     self.Content.BackgroundTransparency = 1
     self.Content.Size = UDim2.new(1,0,1,0)
     self.Content.Name = self.ID
-    self.PageMenu:AddPage(self)
-    if OpenByDefault then self.PageMenu:SetActive(self.ID) else self:SetState(false) end
+    self.TitlebarMenu:AddPage(self)
+    if OpenByDefault then self.TitlebarMenu:SetActive(self.ID) else self:SetState(false) end
     return self
 end
 
