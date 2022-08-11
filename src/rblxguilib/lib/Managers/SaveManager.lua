@@ -37,13 +37,6 @@ end
 
 function m.RecallLayout(layout)
     layout = layout or m.DefaultLayout
-    for i, Widget in pairs(GV.PluginWidgets) do
-        if not m.SearchForID(Widget.ID, layout.Widgets)[2] then
-            Widget.WidgetObject:Destroy()
-            Widget = nil
-            table.remove(GV.PluginWidgets, i)
-        end
-    end
     for _, Widget in pairs(layout.Widgets) do
         local WidgetTable = m.SearchForID(Widget.ID, GV.PluginWidgets)[2]
         if not WidgetTable then
@@ -65,6 +58,13 @@ function m.RecallLayout(layout)
             local NewMenu = m.SearchForID(Page.MenuID, GV.PluginTitlebarMenus)[2]
             PageTable.TitlebarMenu:RemovePage(PageTable)
             NewMenu:RecievePage(PageTable)
+        end
+    end
+    for i, Widget in pairs(GV.PluginWidgets) do
+        if not m.SearchForID(Widget.ID, layout.Widgets)[2] then
+            Widget.WidgetObject:Destroy()
+            Widget = nil
+            table.remove(GV.PluginWidgets, i)
         end
     end
 end
