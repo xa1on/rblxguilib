@@ -1,66 +1,90 @@
 local m = {}
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
-local tasklist = GV.PluginObject:GetSetting("rblxguilib Task List") or {}
 local util = require(GV.LibraryDir.GUIUtil)
 
-function m.FindWidgetIndex(id)
-    for i,v in pairs(GV.PluginWidgets) do
-        if v.ID == id then return i end
+function m.SearchForID(ID, Table)
+    for i,v in pairs(Table) do
+        if v.ID == ID then return {i,v} end
+    end
+    return {nil,nil}
+end
+
+function m.GetLayout()
+    local layout = {Widgets = {}, Menus = {}, Pages = {}}
+    for _, Widget in pairs(GV.PluginWidgets) do
+        local WidgetDesc = {
+            ID = Widget.ID,
+            Title = Widget.WidgetObject.Title
+        }
+        layout.Widgets[#layout.Widgets+1] = WidgetDesc
+    end
+    for _, Menu in pairs(GV.PluginTitlebarMenus) do
+        local MenuDesc = {
+            ID = Menu.ID,
+            Parent = Menu.Parent
+        }
+        layout.Menus[#layout.Menus+1] = MenuDesc
+    end
+    for _, Page in pairs(GV.PluginPages) do
+        local PageDesc = {
+            ID = Page.ID,
+            MenuID = Page.TitlebarMenu.ID
+        }
+        layout.Pages[#layout.Pages+1] = PageDesc
+    end
+    return layout
+end
+
+function m.RecallLayout(layout)
+    layout = layout or m.DefaultLayout
+    for i, Widget in pairs(GV.PluginWidgets) do
+        if not m.SearchForID(Widget.ID, layout.Widgets)[2] then
+            Widget.WidgetObject:Destroy()
+            Widget = nil
+            table.remove(GV.PluginWidgets, i)
+        end
+    end
+    for _, Widget in pairs(layout.Widgets) do
+        local WidgetTable = m.SearchForID(Widget.ID, GV.PluginWidgets)[2]
+        if not WidgetTable then
+            WidgetTable = require(GV.FramesDir.PluginWidget).new(Widget.ID, Widget.Title, true)
+        end
+        WidgetTable.WidgetObject.Title = Widget.Title
+    end
+    --[[
+    for _, Menu in pairs(layout.Menus) do
+        local MenuTable = m.SearchForID(Menu.ID, GV.PluginTitlebarMenus)[2]
+        if MenuTable.Parent ~= Menu.Parent then
+            MenuTable.TitlebarMenu.Parent = Menu.Parent
+            MenuTable.Parent = Menu.Parent
+        end
+    end]]
+    for _, Page in pairs(layout.Pages) do
+        local PageTable = m.SearchForID(Page.ID, GV.PluginPages)[2]
+        if PageTable.TitlebarMenu.ID ~= Page.MenuID then
+            local NewMenu = m.SearchForID(Page.MenuID, GV.PluginTitlebarMenus)[2]
+            PageTable.TitlebarMenu:RemovePage(PageTable)
+            NewMenu:RecievePage(PageTable)
+        end
     end
 end
 
-function m.FindWidget(id)
-    for _,v in pairs(GV.PluginWidgets) do
-        if v.ID == id then return v end
-    end
-end
-
-function m.FindPage(id)
-    for _,v in pairs(GV.PluginPages) do
-        if v.ID == id then return v end
-    end
+function m.SaveLayout(layout)
+    layout = layout or m.GetLayout()
+    GV.PluginObject:SetSetting("guilayout", layout)
 end
 
 function m.RecallSave()
-    for _,task in pairs(tasklist) do
-        local PluginWidget = require(GV.FramesDir.PluginWidget)
-        local taskname = task[1]
-        local taskargs = task[2]
-        if taskname == "newwidget" then
-            -- taskargs[1] = id
-            -- taskargs[2] = title
-            PluginWidget.new(taskargs[1], taskargs[2], true)
-        elseif taskname == "movepage" then
-            -- taskargs[1] = page ID
-            -- taskargs[2] = NewMenuWidget ID
-            local Page = m.FindPage(taskargs[1])
-            local NewWidget = m.FindWidget(taskargs[2])
-            Page.TitlebarMenu:RemovePage(Page)
-            NewWidget:RecievePage(Page, true)
-        elseif taskname == "renamewidget" then
-            -- taskargs[1] = Widget ID
-            -- taskargs[2] = new title
-            local Widget = m.FindWidget(taskargs[1])
-            Widget.WidgetObject.Title = taskargs[2]
-        elseif taskname == "deletewidget" then
-            -- taskargs[1] = Widget ID
-            local Widget = m.FindWidget(taskargs[1])
-            Widget.WidgetObject:Destroy()
-            Widget = nil
-            table.remove(GV.PluginWidgets, m.FindWidgetIndex(taskargs[1]))
-        end
-        PluginWidget = nil
-    end
+    m.DefaultLayout = m.GetLayout()
+    m.RecallLayout(GV.PluginObject:GetSetting("guilayout"))
 end
 
-function m.TaskAppend(task, ...)
-    tasklist[#tasklist+1] = {task, {...}}
-    GV.PluginObject:SetSetting("rblxguilib Task List", tasklist)
+function m.ResetLayout()
+    m.RecallLayout()
 end
 
-function m.ResetSave()
-    tasklist = {}
-    GV.PluginObject:SetSetting("rblxguilib Task List", tasklist)
-end
+GV.PluginObject.Unloading:Connect(function()
+    m.SaveLayout()
+end)
 
 return m

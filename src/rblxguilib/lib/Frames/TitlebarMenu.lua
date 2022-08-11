@@ -5,6 +5,16 @@ local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
 local util = require(GV.LibraryDir.GUIUtil)
 setmetatable(TitlebarMenu,GUIFrame)
+GV.PluginTitlebarMenus = {}
+
+function TitlebarMenu:RecievePage(Page)
+    Page.TabFrame.Parent = self.TabContainer
+    Page.Content.Parent = self.ContentContainers
+    Page.TitlebarMenu = self
+    Page.InsideWidget = true
+    Page.Parent = self.TitlebarMenu
+    self:AddPage(Page)
+end
 
 function TitlebarMenu:GetIDIndex(ID)
     for i,v in pairs(self.Pages) do if v.ID == ID then return i end end
@@ -69,7 +79,7 @@ end
 
 function TitlebarMenu.new(Parent, ID)
     local self = GUIFrame.new(Parent)
-    self.ID = ID
+    self.ID = ID or math.random()
     setmetatable(self,TitlebarMenu)
     self.TitlebarMenu = Instance.new("Frame", self.Parent)
     self.TitlebarMenu.Name = "TitlebarMenu"
@@ -132,6 +142,7 @@ function TitlebarMenu.new(Parent, ID)
     self.ContentContainers.Size = UDim2.new(1,0,1,-24)
     self.Pages = {}
     self.Content = self.Parent
+    GV.PluginTitlebarMenus[#GV.PluginTitlebarMenus+1] = self
     return self
 end
 

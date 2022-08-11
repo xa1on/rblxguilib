@@ -13,16 +13,6 @@ setmetatable(Widget,GUIFrame)
 GV.PluginWidgets = {}
 local Unnamed = 0
 
-function Widget:RecievePage(Page, ReplayTask)
-    if not ReplayTask then require(GV.ManagersDir.SaveManager).TaskAppend("movepage", Page.ID, self.ID) end
-    Page.TabFrame.Parent = self.TitlebarMenu.TabContainer
-    Page.Content.Parent = self.TitlebarMenu.ContentContainers
-    Page.TitlebarMenu = self.TitlebarMenu
-    Page.InsideWidget = true
-    Page.Parent = self.TitlebarMenu.TitlebarMenu
-    self.TitlebarMenu:AddPage(Page)
-end
-
 function Widget.new(ID, title, InitiallyEnabled, NoTitlebarMenu, DockState, OverrideRestore)
     local self = GUIFrame.new()
     setmetatable(self, Widget)
@@ -60,7 +50,7 @@ function Widget.new(ID, title, InitiallyEnabled, NoTitlebarMenu, DockState, Over
     if not NoTitlebarMenu then self.TitlebarMenu = TitlebarMenu.new(self.WidgetObject, self.ID) end
     self.WidgetObject.PluginDragDropped:Connect(function()
         if(GV.SelectedPage and self.TitlebarMenu) then
-            self:RecievePage(GV.SelectedPage)
+            self.TitlebarMenu:RecievePage(GV.SelectedPage)
             FixPosition = true
             FixPage = GV.SelectedPage
             self.TitlebarMenu:SetActive(GV.SelectedPage.ID)
