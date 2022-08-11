@@ -67,8 +67,9 @@ function TitlebarMenu:BeingDragged(ID)
     end
 end
 
-function TitlebarMenu.new(Parent)
+function TitlebarMenu.new(Parent, ID)
     local self = GUIFrame.new(Parent)
+    self.ID = ID
     setmetatable(self,TitlebarMenu)
     self.TitlebarMenu = Instance.new("Frame", self.Parent)
     self.TitlebarMenu.Name = "TitlebarMenu"

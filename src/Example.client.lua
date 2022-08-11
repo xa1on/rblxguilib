@@ -184,3 +184,5 @@ dumpbutton:Clicked(function()
     print("Dumping GUI")
     gui.GUIUtil.DumpGUI(widget.Content)
 end)
+
+gui.SaveManager.RecallSave()

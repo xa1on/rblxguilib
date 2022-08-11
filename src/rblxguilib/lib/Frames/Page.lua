@@ -7,6 +7,7 @@ local InputManager = require(GV.ManagersDir.InputManager)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
 setmetatable(Page,GUIFrame)
 local PageNum = 0
+GV.PluginPages = {}
 
 function Page:SetState(State)
     self.Open = State
@@ -24,14 +25,14 @@ function Page:SetState(State)
     end
 end
 
-function Page.new(Name, TitlebarMenu, OpenByDefault, Size)
+function Page.new(Name, TitlebarMenu, OpenByDefault, Size, ID)
     local self = GUIFrame.new(TitlebarMenu.TitlebarMenu)
     setmetatable(self,Page)
     PageNum += 1
-    self.ID = PageNum
+    self.ID = ID or Name
     self.TitlebarMenu = TitlebarMenu
     self.TabFrame = Instance.new("Frame", self.TitlebarMenu.TabContainer)
-    self.TabFrame.Name = self.ID
+    self.TabFrame.Name = PageNum
     self.TabFrame.BorderSizePixel = 0
     util.ColorSync(self.TabFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
     self.Tab = Instance.new("TextButton", self.TabFrame)
@@ -117,6 +118,7 @@ function Page.new(Name, TitlebarMenu, OpenByDefault, Size)
     self.Content.Name = self.ID
     self.TitlebarMenu:AddPage(self)
     if OpenByDefault then self.TitlebarMenu:SetActive(self.ID) else self:SetState(false) end
+    GV.PluginPages[#GV.PluginPages+1] = self
     return self
 end
 

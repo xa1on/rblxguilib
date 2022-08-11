@@ -9,6 +9,7 @@ local InputPrompt = require(GV.PromptsDir.InputPrompt)
 local InputField = require(GV.ObjectsDir.InputField)
 local TextPrompt = require(GV.PromptsDir.TextPrompt)
 local PluginWidget = require(GV.FramesDir.PluginWidget)
+local SaveManager = require(GV.ManagersDir.SaveManager)
 setmetatable(ViewWidgetsButton,TitlebarButton)
 
 local ViewMenu = {}
@@ -37,6 +38,7 @@ function ViewWidgetsButton:RefreshList()
             NewTitlePrompt:Clicked(function(p)
                 if p == 2 then return end
                 Widget.WidgetObject.Title = NewTitlePrompt.Input.Text
+                SaveManager.TaskAppend("renamewidget", Widget.ID, NewTitlePrompt.Input.Text)
             end)
         end)
         DeleteAction.Triggered:Connect(function()
@@ -55,22 +57,14 @@ function ViewWidgetsButton:RefreshList()
                         local NewWidget = TransferPrompt.InputField.Value
                         if NewWidget == "" then return end
                         for _, v in pairs(Widget.TitlebarMenu.Pages) do
-                            v.TabFrame.Parent = NewWidget.TitlebarMenu.TabContainer
-                            v.Content.Parent = NewWidget.TitlebarMenu.ContentContainers
-                            v.TitlebarMenu = NewWidget.TitlebarMenu
-                            v.InsideWidget = true
-                            v.Parent = NewWidget.TitlebarMenu
-                            NewWidget.TitlebarMenu:AddPage(v)
+                            NewWidget:RecievePage(v)
                         end
-                        Widget.WidgetObject:Destroy()
-                        Widget = nil
-                        table.remove(GV.PluginWidgets, i)
                     end)
-                else
-                    Widget.WidgetObject:Destroy()
-                    Widget = nil
-                    table.remove(GV.PluginWidgets, i)
                 end
+                Widget.WidgetObject:Destroy()
+                Widget = nil
+                table.remove(GV.PluginWidgets, i)
+                SaveManager.TaskAppend("deletewidget", Widget.ID)
             end)
         end)
         WidgetMenuObject:AddAction(ToggleAction)
@@ -81,10 +75,16 @@ function ViewWidgetsButton:RefreshList()
     end
     self.PluginMenu:AddSeparator()
     local CreateNewWindowAction = GV.PluginObject:CreatePluginAction(math.random(), "Create New Window", "", nil, false)
+    local ResetLayoutAction = GV.PluginObject:CreatePluginAction(math.random(), "Reset Layout (Plugin restart required)", "", nil, false)
     CreateNewWindowAction.Triggered:Connect(function()
-        PluginWidget.new(nil, nil, true)
+        local NewWidget = PluginWidget.new(nil, nil, true)
+        SaveManager.TaskAppend("newwidget", NewWidget.ID, NewWidget.WidgetObject.Title)
+    end)
+    ResetLayoutAction.Triggered:Connect(function()
+        SaveManager.ResetSave()
     end)
     self.PluginMenu:AddAction(CreateNewWindowAction)
+    self.PluginMenu:AddAction(ResetLayoutAction)
 end
 
 function ViewWidgetsButton.new()
