@@ -1,3 +1,4 @@
+local ChangeHistoryService = game:GetService("ChangeHistoryService")
 local GuiService = game:GetService("GuiService")
 local ViewWidgetsButton = {}
 ViewWidgetsButton.__index = ViewWidgetsButton
