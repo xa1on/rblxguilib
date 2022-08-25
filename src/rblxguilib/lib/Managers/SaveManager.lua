@@ -64,7 +64,7 @@ function m.RecallLayout(layout)
         if not m.SearchForID(Widget.ID, layout.Widgets)[2] then
             Widget.WidgetObject:Destroy()
             Widget = nil
-            table.remove(GV.PluginWidgets, i)
+            GV.PluginWidgets[i] = nil
         end
     end
 end
