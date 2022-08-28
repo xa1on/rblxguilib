@@ -10,20 +10,13 @@ function m.SearchForID(ID, Table)
 end
 
 function m.GetLayout()
-    local layout = {Widgets = {}, Menus = {}, Pages = {}}
+    local layout = {Widgets = {}, Pages = {}}
     for _, Widget in pairs(GV.PluginWidgets) do
         local WidgetDesc = {
             ID = Widget.ID,
             Title = Widget.WidgetObject.Title
         }
         layout.Widgets[#layout.Widgets+1] = WidgetDesc
-    end
-    for _, Menu in pairs(GV.PluginTitlebarMenus) do
-        local MenuDesc = {
-            ID = Menu.ID,
-            Parent = Menu.Parent
-        }
-        layout.Menus[#layout.Menus+1] = MenuDesc
     end
     for _, Page in pairs(GV.PluginPages) do
         local PageDesc = {
@@ -36,7 +29,6 @@ function m.GetLayout()
 end
 
 function m.RecallLayout(layout)
-    layout = layout or m.DefaultLayout
     for _, Widget in pairs(layout.Widgets) do
         local WidgetTable = m.SearchForID(Widget.ID, GV.PluginWidgets)[2]
         if not WidgetTable then
@@ -44,18 +36,10 @@ function m.RecallLayout(layout)
         end
         WidgetTable.WidgetObject.Title = Widget.Title
     end
-    --[[
-    for _, Menu in pairs(layout.Menus) do
-        local MenuTable = m.SearchForID(Menu.ID, GV.PluginTitlebarMenus)[2]
-        if MenuTable.Parent ~= Menu.Parent then
-            MenuTable.TitlebarMenu.Parent = Menu.Parent
-            MenuTable.Parent = Menu.Parent
-        end
-    end]]
     for _, Page in pairs(layout.Pages) do
         local PageTable = m.SearchForID(Page.ID, GV.PluginPages)[2]
         if PageTable.TitlebarMenu.ID ~= Page.MenuID then
-            local NewMenu = m.SearchForID(Page.MenuID, GV.PluginTitlebarMenus)[2]
+            local NewMenu = m.SearchForID(Page.MenuID, GV.PluginWidgets)[2].TitlebarMenu
             PageTable.TitlebarMenu:RemovePage(PageTable)
             NewMenu:RecievePage(PageTable)
         end
@@ -71,16 +55,16 @@ end
 
 function m.SaveLayout(layout)
     layout = layout or m.GetLayout()
-    GV.PluginObject:SetSetting("guilayout", layout)
+    GV.PluginObject:SetSetting("PreviousGUIState", layout)
 end
 
 function m.RecallSave()
     m.DefaultLayout = m.GetLayout()
-    m.RecallLayout(GV.PluginObject:GetSetting("guilayout"))
+    m.RecallLayout(GV.PluginObject:GetSetting("PreviousGUIState"))
 end
 
 function m.ResetLayout()
-    m.RecallLayout()
+    m.RecallLayout(m.DefaultLayout)
 end
 
 GV.PluginObject.Unloading:Connect(function()

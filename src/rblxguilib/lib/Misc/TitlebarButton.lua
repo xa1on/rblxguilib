@@ -68,6 +68,10 @@ function TitlebarButton:CreateCopy(TitlebarMenu)
         if self.Disabled then return end
         if self.Action then self.Action() end
         if self.PluginMenu then
+            -- ???? what
+            task.wait()
+            task.wait()
+            -- i have no idea how this works but it does
             local SelectedAction = self.PluginMenu:ShowAsync()
             if self.TitlebarMenuSelectedAction then self.TitlebarMenuSelectedAction(SelectedAction) end
         end
