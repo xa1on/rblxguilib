@@ -84,7 +84,7 @@ end
 function KeybindInputField.new(Action, Placeholder, DefaultKeybind, Keybinds, Size, NoDropdown, Disabled, Parent)
     KeybindNum += 1
     Placeholder = Placeholder or "Set Keybind"
-    local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown, true, false, Disabled, Parent)
+    local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown, false, true, false, Disabled, Parent)
     setmetatable(self,KeybindInputField)
     self.TextEditable = true
     self.ID = KeybindNum

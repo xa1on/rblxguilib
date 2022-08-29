@@ -140,7 +140,7 @@ local disablebutton = gui.ToggleableButton.new("toggle previous")
 disablebutton:Clicked(function(p) inpfield:SetDisabled(p) end)
 
 -- instanceinputfield - (defaultname, defaultvalue, items, scale, disabled, frame)
-local instanceinpfield = gui.InstanceInputField.new(nil, nil, {{game:GetService("Lighting")}, {workspace}})
+local instanceinpfield = gui.InstanceInputField.new(nil, nil, {{game:GetService("Lighting"), game:GetService("MaterialService")}, {workspace}})
 gui.Labeled.new("an instance", nil, instanceinpfield)
 instanceinpfield:Changed(function(result)
     for _, v in pairs(result) do
@@ -167,7 +167,7 @@ toggle_checkbox:Clicked(function(p)
     checkbox:SetDisabled(p)
 end)
 
-local slider = gui.Labeled.new("Labled Slider", nil, {{gui.InputField.new(nil, 50, nil, 1, true, true), "display", UDim.new(0,30)},{gui.Slider.new(0,100,50,1), "slider"}})
+local slider = gui.Labeled.new("Labled Slider", nil, {{gui.InputField.new(nil, 50, nil, 1, true, false, true), "display", UDim.new(0,30)},{gui.Slider.new(0,100,50,1), "slider"}})
 slider.slider:Changed(function(p)
     slider.display:SetValue(p)
 end)

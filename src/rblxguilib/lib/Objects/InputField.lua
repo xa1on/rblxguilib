@@ -85,9 +85,28 @@ function InputField:AddItem(Item)
     ItemLabel.ZIndex = 2
     ItemLabel.TextXAlignment = Enum.TextXAlignment.Left
     util.HoverIcon(ItemButton)
+    self.Input.Changed:Connect(function(p)
+        if p == "Text" and self.Filtering then
+            if self.Input.Text == "" or string.sub(StoredItem[1], 1, string.len(self.Input.Text)) == self.Input.Text then
+                ItemButton.Visible = true
+            else
+                ItemButton.Visible = false
+            end
+        end
+    end)
     ItemButton.MouseButton1Click:Connect(function()
+        if self.Disabled then return end
         self:SetDropdown(false)
         self.Input.Text = StoredItem[1]
+    end)
+    ItemButton.MouseEnter:Connect(function()
+        task.wait(0)
+        if self.Disabled then return end
+        if self.EnterAction then self.EnterAction(StoredItem[2]) end
+    end)
+    ItemButton.MouseLeave:Connect(function()
+        if self.Disabled then return end
+        if self.LeaveAction then self.LeaveAction(StoredItem[2]) end
     end)
 end
 
@@ -118,11 +137,20 @@ function InputField:Changed(func)
     self.Action = func
 end
 
-function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, DisableEditing, ClearText, Disabled, Parent)
+function InputField:MouseEnter(func)
+    self.EnterAction = func
+end
+
+function InputField:MouseLeave(func)
+    self.LeaveAction = func
+end
+
+function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Filtering, DisableEditing, ClearText, Disabled, Parent)
     local self = GUIObject.new(Parent)
     setmetatable(self,InputField)
     self.ItemTable = {}
     self.Action = nil
+    self.Filtering = Filtering
     self.InputFieldContainer = Instance.new("Frame", self.Parent)
     self.InputFieldContainer.BackgroundTransparency = 1
     self.InputFieldContainer.Name = "InputFieldContainer"

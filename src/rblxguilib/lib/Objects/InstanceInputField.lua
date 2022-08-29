@@ -44,7 +44,7 @@ end
 
 function InstanceInputField.new(Placeholder, DefaultInstances, Items, Size, NoDropdown, Disabled, Parent)
     Placeholder = Placeholder or "Select object(s)"
-    local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown,  true, true, Disabled, Parent)
+    local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown, false, true, true, Disabled, Parent)
     setmetatable(self,InstanceInputField)
     if Items then self:AddItems(Items) end
     self.Focusable = true

@@ -41,7 +41,7 @@ function ViewWidgetsButton:LoadWidgetOption(Widget, i)
                     if v.TitlebarMenu and v.WidgetObject.Title ~= WidgetTitle then AvailibleWidgets[#AvailibleWidgets+1] = {v.WidgetObject.Title, v} end
                 end
                 if #AvailibleWidgets < 1 then return end
-                local TransferPrompt = InputPrompt.new("Transfer Pages", "Where would you like to move the pages?", {"OK", "Cancel"}, InputField.new(nil, AvailibleWidgets[1], AvailibleWidgets, nil, false, true, nil, nil, nil))
+                local TransferPrompt = InputPrompt.new("Transfer Pages", "Where would you like to move the pages?", {"OK", "Cancel"}, InputField.new(nil, AvailibleWidgets[1], AvailibleWidgets, nil, false, nil, true))
                 TransferPrompt:Clicked(function(p2)
                     if p2 == 2 then return end
                     local NewWidget = TransferPrompt.InputField.Value
