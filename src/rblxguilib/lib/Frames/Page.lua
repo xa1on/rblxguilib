@@ -26,10 +26,9 @@ function Page:SetState(State)
 end
 
 -- Name, TitlebarMenu, Open, Size, ID
-function Page.new(Arguments)
-    local self = GUIFrame.new(Arguments)
-    self.TitlebarMenu = self.Arguments.TitlebarMenu
-    self.Parent = self.TitlebarMenu.TitlebarMenu
+function Page.new(Arguments, Parent)
+    local self = GUIFrame.new(Arguments, Parent)
+    self.TitlebarMenu = self.Arguments.TitlebarMenu or self.Parent.TitlebarMenu
     setmetatable(self,Page)
     PageNum += 1
     self.ID = self.Arguments.ID or self.Arguments.Name

@@ -61,11 +61,11 @@ titlebarbutton:SelectedAction(function(SelectedAction)
 end)
 
 
-gui.Page.new({Name = "SETTINGS", TitlebarMenu = widget.TitlebarMenu})
-gui.Page.new({Name = "PAGE1", TitlebarMenu = widget.TitlebarMenu})
-gui.Page.new({Name = "PAGE2", TitlebarMenu = widget.TitlebarMenu})
-gui.Page.new({Name = "PAGE3", TitlebarMenu = widget.TitlebarMenu})
-gui.Page.new({Name = "PAGE4", TitlebarMenu = widget.TitlebarMenu})
+gui.Page.new({Name = "SETTINGS"}, widget)
+gui.Page.new({Name = "PAGE1"}, widget)
+gui.Page.new({Name = "PAGE2"}, widget)
+gui.Page.new({Name = "PAGE3"}, widget)
+gui.Page.new({Name = "PAGE4"}, widget)
 
 -- scrolling frame(lets you scroll through the gui):
 -- BarSize
