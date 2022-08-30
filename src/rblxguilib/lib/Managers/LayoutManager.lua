@@ -32,16 +32,20 @@ function m.RecallLayout(layout)
     for _, Widget in pairs(layout.Widgets) do
         local WidgetTable = m.SearchForID(Widget.ID, GV.PluginWidgets)[2]
         if not WidgetTable then
-            WidgetTable = require(GV.FramesDir.PluginWidget).new(Widget.ID, Widget.Title, true)
+            WidgetTable = require(GV.FramesDir.PluginWidget).new({ID = Widget.ID, Title = Widget.Title, Enabled = true})
         end
         WidgetTable.WidgetObject.Title = Widget.Title
     end
     for _, Page in pairs(layout.Pages) do
         local PageTable = m.SearchForID(Page.ID, GV.PluginPages)[2]
-        if PageTable.TitlebarMenu.ID ~= Page.MenuID then
-            local NewMenu = m.SearchForID(Page.MenuID, GV.PluginWidgets)[2].TitlebarMenu
-            PageTable.TitlebarMenu:RemovePage(PageTable)
-            NewMenu:RecievePage(PageTable)
+        if PageTable then
+            if PageTable.TitlebarMenu.ID ~= Page.MenuID then
+                local NewMenu = m.SearchForID(Page.MenuID, GV.PluginWidgets)[2]
+                if NewMenu then
+                    PageTable.TitlebarMenu:RemovePage(PageTable)
+                    NewMenu.TitlebarMenu:RecievePage(PageTable)
+                end
+            end
         end
     end
     for i, Widget in pairs(GV.PluginWidgets) do

@@ -5,7 +5,7 @@ ViewWidgetsButton.__index = ViewWidgetsButton
 
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
-local TitlebarButton = require(GV.MiscDir.TitlebarButton)
+local TitlebarButton = require(GV.ObjectsDir.TitlebarButton)
 local InputPrompt = require(GV.PromptsDir.InputPrompt)
 local InputField = require(GV.ObjectsDir.InputField)
 local TextPrompt = require(GV.PromptsDir.TextPrompt)
@@ -25,14 +25,14 @@ function ViewWidgetsButton:LoadWidgetOption(Widget, i)
         Widget.WidgetObject.Enabled = not Widget.WidgetObject.Enabled
     end)
     RenameAction.Triggered:Connect(function()
-        local NewTitlePrompt = InputPrompt.new("Rename " .. WidgetTitle, "Type in a new name:", {"OK", "Cancel"}, InputField.new("New name", WidgetTitle, nil, nil, true))
+        local NewTitlePrompt = InputPrompt.new({Title = "Rename " .. WidgetTitle, Text = "Type in a new name:", Buttons = {"OK", "Cancel"}, InputField = InputField.new({Placeholder = "New name", Text = WidgetTitle, NoDropdown = true})})
         NewTitlePrompt:Clicked(function(p)
             if p == 2 then return end
             Widget.WidgetObject.Title = NewTitlePrompt.Input.Text
         end)
     end)
     DeleteAction.Triggered:Connect(function()
-        local DeletePrompt = TextPrompt.new("Delete " .. WidgetTitle, 'Are you sure you want to delete "' .. WidgetTitle .. '"?', {"Yes", "No"})
+        local DeletePrompt = TextPrompt.new({Title = "Delete " .. WidgetTitle, Text = 'Are you sure you want to delete "' .. WidgetTitle .. '"?', Buttons = {"Yes", "No"}})
         DeletePrompt:Clicked(function(p)
             if p == 2 then return end
             if Widget.TitlebarMenu and #Widget.TitlebarMenu.Pages > 0 then
@@ -41,7 +41,7 @@ function ViewWidgetsButton:LoadWidgetOption(Widget, i)
                     if v.TitlebarMenu and v.WidgetObject.Title ~= WidgetTitle then AvailibleWidgets[#AvailibleWidgets+1] = {v.WidgetObject.Title, v} end
                 end
                 if #AvailibleWidgets < 1 then return end
-                local TransferPrompt = InputPrompt.new("Transfer Pages", "Where would you like to move the pages?", {"OK", "Cancel"}, InputField.new(nil, AvailibleWidgets[1], AvailibleWidgets, nil, false, nil, true))
+                local TransferPrompt = InputPrompt.new({Title = "Transfer Pages", Text = "Where would you like to move the pages?", Buttons = {"OK", "Cancel"}, InputField = InputField.new({Value = AvailibleWidgets[1], Items = AvailibleWidgets, DisableEditing = true})})
                 TransferPrompt:Clicked(function(p2)
                     if p2 == 2 then return end
                     local NewWidget = TransferPrompt.InputField.Value
@@ -79,7 +79,7 @@ function ViewWidgetsButton:LoadLayoutOption(Layout, i)
     local RenameAction = GV.PluginObject:CreatePluginAction(math.random(), "Rename", "", nil, false)
     local DeleteAction = GV.PluginObject:CreatePluginAction(math.random(), "Delete", "", nil, false)
     UseLayoutAction.Triggered:Connect(function()
-        local OverridePrompt = TextPrompt.new("Override Layout", "Are you sure you want to override the current GUI layout?", {"Yes", "No"})
+        local OverridePrompt = TextPrompt.new({Title = "Override Layout", Text = "Are you sure you want to override the current GUI layout?", Buttons = {"Yes", "No"}})
         OverridePrompt:Clicked(function(p)
             if p == 2 then return end
             LayoutManager.RecallLayout(Layout)
@@ -92,7 +92,7 @@ function ViewWidgetsButton:LoadLayoutOption(Layout, i)
         GV.PluginObject:SetSetting("SavedGUILayouts", SavedLayouts)
     end)
     RenameAction.Triggered:Connect(function()
-        local RenamePrompt = InputPrompt.new("Rename Layout ", "Type in a new name:", {"OK", "Cancel"}, InputField.new("New name", Layout.Name, nil, nil, true))
+        local RenamePrompt = InputPrompt.new({Title = "Rename Layout ", Text = "Type in a new name:", Buttons = {"OK", "Cancel"}, InputField = InputField.new({Placeholder = "New name", Value = Layout.Name, NoDropdown = true})})
         RenamePrompt:Clicked(function(p)
             if p == 2 then return end
             Layout.Name = RenamePrompt.Input.Text
@@ -101,7 +101,7 @@ function ViewWidgetsButton:LoadLayoutOption(Layout, i)
         end)
     end)
     DeleteAction.Triggered:Connect(function()
-        local DeletePrompt = TextPrompt.new("Delete " .. Layout.Name, 'Are you sure you want to delete "' .. Layout.Name .. '"?', {"Yes", "No"})
+        local DeletePrompt = TextPrompt.new({Title = "Delete " .. Layout.Name, Text = 'Are you sure you want to delete "' .. Layout.Name .. '"?', Buttons = {"Yes", "No"}})
         DeletePrompt:Clicked(function(p)
             if p == 2 then return end
             table.remove(SavedLayouts, i)
@@ -126,7 +126,7 @@ function ViewWidgetsButton:CreateMenu()
     self.WidgetsMenu = GV.PluginObject:CreatePluginMenu(math.random(), "Widgets")
     local CreateNewWindowAction = GV.PluginObject:CreatePluginAction(math.random(), "Create New Window", "", nil, false)
     CreateNewWindowAction.Triggered:Connect(function()
-        PluginWidget.new(nil, nil, true)
+        PluginWidget.new({Enabled = true})
     end)
     self.WidgetsMenu:AddAction(CreateNewWindowAction)
     self.WidgetsMenu:AddSeparator()
@@ -137,7 +137,7 @@ function ViewWidgetsButton:CreateMenu()
     local SaveCurrentLayout = GV.PluginObject:CreatePluginAction(math.random(), "Save Layout", "", nil, false)
     SaveCurrentLayout.Triggered:Connect(function()
         local SavedLayouts = GV.PluginObject:GetSetting("SavedGUILayouts") or {}
-        local NamePrompt = InputPrompt.new("Name Layout ", "Type in a name for this layout:", {"OK", "Cancel"}, InputField.new("New name", nil, nil, nil, true))
+        local NamePrompt = InputPrompt.new({Title = "Name Layout ", Text = "Type in a name for this layout:", Buttons = {"OK", "Cancel"}, InputField = InputField.new({Placeholder = "New name", NoDropdown = true})})
         NamePrompt:Clicked(function(p)
             if p == 2 then return end
             local NewLayout = LayoutManager.GetLayout()
@@ -179,7 +179,7 @@ function ViewWidgetsButton:RefreshMenu()
 end
 
 function ViewWidgetsButton.new()
-    local self = TitlebarButton.new("VIEW", nil, false)
+    local self = TitlebarButton.new({Name = "VIEW"})
     setmetatable(self,ViewWidgetsButton)
     self:CreateMenu()
     self:Clicked(function()

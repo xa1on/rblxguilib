@@ -32,8 +32,9 @@ function Button:Clicked(func)
     self.Action = func
 end
 
-function Button.new(Textbox, Size, Disabled, Parent)
-    local self = GUIObject.new(Parent)
+-- Text/Textbox, Size, Disabled
+function Button.new(Arguments, Parent)
+    local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,Button)
     self.TextboxTable = nil
     -- creating a frame to hold the button
@@ -45,8 +46,9 @@ function Button.new(Textbox, Size, Disabled, Parent)
     self.Button = Instance.new("ImageButton", self.ButtonFrame)
 
     -- set up a textbox for the button
+    local Textbox = self.Arguments.Textbox or self.Arguments.Text
     if type(Textbox) == "string" then
-        self.TextboxTable = TextboxMod.new(Textbox, nil, nil, nil, self.Button)
+        self.TextboxTable = TextboxMod.new({Text = Textbox}, self.Button)
     else
         self.TextboxTable = Textbox
         Textbox:Move(self.Button, true)
@@ -54,7 +56,7 @@ function Button.new(Textbox, Size, Disabled, Parent)
     self.Textbox = self.TextboxTable.Textbox
     self.Textbox.ZIndex = 1
 
-    Size = util.GetScale(Size)
+    local Size = util.GetScale(self.Arguments.Size)
     if Size then self.Button.Size = UDim2.new(Size.Scale,Size.Offset,1,0)
     else
         local function sync()
@@ -120,7 +122,7 @@ function Button.new(Textbox, Size, Disabled, Parent)
         end
     end)
 
-    self:SetDisabled(Disabled)
+    self:SetDisabled(self.Arguments.Disabled)
     self.Object = self.Button
     self.MainMovable = self.ButtonFrame
     return self

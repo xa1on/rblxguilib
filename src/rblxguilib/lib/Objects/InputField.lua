@@ -44,10 +44,12 @@ function InputField:SetDropdown(State)
     self.DropdownFrame.Visible = State
     if State then
         self.Parent.ZIndex = 2
-        self.DropdownFrame.ZIndex = 2
+        self.InputFieldFrame.ZIndex = 3
+        self.Input.ZIndex = 4
     else
         self.Parent.ZIndex = 0
-        self.DropdownFrame.ZIndex = 2
+        self.InputFieldFrame.ZIndex = 0
+        self.Input.ZIndex = 0
     end
 end
 
@@ -144,19 +146,19 @@ end
 function InputField:MouseLeave(func)
     self.LeaveAction = func
 end
-
-function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Filtering, DisableEditing, ClearText, Disabled, Parent)
-    local self = GUIObject.new(Parent)
+-- Placeholder, Value, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
+function InputField.new(Arguments, Parent)
+    local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,InputField)
     self.ItemTable = {}
     self.Action = nil
-    self.Filtering = Filtering
+    self.Filtering = not self.Arguments.NoFiltering
     self.InputFieldContainer = Instance.new("Frame", self.Parent)
     self.InputFieldContainer.BackgroundTransparency = 1
     self.InputFieldContainer.Name = "InputFieldContainer"
     self.InputFieldFrame = Instance.new("Frame", self.InputFieldContainer)
     self.InputFieldFrame.BackgroundTransparency = 1
-    Size = util.GetScale(Size) or UDim.new(1,-20)
+    local Size = util.GetScale(self.Arguments.Size) or UDim.new(1,-20)
     self.InputFieldFrame.Size = UDim2.new(Size.Scale,Size.Offset,0,20)
     self.InputFieldFrame.Position = UDim2.new(0.5,0,0.5,0)
     self.InputFieldFrame.AnchorPoint = Vector2.new(0.5,0.5)
@@ -166,31 +168,35 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Filt
     self.Input = Instance.new("TextBox", self.InputFieldFrame)
     self.Input.TextTruncate = Enum.TextTruncate.AtEnd
     self.Input.BackgroundTransparency = 1
-    if NoDropdown then self.Input.Size = UDim2.new(1,-10,1,0) else self.Input.Size = UDim2.new(1,-30,1,0) end
+    if self.Arguments.NoDropdown then self.Input.Size = UDim2.new(1,-10,1,0) else self.Input.Size = UDim2.new(1,-30,1,0) end
     self.Input.Font = Enum.Font.SourceSans
-    DefaultValue = DefaultValue or ""
-    if type(DefaultValue) == "string" or type(DefaultValue) == "number" then
-        self:SetValue(DefaultValue)
-    elseif type(DefaultValue) == "table" then
-        self:SetValue(DefaultValue[2], DefaultValue[1])
+    if not self.Arguments.IgnoreItems then
+        local Value = self.Arguments.Value or ""
+        if type(Value) == "string" or type(Value) == "number" then
+            self:SetValue(Value)
+        elseif type(Value) == "table" then
+            self:SetValue(Value[2], Value[1])
+        end
     end
     self.Value = self:RecallItem(self.Input.Text)
     self.Input.TextSize = 14
-    if Placeholder then self.Input.PlaceholderText = Placeholder end
+    if self.Arguments.Placeholder then self.Input.PlaceholderText = self.Arguments.Placeholder end
     self.Input.TextXAlignment = Enum.TextXAlignment.Left
     self.Input.Position = UDim2.new(0,5,0,0)
-    self.Input.ClearTextOnFocus = ClearText
+    self.Input.ClearTextOnFocus = self.Arguments.ClearText
     self.Input.Name = "Input"
     self.Input.Changed:Connect(function(p)
         if p == "Text" then
             local RecalledItem = self:RecallItem(self.Input.Text)
-            self.Value = RecalledItem
-            if self.Action then self.Action(RecalledItem) end
+            if self.RecallItem then
+                self.Value = RecalledItem
+                if self.Action then self.Action(RecalledItem) end
+            end
         end
     end)
     self.Focusable = true
     self.TextEditable = true
-    if DisableEditing then
+    if self.Arguments.DisableEditing then
         self.Input.TextEditable = false
         self.TextboxEditable = false
         self.Focusable = false
@@ -228,7 +234,7 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Filt
         end
     end)
     self.DropdownButton = Instance.new("TextButton", self.InputFieldFrame)
-    if NoDropdown then self.DropdownButton.Visible = false end
+    if self.Arguments.NoDropdown then self.DropdownButton.Visible = false end
     self.DropdownButton.Text = ""
     util.ColorSync(self.DropdownButton, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     self.DropdownButton.BorderSizePixel = 0
@@ -257,7 +263,8 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Filt
     self.MouseInDropdownMenu = false
     self.DropdownFrame.MouseEnter:Connect(function() self.MouseInDropdownMenu = true end)
     self.DropdownFrame.MouseLeave:Connect(function() self.MouseInDropdownMenu = false end)
-    self.DropdownScroll = ScrollingFrame.new(10, self.DropdownFrame)
+    self.DropdownFrame.ZIndex = 2
+    self.DropdownScroll = ScrollingFrame.new({BarSize = 10}, self.DropdownFrame)
     self:SetDropdown(false)
     self.DropdownMaxY = 100
     local function syncframe()
@@ -284,8 +291,8 @@ function InputField.new(Placeholder, DefaultValue, Items, Size, NoDropdown, Filt
             end
         end
     end)
-    if Items then self:AddItems(Items) end
-    self:SetDisabled(Disabled)
+    if self.Arguments.Items and not self.Arguments.IgnoreItems then self:AddItems(self.Arguments.Items) end
+    self:SetDisabled(self.Arguments.Disabled)
     self.Object = self.Input
     self.MainMovable = self.InputFieldContainer
     return self

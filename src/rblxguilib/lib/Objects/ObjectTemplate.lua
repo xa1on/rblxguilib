@@ -6,8 +6,8 @@ local util = require(GV.LibraryDir.GUIUtil)
 local GUIObject = require(GV.ObjectsDir.GUIObject)
 setmetatable(temp,GUIObject)
 
-function temp.new(Parent)
-    local self = GUIObject.new(Parent)
+function temp.new(Arguments, Parent)
+    local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,temp)
     self.Object = nil
     self.MainMovable = nil

@@ -15,8 +15,9 @@ function ToggleableButton:SetValue(Value)
     self.Value = Value
 end
 
-function ToggleableButton.new(Textbox, Size, DefaultValue, Disabled, Parent)
-    local self = Button.new(Textbox, Size, Disabled, Parent)
+-- Textbox, Size, Value, Disabled
+function ToggleableButton.new(Arguments, Parent)
+    local self = Button.new(Arguments, Parent)
     setmetatable(self,ToggleableButton)
     self.Toggleable = true
     local Pressed = false
@@ -68,7 +69,7 @@ function ToggleableButton.new(Textbox, Size, DefaultValue, Disabled, Parent)
         end
     end)
 
-    self:SetValue(DefaultValue)
+    self:SetValue(self.Arguments.Value)
     return self
 end
 

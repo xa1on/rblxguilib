@@ -3,6 +3,8 @@ Prompt.__index = Prompt
 
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local BackgroundFrame = require(GV.FramesDir.BackgroundFrame)
+local GUIElement = require(GV.LibraryDir.GUIElement)
+setmetatable(Prompt,GUIElement)
 
 function Prompt:Reset(Title, Width, Height)
     Title = Title or "Prompt"
@@ -24,11 +26,12 @@ function Prompt:Reset(Title, Width, Height)
     self.Widget = NewWidget
 end
 
-function Prompt.new(Title, Width, Height)
-    local self = {}
+-- Title, Width, Height
+function Prompt.new(Arguments)
+    local self = GUIElement.new(Arguments)
     setmetatable(self,Prompt)
-    self:Reset(Title, Width, Height)
-    local BackgroundFrame = BackgroundFrame.new(self.Widget)
+    self:Reset(self.Arguments.Title, self.Arguments.Width, self.Arguments.Height)
+    local BackgroundFrame = BackgroundFrame.new(nil, self.Widget)
     self.Parent = BackgroundFrame.Content
     return self
 end

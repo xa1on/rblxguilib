@@ -5,16 +5,18 @@ local GUIFrame = require(GV.FramesDir.GUIFrame)
 setmetatable(ListFrame,GUIFrame)
 local Count = 0
 
-function ListFrame.new(Name, Height, Parent)
-    local self = GUIFrame.new(Parent)
+
+-- Name, Height
+function ListFrame.new(Arguments, Parent)
+    local self = GUIFrame.new(Arguments, Parent)
     setmetatable(self,ListFrame)
     Count = Count + 1;
-    Height = Height or 28
+    self.Arguments.Height = self.Arguments.Height or 28
     self.Content = Instance.new("Frame", self.Parent)
     self.Content.BackgroundTransparency = 1
-    self.Content.Size = UDim2.new(1,0,0,Height)
+    self.Content.Size = UDim2.new(1,0,0,self.Arguments.Height)
     self.Content.Name = Count
-    if Name then self.Content.Name = self.Content.Name .. ": " .. Name end
+    if self.Arguments.Name then self.Content.Name = self.Content.Name .. ": " .. self.Arguments.Name end
     -- layout (used for stacking multiple elements in one row)
     self.Layout = Instance.new("UIGridLayout", self.Content)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder

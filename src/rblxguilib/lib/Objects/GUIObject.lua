@@ -5,8 +5,8 @@ local GUIElement = require(GV.LibraryDir.GUIElement)
 local ListFrame = require(GV.FramesDir.ListFrame)
 setmetatable(GUIObject,GUIElement)
 
-function GUIObject.new(Parent)
-    local self = GUIElement.new(Parent or ListFrame.new().Content)
+function GUIObject.new(Arguments, Parent)
+    local self = GUIElement.new(Arguments, Parent or ListFrame.new().Content)
     setmetatable(self,GUIObject)
     self.Object = nil
     self.MainMovable = nil

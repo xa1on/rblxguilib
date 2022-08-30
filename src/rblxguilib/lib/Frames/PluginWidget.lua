@@ -13,24 +13,26 @@ setmetatable(Widget,GUIFrame)
 GV.PluginWidgets = {}
 local Unnamed = 0
 
-function Widget.new(ID, title, InitiallyEnabled, NoTitlebarMenu, DockState, OverrideRestore)
-    local self = GUIFrame.new()
+-- ID, Title, Enabled, NoTitlebarMenu, DockState, OverrideRestore
+function Widget.new(Arguments)
+    local self = GUIFrame.new(Arguments)
     setmetatable(self, Widget)
-    self.ID = ID or math.random()
+    self.ID = self.Arguments.ID or math.random()
+    local title = self.Arguments.Title
     if not title then
-        title = ID
+        title = self.Arguments.ID
         if not title then
             Unnamed += 1
             title = "Unnamed #" .. tostring(Unnamed)
         end
     end
-    title = title or ID or "Unnamed"
-    DockState = DockState or Enum.InitialDockState.Float
-    if InitiallyEnabled then InitiallyEnabled = true else InitiallyEnabled = false end
-    if OverrideRestore then OverrideRestore = true else OverrideRestore = false end
-    self.WidgetObject = plugin:CreateDockWidgetPluginGui(self.ID, DockWidgetPluginGuiInfo.new(DockState, InitiallyEnabled, OverrideRestore, 300, 500, 50, 50))
+    self.Arguments.DockState = self.Arguments.DockState or Enum.InitialDockState.Float
+    -- really dumb but its gotta be a boolean
+    if not self.Arguments.Enabled then self.Arguments.Enabled = false end
+    if not self.Arguments.OverrideRestore then self.Arguments.OverrideRestore = false end
+    self.WidgetObject = plugin:CreateDockWidgetPluginGui(self.ID, DockWidgetPluginGuiInfo.new(self.Arguments.DockState, self.Arguments.Enabled, self.Arguments.OverrideRestore, 300, 500, 50, 50))
     self.WidgetObject.Title = title
-    self.BackgroundFrame = BackgroundFrame.new(self.WidgetObject)
+    self.BackgroundFrame = BackgroundFrame.new(nil, self.WidgetObject)
     self.InputFrame = Instance.new("Frame", self.WidgetObject)
     self.InputFrame.BackgroundTransparency = 1
     self.InputFrame.Size = UDim2.new(1,0,1,0)
@@ -47,7 +49,7 @@ function Widget.new(ID, title, InitiallyEnabled, NoTitlebarMenu, DockState, Over
         self.TitlebarMenu:FixPageLayout()
     end)
     InputManager.AddInput(self.InputFrame)
-    if not NoTitlebarMenu then self.TitlebarMenu = TitlebarMenu.new(self.WidgetObject, self.ID) end
+    if not self.Arguments.NoTitlebarMenu then self.TitlebarMenu = TitlebarMenu.new({ID = self.ID}, self.WidgetObject) end
     self.WidgetObject.PluginDragDropped:Connect(function()
         if(GV.SelectedPage and self.TitlebarMenu) then
             self.TitlebarMenu:RecievePage(GV.SelectedPage)

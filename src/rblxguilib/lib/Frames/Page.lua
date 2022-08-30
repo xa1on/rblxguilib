@@ -25,12 +25,14 @@ function Page:SetState(State)
     end
 end
 
-function Page.new(Name, TitlebarMenu, OpenByDefault, Size, ID)
-    local self = GUIFrame.new(TitlebarMenu.TitlebarMenu)
+-- Name, TitlebarMenu, Open, Size, ID
+function Page.new(Arguments)
+    local self = GUIFrame.new(Arguments)
+    self.TitlebarMenu = self.Arguments.TitlebarMenu
+    self.Parent = self.TitlebarMenu.TitlebarMenu
     setmetatable(self,Page)
     PageNum += 1
-    self.ID = ID or Name
-    self.TitlebarMenu = TitlebarMenu
+    self.ID = self.Arguments.ID or self.Arguments.Name
     self.TabFrame = Instance.new("Frame", self.TitlebarMenu.TabContainer)
     self.TabFrame.Name = PageNum
     self.TabFrame.BorderSizePixel = 0
@@ -40,11 +42,11 @@ function Page.new(Name, TitlebarMenu, OpenByDefault, Size, ID)
     util.ColorSync(self.Tab, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
     self.Tab.BorderSizePixel = 0
     self.Tab.Font = Enum.Font.SourceSans
-    self.Tab.Text = Name
+    self.Tab.Text = self.Arguments.Name
     self.Tab.TextSize = 14
     self.Tab.Name = "Tab"
     self.InsideWidget = true
-    if not Size then
+    if not self.Arguments.Size then
         local function sync()
             self.TabFrame.Size = UDim2.new(0,self.Tab.TextBounds.X+1.5*self.Tab.TextSize, 0, 24)
         end
@@ -53,7 +55,7 @@ function Page.new(Name, TitlebarMenu, OpenByDefault, Size, ID)
         end)
         sync()
     else
-        self.TabFrame.Size = UDim2.new(0,Size,0,30)
+        self.TabFrame.Size = UDim2.new(0,self.Arguments.Size,0,30)
     end
     self.Tab.MouseButton1Down:Connect(function(x)
         if self.TabDragging then return end
@@ -117,7 +119,7 @@ function Page.new(Name, TitlebarMenu, OpenByDefault, Size, ID)
     self.Content.Size = UDim2.new(1,0,1,0)
     self.Content.Name = self.ID
     self.TitlebarMenu:AddPage(self)
-    if OpenByDefault then self.TitlebarMenu:SetActive(self.ID) else self:SetState(false) end
+    if self.Arguments.Open then self.TitlebarMenu:SetActive(self.ID) else self:SetState(false) end
     GV.PluginPages[#GV.PluginPages+1] = self
     return self
 end

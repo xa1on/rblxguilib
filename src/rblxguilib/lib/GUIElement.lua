@@ -3,9 +3,10 @@ GUIElement.__index = GUIElement
 
 local GV = require(script.Parent.PluginGlobalVariables)
 
-function GUIElement.new(Parent)
+function GUIElement.new(Arguments, Parent)
     local self = {}
     setmetatable(self,GUIElement)
+    self.Arguments = Arguments or {}
     self.Parent = Parent
     return self
 end

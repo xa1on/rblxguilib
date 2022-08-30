@@ -8,12 +8,13 @@ local InputFieldMod = require(GV.ObjectsDir.InputField)
 
 setmetatable(InputPrompt, TextPrompt)
 
-
-function InputPrompt.new(Title, Textbox, Buttons, InputField)
-    local self = TextPrompt.new(Title, Textbox, Buttons)
+-- Title, Textbox, Buttons, InputField
+function InputPrompt.new(Arguments)
+    local self = TextPrompt.new(Arguments)
     setmetatable(self,InputPrompt)
+    local InputField = self.Arguments.InputField or self.Arguments.Input
     if type(InputField) == "string" then
-        self.InputField = InputFieldMod.new(InputField, nil, nil, UDim.new(1,-30), true)
+        self.InputField = InputFieldMod.new({Placeholder = InputField, Size = UDim.new(1,-30), NoDropdown = true})
     else
         self.InputField = InputField
     end

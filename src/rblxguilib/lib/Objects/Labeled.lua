@@ -33,8 +33,9 @@ function LabeledObject:AddObject(Object, Name, Size)
     self.Objects[#self.Objects+1] = Object
 end
 
-function LabeledObject.new(Textbox, LabelSize, Objects, Parent)
-    local self = GUIObject.new(Parent)
+-- Textbox, LabelSize, Objects
+function LabeledObject.new(Arguments, Parent)
+    local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,LabeledObject)
     self.Objects = {}
     self.TotalUsedScale = 0
@@ -48,8 +49,9 @@ function LabeledObject.new(Textbox, LabelSize, Objects, Parent)
     self.MainLayout.FillDirection = Enum.FillDirection.Horizontal
     self.MainPadding = Instance.new("UIPadding", self.MainFrame)
     self.MainPadding.PaddingBottom, self.MainPadding.PaddingLeft, self.MainPadding.PaddingRight, self.MainPadding.PaddingTop = UDim.new(0,2), UDim.new(0,6), UDim.new(0,6), UDim.new(0,2)
+    local Textbox = self.Arguments.Textbox or self.Arguments.Text
     if type(Textbox) == "string" then
-        self.TextboxTable = TextboxMod.new(Textbox, nil, Enum.TextXAlignment.Left, 14, self.MainFrame)
+        self.TextboxTable = TextboxMod.new({Text = Textbox, Alignment = Enum.TextXAlignment.Left, TextSize = 14}, self.MainFrame)
     else
         self.TextboxTable = Textbox
         Textbox:Move(self.MainFrame, true)
@@ -58,7 +60,7 @@ function LabeledObject.new(Textbox, LabelSize, Objects, Parent)
     self.Content = Instance.new("Frame", self.MainFrame)
     self.Content.Name = "Content"
     self.Content.BackgroundTransparency = 1
-    LabelSize = util.GetScale(LabelSize)
+    local LabelSize = util.GetScale(self.Arguments.LabelSize)
     if LabelSize then
         self.Label.Size = UDim2.new(LabelSize.Scale, LabelSize.Offset, 0, 20)
         self.Content.Size = UDim2.new(1-LabelSize.Scale, -LabelSize.Offset, 0, 20)
@@ -72,9 +74,10 @@ function LabeledObject.new(Textbox, LabelSize, Objects, Parent)
         end)
     end
     self.TotalUsedScale = 0
+    local Objects = self.Arguments.Objects or self.Arguments.Object
     if type(Objects) == "table" and Objects[1] and type(Objects[1] == "table") then
         for _, v in pairs(Objects) do
-            self:AddObject(v[1], v[2], v[3])
+            self:AddObject(v.Object, v.Name, v.Size)
         end
     else
         self:AddObject(Objects, "Object")

@@ -79,17 +79,18 @@ function TitlebarButton:CreateCopy(TitlebarMenu)
     self.Buttons[#self.Buttons+1] = Button
 end
 
-function TitlebarButton.new(Name, Size, Disabled, PluginMenu)
-    local self = GUIElement.new()
+-- Name, Size, Disabled, PluginMenu
+function TitlebarButton.new(Arguments)
+    local self = GUIElement.new(Arguments)
     setmetatable(self,TitlebarButton)
     self.Buttons = {}
-    self.Name = Name
-    self.PluginMenu = PluginMenu
-    self.Size = Size
+    self.Name = self.Arguments.Name
+    self.PluginMenu = self.Arguments.PluginMenu
+    self.Size = self.Arguments.Size
     for _, v in pairs(GV.PluginWidgets) do
         self:CreateCopy(v.TitlebarMenu)
     end
-    self:SetDisabled(Disabled)
+    self:SetDisabled(self.Arguments.Disabled)
     GV.TitleBarButtons[#GV.TitleBarButtons+1] = self
     return self
 end

@@ -12,10 +12,11 @@ function TextPrompt:Clicked(func)
     self.Action = func
 end
 
-function TextPrompt.new(Title, Textbox, Buttons)
-    local self = Prompt.new()
+-- Title, Textbox, Buttons
+function TextPrompt.new(Arguments)
+    local self = Prompt.new(Arguments)
     setmetatable(self,TextPrompt)
-    Buttons = Buttons or {"OK"}
+    local Buttons = self.Arguments.Buttons or {"OK"}
     self.TextPromptContainer = Instance.new("Frame", self.Parent)
     self.TextPromptContainer.BackgroundTransparency = 1
     self.TextPromptContainer.BorderSizePixel = 0
@@ -28,8 +29,9 @@ function TextPrompt.new(Title, Textbox, Buttons)
     self.TextFrame.Size = UDim2.new(0,0,0,35)
     self.TextFrame.BackgroundTransparency = 1
     self.TextFrame.BorderSizePixel = 0
+    local Textbox = self.Arguments.Textbox or self.Arguments.Text
     if type(Textbox) == "string" then
-        self.TextboxTable = TextboxMod.new(Textbox, nil, nil, nil, self.TextFrame)
+        self.TextboxTable = TextboxMod.new({Text = Textbox}, self.TextFrame)
     else
         self.TextboxTable = Textbox
         Textbox:Move(self.TextFrame, true)
@@ -57,7 +59,7 @@ function TextPrompt.new(Title, Textbox, Buttons)
     for i,v in pairs(Buttons) do
         local NewButton = v
         if type(v) == "string" then
-            NewButton = Button.new(v, 0.95, false, self.ButtonsFrame)
+            NewButton = Button.new({Text = v, Size = 0.95}, self.ButtonsFrame)
         end
         NewButton.ButtonFrame.Size = UDim2.new(0,82,1,0)
         NewButton:Clicked(function()
@@ -74,7 +76,7 @@ function TextPrompt.new(Title, Textbox, Buttons)
         end
     end)
     local function syncTextPromptSize()
-        self:Reset(Title, self.TextPromptLayout.AbsoluteContentSize.X, self.TextPromptLayout.AbsoluteContentSize.Y)
+        self:Reset(self.Arguments.Title, self.TextPromptLayout.AbsoluteContentSize.X, self.TextPromptLayout.AbsoluteContentSize.Y)
         self.TextPromptContainer.Parent = self.Parent
     end
     self.TextPromptLayout.Changed:Connect(function(p)

@@ -22,10 +22,11 @@ function Section:Toggle()
     self:SetState(not self.Open)
 end
 
-function Section.new(Text, Open, Parent)
-    local self = GUIFrame.new(Parent)
+-- Text, Open
+function Section.new(Arguments, Parent)
+    local self = GUIFrame.new(Arguments, Parent)
     setmetatable(self, Section)
-    self.Open = Open
+    self.Open = self.Arguments.Open
 
     self.Collapse = Instance.new("Frame", self.Parent)
     self.Collapse.BackgroundTransparency = 1
@@ -72,11 +73,12 @@ function Section.new(Text, Open, Parent)
     self.CollapseImage.Size = UDim2.new(0,15,0,15)
     util.ColorSync(self.CollapseImage, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
 
-    if type(Text) == "string" then
-        self.TextboxTable = TextboxMod.new(Text, Enum.Font.SourceSansBold, Enum.TextXAlignment.Left, 15, self.CollapseTextboxFrame)
+    local Textbox = self.Arguments.Textbox or self.Arguments.Text
+    if type(Textbox) == "string" then
+        self.TextboxTable = TextboxMod.new({Text = Textbox, Font = Enum.Font.SourceSansBold, Alignment = Enum.TextXAlignment.Left, Size = 15}, self.CollapseTextboxFrame)
     else
-        self.TextboxTable = Text
-        Text:Move(self.CollapseTextboxFrame)
+        self.TextboxTable = Textbox
+        Textbox:Move(self.CollapseTextboxFrame, true)
     end
     self.Textbox = self.TextboxTable.Textbox
     self.Collapse.Name = "Section - " .. self.Textbox.Text
@@ -91,7 +93,7 @@ function Section.new(Text, Open, Parent)
     self.Layout = Instance.new("UIListLayout", self.Content)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
     self.Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    self:SetState(Open)
+    self:SetState(self.Arguments.Open)
 
     return self
 end

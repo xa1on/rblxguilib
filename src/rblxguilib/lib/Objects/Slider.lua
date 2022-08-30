@@ -46,19 +46,20 @@ function Slider:Changed(func)
     self.Action = func
 end
 
-function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
-    local self = GUIObject.new(Parent)
+-- Min, Max, Value, Increment, Size, Disabled
+function Slider.new(Arguments, Parent)
+    local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,Slider)
-    self.Increment = Increment or 0
-    self.Value = InitalValue or Min
-    self.Min = Min
-    self.Max = Max
+    self.Increment = self.Arguments.Increment or 0
+    self.Value = self.Arguments.Value or self.Arguments.Min
+    self.Min = self.Arguments.Min
+    self.Max = self.Arguments.Max
     self.SliderFrame = Instance.new("Frame", self.Parent)
     self.SliderFrame.BackgroundTransparency = 1
     self.SlideBar = Instance.new("Frame", self.SliderFrame)
     self.SlideBar.AnchorPoint = Vector2.new(0.5,0.5)
     self.SlideBar.Position = UDim2.new(0.5,0,0.5,0)
-    Size = util.GetScale(Size) or UDim.new(1,-20)
+    local Size = util.GetScale(self.Arguments.Size) or UDim.new(1,-20)
     self.SlideBar.Size = UDim2.new(Size.Scale, Size.Offset, 0, 5)
     util.ColorSync(self.SlideBar, "BackgroundColor3", Enum.StudioStyleGuideColor.FilterButtonAccent)
     self.SlideButton = Instance.new("TextButton", self.SlideBar)
@@ -94,7 +95,7 @@ function Slider.new(Min, Max, InitalValue, Increment, Size, Disabled, Parent)
         task.wait(0)
         GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
-    self:SetDisabled(Disabled)
+    self:SetDisabled(self.Arguments.Disabled)
     self.Object = self.SlideButton
     self.MainMovable = self.SliderFrame
     return self

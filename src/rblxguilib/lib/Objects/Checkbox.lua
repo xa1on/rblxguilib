@@ -66,13 +66,12 @@ end
 function Checkbox:Clicked(func)
     self.Action = func
 end
-
-function Checkbox.new(DefaultValue, Disabled, Parent)
-    local self = GUIObject.new(Parent)
+-- Value, Disabled
+function Checkbox.new(Arguments, Parent)
+    local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,Checkbox)
-    if type(DefaultValue) ~= "boolean" then DefaultValue = false end
-    self.Value = DefaultValue
-    self.Disabled = Disabled
+    self.Value = self.Arguments.Value
+    self.Disabled = self.Arguments.Disabled
     self.CheckboxFrame = Instance.new("Frame", self.Parent)
     self.CheckboxFrame.BackgroundTransparency = 1
     self.CheckboxFrame.Name = "CheckboxFrame"

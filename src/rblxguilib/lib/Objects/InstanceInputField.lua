@@ -20,7 +20,7 @@ function InstanceInputField.GenerateInstanceList(Instances)
 end
 
 function InstanceInputField:SetValue(Instances)
-    if not Instances then return end
+    if not Instances then self.Input.Text = "" return end
     if type(Instances) ~= "table" then Instances = {Instances} end
     self.Value = Instances
     self.Input.Text = self.GenerateInstanceList(Instances)
@@ -42,14 +42,15 @@ function InstanceInputField:StoreItem(Item)
     return {GeneratedList, Item}
 end
 
-function InstanceInputField.new(Placeholder, DefaultInstances, Items, Size, NoDropdown, Disabled, Parent)
-    Placeholder = Placeholder or "Select object(s)"
-    local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown, false, true, true, Disabled, Parent)
+function InstanceInputField.new(Arguments, Parent)
+    Arguments = Arguments or {}
+    Arguments.Placeholder = Arguments.Placeholder or "Select object(s)"
+    Arguments.DisableEditing = true
+    Arguments.IgnoreItems = true
+    local self = InputField.new(Arguments, Parent)
     setmetatable(self,InstanceInputField)
-    if Items then self:AddItems(Items) end
     self.Focusable = true
     self.TextEditable = true
-    self:SetValue(DefaultInstances)
     self.Input.Focused:Connect(function()
         if self.Disabled then return end
         local CurrentSelection = Selection:Get()
@@ -62,6 +63,8 @@ function InstanceInputField.new(Placeholder, DefaultInstances, Items, Size, NoDr
             if #CurrentSelection > 0 then self:SetValue(CurrentSelection) end
         end
     end)
+    if self.Arguments.Items then self:AddItems(self.Arguments.Items) end
+    self:SetValue(self.Arguments.Value)
     return self
 end
 

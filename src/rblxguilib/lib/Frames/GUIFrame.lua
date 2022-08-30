@@ -6,12 +6,10 @@ setmetatable(GUIFrame,GUIElement)
 
 GV.MainGUI = nil
 
-function GUIFrame.new(Parent)
-    local self = GUIElement.new(Parent)
+function GUIFrame.new(Arguments, Parent)
+    local self = GUIElement.new(Arguments, Parent or GV.MainGUI)
     setmetatable(self,GUIFrame)
     self.Content = nil
-    Parent = Parent or GV.MainGUI
-    self.Parent = Parent
     return self
 end
 

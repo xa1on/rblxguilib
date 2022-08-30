@@ -81,17 +81,19 @@ function KeybindInputField:Triggered(func)
     KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
 end
 
-function KeybindInputField.new(Action, Placeholder, DefaultKeybind, Keybinds, Size, NoDropdown, Disabled, Parent)
+-- Action
+function KeybindInputField.new(Arguments, Parent)
+    Arguments = Arguments or {}
     KeybindNum += 1
-    Placeholder = Placeholder or "Set Keybind"
-    local self = InputField.new(Placeholder, nil, nil, Size, NoDropdown, false, true, false, Disabled, Parent)
+    Arguments.IgnoreItems = true
+    Arguments.Placeholder = Arguments.Placeholder or "Set Keybind"
+    Arguments.DisableEditing = true
+    local self = InputField.new(Arguments, Parent)
     setmetatable(self,KeybindInputField)
     self.TextEditable = true
     self.ID = KeybindNum
-    self:Triggered(Action)
+    self:Triggered(self.Arguments.Action)
     self.Binds = {{}}
-    if Keybinds then self:AddItems(Keybinds) end
-    self:SetValue(DefaultKeybind)
     self.Input.Focused:Connect(function()
         if self.Disabled then return end
         self.Focused = true
@@ -99,6 +101,8 @@ function KeybindInputField.new(Action, Placeholder, DefaultKeybind, Keybinds, Si
         task.wait()
         KeybindManager.FocusInputField(self.ID, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
     end)
+    if self.Arguments.Items then self:AddItems(self.Arguments.Items) end
+    self:SetValue(self.Arguments.Value)
     return self
 end
 
