@@ -87,6 +87,7 @@ function InputField:AddItem(Item)
     ItemLabel.ZIndex = 2
     ItemLabel.TextXAlignment = Enum.TextXAlignment.Left
     util.HoverIcon(ItemButton)
+    self.DropdownButton.MouseButton1Click:Connect(function() if not self.Disabled then ItemButton.Visible = true end end)
     self.Input.Changed:Connect(function(p)
         if p == "Text" and self.Filtering then
             if self.Input.Text == "" or string.sub(StoredItem[1], 1, string.len(self.Input.Text)) == self.Input.Text then
