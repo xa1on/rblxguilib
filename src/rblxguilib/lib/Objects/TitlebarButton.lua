@@ -3,12 +3,13 @@ TitlebarButton.__index = TitlebarButton
 
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
-local GUIElement = require(GV.LibraryDir.GUIElement)
-setmetatable(TitlebarButton,GUIElement)
+local GUIObject = require(GV.ObjectsDir.GUIObject)
+setmetatable(TitlebarButton,GUIObject)
 
 GV.TitleBarButtons = {}
 
 function TitlebarButton:SetDisabled(State)
+    print("a")
     self.Disabled = State
     if self.Disabled then
         self.CursorIcon = "rbxasset://SystemCursors/Forbidden"
@@ -81,7 +82,7 @@ end
 
 -- Name, Size, Disabled, PluginMenu
 function TitlebarButton.new(Arguments)
-    local self = GUIElement.new(Arguments)
+    local self = GUIObject.new(Arguments)
     setmetatable(self,TitlebarButton)
     self.Buttons = {}
     self.Name = self.Arguments.Name
@@ -91,6 +92,7 @@ function TitlebarButton.new(Arguments)
         self:CreateCopy(v.TitlebarMenu)
     end
     self:SetDisabled(self.Arguments.Disabled)
+    self.Object = self.Buttons
     GV.TitleBarButtons[#GV.TitleBarButtons+1] = self
     return self
 end

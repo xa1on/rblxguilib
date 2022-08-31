@@ -18,6 +18,7 @@ local RefreshedMenus = {}
 function ViewWidgetsButton:LoadWidgetOption(Widget, i)
     local WidgetTitle = Widget.WidgetObject.Title
     local WidgetMenuObject = GV.PluginObject:CreatePluginMenu(math.random(), tostring(i) .. ': "' .. WidgetTitle .. '"')
+    WidgetMenuObject.Name = '"' .. WidgetTitle .. '" Widget Menu'
     local ToggleAction = GV.PluginObject:CreatePluginAction(math.random(), "Toggle", "", nil, false)
     local RenameAction = GV.PluginObject:CreatePluginAction(math.random(), "Rename", "", nil, false)
     local DeleteAction = GV.PluginObject:CreatePluginAction(math.random(), "Delete", "", nil, false)
@@ -32,8 +33,10 @@ function ViewWidgetsButton:LoadWidgetOption(Widget, i)
         end)
     end)
     DeleteAction.Triggered:Connect(function()
+        util.PauseAll()
         local DeletePrompt = TextPrompt.new({Title = "Delete " .. WidgetTitle, Text = 'Are you sure you want to delete "' .. WidgetTitle .. '"?', Buttons = {"Yes", "No"}})
         DeletePrompt:Clicked(function(p)
+            util.UnpauseAll()
             if p == 2 then return end
             if Widget.TitlebarMenu and #Widget.TitlebarMenu.Pages > 0 then
                 local AvailibleWidgets = {}
@@ -74,6 +77,7 @@ function ViewWidgetsButton:LoadLayoutOption(Layout, i)
     if not Layout.Name then Layout.Name = "Unnamed" end
     local SavedLayouts = GV.PluginObject:GetSetting("SavedGUILayouts") or {}
     local LayoutMenuObject = GV.PluginObject:CreatePluginMenu(math.random(), tostring(i) .. ': "' .. Layout.Name .. '"')
+    LayoutMenuObject.Name = '"' .. Layout.Name .. '" Layout Menu'
     local UseLayoutAction = GV.PluginObject:CreatePluginAction(math.random(), "Use", "", nil, false)
     local SaveAsAction = GV.PluginObject:CreatePluginAction(math.random(), "Save As", "", nil, false)
     local RenameAction = GV.PluginObject:CreatePluginAction(math.random(), "Rename", "", nil, false)
@@ -122,8 +126,10 @@ end
 
 function ViewWidgetsButton:CreateMenu()
     self.PluginMenu = GV.PluginObject:CreatePluginMenu(math.random(), "View Menu")
+    self.PluginMenu.Name = "View Menu"
     -- Widgets Menu
     self.WidgetsMenu = GV.PluginObject:CreatePluginMenu(math.random(), "Widgets")
+    self.WidgetsMenu.Name = "Widget Menu"
     local CreateNewWindowAction = GV.PluginObject:CreatePluginAction(math.random(), "Create New Window", "", nil, false)
     CreateNewWindowAction.Triggered:Connect(function()
         PluginWidget.new({Enabled = true})
@@ -134,6 +140,7 @@ function ViewWidgetsButton:CreateMenu()
 
     -- Saved Layouts Menu
     self.LayoutsMenu = GV.PluginObject:CreatePluginMenu(math.random(), "Layouts")
+    self.LayoutsMenu.Name = "Layout Menu"
     local SaveCurrentLayout = GV.PluginObject:CreatePluginAction(math.random(), "Save Layout", "", nil, false)
     SaveCurrentLayout.Triggered:Connect(function()
         local SavedLayouts = GV.PluginObject:GetSetting("SavedGUILayouts") or {}

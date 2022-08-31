@@ -29,13 +29,13 @@ function TextPrompt.new(Arguments)
     self.TextFrame.Size = UDim2.new(0,0,0,35)
     self.TextFrame.BackgroundTransparency = 1
     self.TextFrame.BorderSizePixel = 0
-    local Textbox = self.Arguments.Textbox or self.Arguments.Text
-    if type(Textbox) == "string" then
-        self.TextboxTable = TextboxMod.new({Text = Textbox}, self.TextFrame)
+    self.TextboxTable = self.Arguments.Textbox or self.Arguments.Text
+    if type(self.TextboxTable) == "string" then
+        self.TextboxTable = TextboxMod.new({Text = self.TextboxTable}, self.TextFrame)
     else
-        self.TextboxTable = Textbox
-        Textbox:Move(self.TextFrame, true)
+        self.TextboxTable:Move(self.TextFrame, true)
     end
+    self.TextboxTable.Arguments.Unpausable = true
     self.Textbox = self.TextboxTable.Textbox
     self.Textbox.ZIndex = 1
     self.Textbox.TextXAlignment = Enum.TextXAlignment.Left
@@ -60,7 +60,10 @@ function TextPrompt.new(Arguments)
         local NewButton = v
         if type(v) == "string" then
             NewButton = Button.new({Text = v, Size = 0.95}, self.ButtonsFrame)
+        else
+            NewButton:Move(self.ButtonsFrame, true)
         end
+        NewButton.Arguments.Unpausable = true
         NewButton.ButtonFrame.Size = UDim2.new(0,82,1,0)
         NewButton:Clicked(function()
             self.Widget:Destroy()

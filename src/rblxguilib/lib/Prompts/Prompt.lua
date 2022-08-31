@@ -20,6 +20,8 @@ function Prompt:Reset(Title, Width, Height)
             if NewWidget.AbsoluteSize.X ~= Width or NewWidget.AbsoluteSize.Y ~= Height then
                 self:Reset(Title, Width, Height)
             end
+        elseif p == "Enabled" then
+            NewWidget.Enabled = true
         end
     end)
     if self.Widget then self.Widget:Destroy() end

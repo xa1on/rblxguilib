@@ -10,6 +10,7 @@ local InputManager = require(GV.ManagersDir.InputManager)
 setmetatable(InputField,GUIObject)
 
 local RightClickMenu = GV.PluginObject:CreatePluginMenu(math.random(), "RightClickMenu - InputField")
+RightClickMenu.Name = "InputField Right-Click Menu"
 RightClickMenu:AddNewAction("Edit", "Edit")
 RightClickMenu:AddNewAction("Clear", "Clear Input")
 
@@ -21,7 +22,7 @@ InputField.Images = {
 function InputField:SetDisabled(State)
     self.Disabled = State
     if self.Disabled then
-        self:SetDropdown(false)
+        if self.DropdownOpen then self:SetDropdown(false) end
         self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0.5,0.5,0.5
     else
         self.InputFieldFrame.BackgroundTransparency, self.Input.TextTransparency, self.DropdownButton.BackgroundTransparency = 0,0,0
@@ -51,6 +52,7 @@ function InputField:SetDropdown(State)
         self.InputFieldFrame.ZIndex = 0
         self.Input.ZIndex = 0
     end
+    if self.DropdownAction then self.DropdownAction(State) end
 end
 
 function InputField:RecallItem(Name)
@@ -105,11 +107,11 @@ function InputField:AddItem(Item)
     ItemButton.MouseEnter:Connect(function()
         task.wait(0)
         if self.Disabled then return end
-        if self.EnterAction then self.EnterAction(StoredItem[2]) end
+        if self.ItemEnterAction then self.ItemEnterAction(StoredItem[2]) end
     end)
     ItemButton.MouseLeave:Connect(function()
         if self.Disabled then return end
-        if self.LeaveAction then self.LeaveAction(StoredItem[2]) end
+        if self.ItemLeaveAction then self.ItemLeaveAction(StoredItem[2]) end
     end)
 end
 
@@ -140,13 +142,18 @@ function InputField:Changed(func)
     self.Action = func
 end
 
-function InputField:MouseEnter(func)
-    self.EnterAction = func
+function InputField:MouseEnterItem(func)
+    self.ItemEnterAction = func
 end
 
-function InputField:MouseLeave(func)
-    self.LeaveAction = func
+function InputField:MouseLeaveItem(func)
+    self.ItemLeaveAction = func
 end
+
+function InputField:DropdownToggled(func)
+    self.DropdownAction = func
+end
+
 -- Placeholder, Value, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
 function InputField.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)

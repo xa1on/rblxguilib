@@ -18,6 +18,7 @@ function InputPrompt.new(Arguments)
     else
         self.InputField = InputField
     end
+    self.InputField.Arguments.Unpausable = true
     self.InputField.InputFieldContainer.Size = UDim2.new(1,0,0,25)
     self.InputField.DropdownMaxY = 30
     self.ButtonsFrame.Parent = nil

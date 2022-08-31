@@ -80,6 +80,7 @@ function Section.new(Arguments, Parent)
         self.TextboxTable = Textbox
         Textbox:Move(self.CollapseTextboxFrame, true)
     end
+    self.TextboxTable.Arguments.Unpausable = true
     self.Textbox = self.TextboxTable.Textbox
     self.Collapse.Name = "Section - " .. self.Textbox.Text
     self.Textbox.AnchorPoint = Vector2.new(0,0.5)

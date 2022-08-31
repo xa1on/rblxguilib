@@ -1,6 +1,10 @@
 --[[
     [RBLXGUILib]
     something#7597
+    todo:
+        Icons for dropdown options
+        Progress bar
+        Color selector
 ]]--
 
 -- loads the library
@@ -20,6 +24,9 @@ local widget = gui.PluginWidget.new({
 -- toolbar button to toggle the widget
 local b_toggle = toolbar:CreateButton("","open widget","")
 b_toggle.Click:Connect(function() widget.Content.Enabled = not widget.Content.Enabled end)
+local b_resetlayout = toolbar:CreateButton("", "reset layout", "")
+b_resetlayout.Click:Connect(function() gui.LayoutManager.ResetLayout() end)
+
 
 -- page:
 -- Name, TitlebarMenu, Open, Size, ID
@@ -34,6 +41,7 @@ local mainpage = gui.Page.new({
 gui.ViewWidgetsButton.new()
 
 local randommenu = plugin:CreatePluginMenu(math.random(), "Random Menu")
+randommenu.Name = "Random Menu"
 randommenu:AddNewAction("1", "Option 1", "rbxasset://textures/loading/robloxTiltRed.png")
 randommenu:AddNewAction("2", "Option 2", "rbxasset://textures/loading/robloxTilt.png")
 local subMenu = plugin:CreatePluginMenu(math.random(), "C", "rbxasset://textures/explosion.png")
@@ -238,6 +246,10 @@ instanceinpfield:Changed(function(result)
     for _, v in pairs(result) do
         print(v:GetFullName())
     end
+end)
+instanceinpfield:DropdownToggled(function(p)
+    print("dropdown has beeen toggled")
+    print(p)
 end)
 
 -- keybindinputfield

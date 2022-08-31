@@ -86,5 +86,21 @@ function m.RoundNumber(number, factor)
     if factor == 0 then return number else return math.floor(number/factor+0.5)*factor end
 end
 
+local UnpauseList = {}
+function m.PauseAll()
+    for _,v in pairs(GV.ObjectList) do
+        if v and v.SetDisabled and not v.Disabled and not v.Arguments.Unpausable then
+            v:SetDisabled(true)
+            UnpauseList[#UnpauseList+1] = v
+        end
+    end
+end
+
+function m.UnpauseAll()
+    for _,v in pairs(UnpauseList) do
+        v:SetDisabled(false)
+    end
+    UnpauseList = {}
+end
 
 return m

@@ -4,12 +4,14 @@ local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local GUIElement = require(GV.LibraryDir.GUIElement)
 local ListFrame = require(GV.FramesDir.ListFrame)
 setmetatable(GUIObject,GUIElement)
+GV.ObjectList = {}
 
 function GUIObject.new(Arguments, Parent)
     local self = GUIElement.new(Arguments, Parent or ListFrame.new().Content)
     setmetatable(self,GUIObject)
     self.Object = nil
     self.MainMovable = nil
+    GV.ObjectList[#GV.ObjectList+1] = self
     return self
 end
 
