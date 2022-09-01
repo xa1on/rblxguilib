@@ -48,7 +48,7 @@ function LabeledObject.new(Arguments, Parent)
     self.MainLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self.MainLayout.FillDirection = Enum.FillDirection.Horizontal
     self.MainPadding = Instance.new("UIPadding", self.MainFrame)
-    self.MainPadding.PaddingBottom, self.MainPadding.PaddingLeft, self.MainPadding.PaddingRight, self.MainPadding.PaddingTop = UDim.new(0,2), UDim.new(0,6), UDim.new(0,6), UDim.new(0,2)
+    self.MainPadding.PaddingBottom, self.MainPadding.PaddingLeft, self.MainPadding.PaddingRight, self.MainPadding.PaddingTop = UDim.new(0,2), UDim.new(0,6), UDim.new(0,0), UDim.new(0,2)
     local Textbox = self.Arguments.Textbox or self.Arguments.Text
     if type(Textbox) == "string" then
         self.TextboxTable = TextboxMod.new({Text = Textbox, Alignment = Enum.TextXAlignment.Left, TextSize = 14}, self.MainFrame)

@@ -320,8 +320,16 @@ local labeledslider = gui.Labeled.new({
         }
     }
 })
+
+-- progressbar
+-- Size, Value, Disabled
+local progressbar = gui.ProgressBar.new({
+    Value = 0.5
+})
+
 labeledslider.slider:Changed(function(p)
     labeledslider.display:SetValue(p)
+    progressbar:SetValue(p/100)
 end)
 
 local toggle_checkbox2 = gui.Checkbox.new()

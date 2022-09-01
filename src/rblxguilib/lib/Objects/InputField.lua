@@ -166,7 +166,7 @@ function InputField.new(Arguments, Parent)
     self.InputFieldContainer.Name = "InputFieldContainer"
     self.InputFieldFrame = Instance.new("Frame", self.InputFieldContainer)
     self.InputFieldFrame.BackgroundTransparency = 1
-    local Size = util.GetScale(self.Arguments.Size) or UDim.new(1,-20)
+    local Size = util.GetScale(self.Arguments.Size) or UDim.new(1,-12)
     self.InputFieldFrame.Size = UDim2.new(Size.Scale,Size.Offset,0,20)
     self.InputFieldFrame.Position = UDim2.new(0.5,0,0.5,0)
     self.InputFieldFrame.AnchorPoint = Vector2.new(0.5,0.5)
@@ -256,10 +256,11 @@ function InputField.new(Arguments, Parent)
     self.DropdownButton.MouseEnter:Connect(function() self.MouseInDropdownButton = true end)
     self.DropdownButton.MouseLeave:Connect(function() self.MouseInDropdownButton = false end)
     self.DropdownImage = Instance.new("ImageLabel", self.DropdownButton)
+    self.DropdownImage.Name = "Dropdown Image"
     self.DropdownImage.AnchorPoint = Vector2.new(0.5,0.5)
     self.DropdownImage.BackgroundTransparency = 1
     self.DropdownImage.Position = UDim2.new(0.5,0,0.5,0)
-    self.DropdownImage.Size = UDim2.new(0,5,0,5)
+    self.DropdownImage.Size = UDim2.new(0,4.5,0,4.5)
     self.DropdownImage.Image = self.Images.Down
     self.DropdownFrame = Instance.new("Frame", self.InputFieldFrame)
     self.DropdownFrame.Size = UDim2.new(1,0,0,0)

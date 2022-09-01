@@ -9,7 +9,6 @@ setmetatable(TitlebarButton,GUIObject)
 GV.TitleBarButtons = {}
 
 function TitlebarButton:SetDisabled(State)
-    print("a")
     self.Disabled = State
     if self.Disabled then
         self.CursorIcon = "rbxasset://SystemCursors/Forbidden"
