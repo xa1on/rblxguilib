@@ -73,9 +73,9 @@ function m.CopyTable(t)
 end
 
 function m.GetScale(Scale)
-    if type(Scale) == "userdata" then
+    if typeof(Scale) == "UDim" then
         return Scale
-    elseif type(Scale) == "number" then
+    elseif typeof(Scale) == "number" then
         return UDim.new(Scale,0)
     else
         return nil

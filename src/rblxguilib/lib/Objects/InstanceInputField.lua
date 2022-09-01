@@ -6,47 +6,11 @@ local util = require(GV.LibraryDir.GUIUtil)
 local InputField = require(GV.ObjectsDir.InputField)
 local Selection = game:GetService("Selection")
 setmetatable(InstanceInputField,InputField)
---{{"bob", workspace.bob}, {"bob", {workspace.bob1, workspace.bob2}}, workspace.bob}
-
-function InstanceInputField.GenerateInstanceList(Instances)
-    if type(Instances) == "userdata" then Instances = {Instances} end
-    local GeneratedList = Instances[1].Name
-    for i, v in pairs(Instances) do
-        if i ~= 1 then
-            GeneratedList = GeneratedList .. ", " .. v.Name
-        end
-    end
-    return GeneratedList
-end
-
-function InstanceInputField:SetValue(Instances)
-    if not Instances then self.Input.Text = "" return end
-    if type(Instances) ~= "table" then Instances = {Instances} end
-    self.Value = Instances
-    self.Input.Text = self.GenerateInstanceList(Instances)
-end
-
-function InstanceInputField:RecallItem(Name)
-    if self.ItemTable[Name] then
-        if type(self.ItemTable[Name]) == "table" then return self.ItemTable[Name]
-        else return {self.ItemTable[Name]} end
-    elseif #Name <= 0 then
-        self.Value = {}
-    end
-    return self.Value
-end
-
-function InstanceInputField:StoreItem(Item)
-    local GeneratedList = self.GenerateInstanceList(Item)
-    self.ItemTable[GeneratedList] = Item
-    return {GeneratedList, Item}
-end
 
 function InstanceInputField.new(Arguments, Parent)
     Arguments = Arguments or {}
     Arguments.Placeholder = Arguments.Placeholder or "Select object(s)"
     Arguments.DisableEditing = true
-    Arguments.IgnoreItems = true
     local self = InputField.new(Arguments, Parent)
     setmetatable(self,InstanceInputField)
     self.Focusable = true
@@ -63,8 +27,6 @@ function InstanceInputField.new(Arguments, Parent)
             if #CurrentSelection > 0 then self:SetValue(CurrentSelection) end
         end
     end)
-    if self.Arguments.Items then self:AddItems(self.Arguments.Items) end
-    self:SetValue(self.Arguments.Value)
     return self
 end
 

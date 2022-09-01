@@ -55,23 +55,45 @@ function InputField:SetDropdown(State)
     if self.DropdownAction then self.DropdownAction(State) end
 end
 
-function InputField:RecallItem(Name)
-    if self.ItemTable[Name] then return self.ItemTable[Name]
-    else return Name end
+function InputField.GenerateInstanceList(Instances)
+    if typeof(Instances) == "Instance" then Instances = {Instances} end
+    local GeneratedList = Instances[1].Name
+    for i, v in pairs(Instances) do
+        if i ~= 1 then
+            GeneratedList = GeneratedList .. ", " .. v.Name
+        end
+    end
+    return GeneratedList
 end
 
-function InputField:StoreItem(Item)
-    if type(Item) == "table" then
-        self.ItemTable[Item[1]] = Item[2]
-        return Item
+function InputField.GetItemInfo(Item)
+    local ItemInfo = Item or ""
+    if not (typeof(ItemInfo) == "table") then ItemInfo = {Value = Item, Name = Item} end
+    if (not ItemInfo.Value) and (not ItemInfo.Name) then ItemInfo = {Value = ItemInfo} end
+    ItemInfo.Value = ItemInfo.Value or ItemInfo.Name
+    ItemInfo.Name = ItemInfo.Name or ItemInfo.Value
+    if typeof(ItemInfo.Name) ~= "string" and typeof(ItemInfo.Name) ~= "number" then
+        if typeof(ItemInfo.Value) == "table" then
+            if #ItemInfo.Value < 1 then return {Value = "", Name = ""} end
+            if typeof(ItemInfo.Value[1]) == "Instance" then
+                ItemInfo.Name = InputField.GenerateInstanceList(ItemInfo.Value)
+            else
+                ItemInfo.Name = nil
+            end
+        elseif typeof(ItemInfo.Value) == "Instance" then
+            ItemInfo.Name = ItemInfo.Value.Name
+            ItemInfo.Value = {ItemInfo.Value}
+        else
+            ItemInfo.Name = tostring(ItemInfo.Value)
+        end
     end
-    return {Item, Item}
+    return ItemInfo
 end
 
 function InputField:AddItem(Item)
-    local StoredItem = self:StoreItem(Item)
+    local ItemInfo = self.GetItemInfo(Item)
     local ItemButton = Instance.new("TextButton", self.DropdownScroll.Content)
-    ItemButton.Name = StoredItem[1]
+    ItemButton.Name = ItemInfo.Name
     ItemButton.Size = UDim2.new(1,0,0,18)
     ItemButton.BorderSizePixel = 0
     util.ColorSync(ItemButton, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
@@ -81,7 +103,7 @@ function InputField:AddItem(Item)
     util.ColorSync(ItemLabel, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     ItemLabel.Font = Enum.Font.SourceSans
     ItemLabel.TextSize = 14
-    ItemLabel.Text = StoredItem[1]
+    ItemLabel.Text = ItemInfo.Name
     ItemLabel.AnchorPoint = Vector2.new(0.5,0.5)
     ItemLabel.Position = UDim2.new(0.5,0,0.5,0)
     ItemLabel.Size = UDim2.new(1,-8,0,14)
@@ -92,7 +114,7 @@ function InputField:AddItem(Item)
     self.DropdownButton.MouseButton1Click:Connect(function() if not self.Disabled then ItemButton.Visible = true end end)
     self.Input.Changed:Connect(function(p)
         if p == "Text" and self.Filtering then
-            if self.Input.Text == "" or string.sub(StoredItem[1], 1, string.len(self.Input.Text)) == self.Input.Text then
+            if self.Input.Text == "" or string.sub(ItemInfo.Name, 1, string.len(self.Input.Text)) == self.Input.Text then
                 ItemButton.Visible = true
             else
                 ItemButton.Visible = false
@@ -102,16 +124,18 @@ function InputField:AddItem(Item)
     ItemButton.MouseButton1Click:Connect(function()
         if self.Disabled then return end
         self:SetDropdown(false)
-        self.Input.Text = StoredItem[1]
+        self.SelectedItem = true
+        self.Value = ItemInfo.Value
+        self.Input.Text = ItemInfo.Name
     end)
     ItemButton.MouseEnter:Connect(function()
         task.wait(0)
         if self.Disabled then return end
-        if self.ItemEnterAction then self.ItemEnterAction(StoredItem[2]) end
+        if self.ItemEnterAction then self.ItemEnterAction(ItemInfo.Value) end
     end)
     ItemButton.MouseLeave:Connect(function()
         if self.Disabled then return end
-        if self.ItemLeaveAction then self.ItemLeaveAction(StoredItem[2]) end
+        if self.ItemLeaveAction then self.ItemLeaveAction(ItemInfo.Value) end
     end)
 end
 
@@ -123,7 +147,6 @@ function InputField:RemoveItem(Item)
     local Target = self.DropdownScroll.Content:FindFirstChild(Item)
     if Target then
         Target:Destroy()
-        if self.ItemTable[Item] then self.ItemTable[Item] = nil end
     end
 end
 
@@ -131,11 +154,11 @@ function InputField:RemoveItems(Items)
     for _, v in pairs(Items) do self:RemoveItem(v) end
 end
 
-function InputField:SetValue(Value, Name)
-    local StoredItem = Value
-    if Name then StoredItem = {Name, Value} end
-    local StoredValue = self:StoreItem(StoredItem)
-    self.Input.Text = StoredValue[1]
+function InputField:SetValue(Item)
+    local ItemInfo = self.GetItemInfo(Item)
+    self.SelectedItem = true
+    self.Value = ItemInfo.Value
+    self.Input.Text = ItemInfo.Name
 end
 
 function InputField:Changed(func)
@@ -158,7 +181,6 @@ end
 function InputField.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,InputField)
-    self.ItemTable = {}
     self.Action = nil
     self.Filtering = not self.Arguments.NoFiltering
     self.InputFieldContainer = Instance.new("Frame", self.Parent)
@@ -178,15 +200,6 @@ function InputField.new(Arguments, Parent)
     self.Input.BackgroundTransparency = 1
     if self.Arguments.NoDropdown then self.Input.Size = UDim2.new(1,-10,1,0) else self.Input.Size = UDim2.new(1,-30,1,0) end
     self.Input.Font = Enum.Font.SourceSans
-    if not self.Arguments.IgnoreItems then
-        local Value = self.Arguments.Value or ""
-        if type(Value) == "string" or type(Value) == "number" then
-            self:SetValue(Value)
-        elseif type(Value) == "table" then
-            self:SetValue(Value[2], Value[1])
-        end
-    end
-    self.Value = self:RecallItem(self.Input.Text)
     self.Input.TextSize = 14
     if self.Arguments.Placeholder then self.Input.PlaceholderText = self.Arguments.Placeholder end
     self.Input.TextXAlignment = Enum.TextXAlignment.Left
@@ -195,11 +208,11 @@ function InputField.new(Arguments, Parent)
     self.Input.Name = "Input"
     self.Input.Changed:Connect(function(p)
         if p == "Text" then
-            local RecalledItem = self:RecallItem(self.Input.Text)
-            if self.RecallItem then
-                self.Value = RecalledItem
-                if self.Action then self.Action(RecalledItem) end
+            if not self.SelectedItem then
+                self.Value = self.Input.Text
             end
+            self.SelectedItem = false
+            if self.Action then self.Action(self.Value) end
         end
     end)
     self.Focusable = true
@@ -300,7 +313,9 @@ function InputField.new(Arguments, Parent)
             end
         end
     end)
-    if self.Arguments.Items and not self.Arguments.IgnoreItems then self:AddItems(self.Arguments.Items) end
+    local Value = self.Arguments.Value or ""
+    self:SetValue(Value)
+    if self.Arguments.Items then self:AddItems(self.Arguments.Items) end
     self:SetDisabled(self.Arguments.Disabled)
     self.Object = self.Input
     self.MainMovable = self.InputFieldContainer

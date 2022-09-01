@@ -2,7 +2,6 @@
     [RBLXGUILib]
     something#7597
     todo:
-        Icons for dropdown options
         Color selector
 ]]--
 
@@ -15,8 +14,8 @@ toolbar = plugin:CreateToolbar("rblxgui")
 -- widget
 -- ID, Title, Enabled, NoTitlebarMenu, DockState, OverrideRestore
 local widget = gui.PluginWidget.new({
-    ID = "rblxgui", 
-    Enabled = true, 
+    ID = "rblxgui",
+    Enabled = true,
     DockState = Enum.InitialDockState.Left
 })
 
@@ -30,8 +29,8 @@ b_resetlayout.Click:Connect(function() gui.LayoutManager.ResetLayout() end)
 -- page:
 -- Name, TitlebarMenu, Open, Size, ID
 local mainpage = gui.Page.new({
-    Name = "MAIN", 
-    TitlebarMenu = widget.TitlebarMenu, 
+    Name = "MAIN",
+    TitlebarMenu = widget.TitlebarMenu,
     Open = true
 })
 
@@ -52,7 +51,7 @@ randommenu:AddMenu(subMenu)
 -- title bar button(button on the titlebar of widgets with titlebars)
 -- Name, Size, Disabled, PluginMenu
 local titlebarbutton = gui.TitlebarButton.new({
-    Name = "BUTTON", 
+    Name = "BUTTON",
     PluginMenu = randommenu
 })
 titlebarbutton:Clicked(function()
@@ -83,8 +82,8 @@ mainframe:SetMain()
 -- textbox:
 -- Text, Font, Alignment, TextSize
 gui.Textbox.new({
-    Text = "Welcome to rblxgui!", 
-    Font = Enum.Font.SourceSansBold, 
+    Text = "Welcome to rblxgui!",
+    Font = Enum.Font.SourceSansBold,
     Alignment = Enum.TextXAlignment.Center
 })
 
@@ -97,7 +96,7 @@ gui.Textbox.new({
     Text = "welcome to rblxgui!"
 }, acoolframe.Content)
 gui.Textbox.new({
-    Text = "WELCOME TO RBLXGUI!", 
+    Text = "WELCOME TO RBLXGUI!",
     Font = Enum.Font.SourceSansBold
 }, acoolframe.Content)
 
@@ -108,7 +107,7 @@ local button1 = gui.Button.new({
 })
 button1:Clicked(function() print("hi") end)
 local button2 = gui.Button.new({
-    Text = "Hello", 
+    Text = "Hello",
     Size = 1
 }, button1.Parent)
 button2:Clicked(function() print("Hello") button1:ToggleDisable() end)
@@ -130,7 +129,7 @@ buttonsection:SetMain()
 
 -- textbox inside button for custom text
 local fancybuttonlabel = gui.Textbox.new({
-    Text = "fancier button", 
+    Text = "fancier button",
     Font = Enum.Font.Arcade
 })
 local button2 = gui.Button.new({
@@ -140,8 +139,8 @@ button2.Object.MouseButton1Click:Connect(function()
     -- textprompt:
     -- Title, Textbox, Buttons
     local textprompt = gui.TextPrompt.new({
-        Title = "The Fancy Button", 
-        Text = "Hello!", 
+        Title = "The Fancy Button",
+        Text = "Hello!",
         Buttons = {"Hi!", "Hello!"}
     })
     textprompt:Clicked(function(p)
@@ -175,11 +174,11 @@ end)
 
 mainframe:SetMain()
 local newsection = gui.Section.new({
-    Text = "section with a section inside it", 
+    Text = "section with a section inside it",
     Open = true
 })
 local sectionwithin = gui.Section.new({
-    Text = "another section", 
+    Text = "another section",
     Open = true
 }, newsection.Content)
 gui.Textbox.new({
@@ -190,33 +189,46 @@ local testbutton = gui.Button.new({
 }, gui.ListFrame.new(nil, sectionwithin.Content).Content)
 testbutton:Clicked(function()
     local inputprompt = gui.InputPrompt.new({
-        Title = "Input Prompt title", 
-        Text = "hey, this is an inputprompt", 
+        Title = "Input Prompt title",
+        Text = "hey, this is an inputprompt",
         Input = "hi"
     })
     inputprompt:Clicked(function(p)
         print("option " .. p .. " chosen")
-        print("entered text:" .. inputprompt.Input.Text)
+        print("entered text:" .. inputprompt.Value)
     end)
 end)
 
 
 -- inputfields
--- Placeholder, Value, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
+-- Placeholder, CurrentItem, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
 gui.InputField.new({
-    Value = "default text", 
-    Items = {{"bob","Bob"},"Steve"}
+    CurrentItem = "default text",
+    Items = {
+        {
+            Name = "bob",
+            Value = "Bob"
+        }, "Steve"
+    }
 })
 
 -- Labeled objects
 -- Textbox, LabelSize, Objects
 local inpfield = gui.Labeled.new({
-    Text = "another input", 
+    Text = "another input",
     Objects = gui.InputField.new({
         Placeholder = "placeholder"
     })
 })
-inpfield.Object:AddItems({"1", "2", "remove", {"1 thousand",1000}})
+inpfield.Object:AddItems({
+    "1",
+    "2",
+    "remove",
+    {
+        Name = "1 thousand",
+        Value = 1000
+    }
+})
 inpfield.Object:RemoveItem("remove")
 for i=4,100 do
     inpfield.Object:AddItem(i)
@@ -235,7 +247,18 @@ disablebutton:Clicked(function(p) inpfield:SetDisabled(p) end)
 -- instanceinputfield
 -- Value, Items, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
 local instanceinpfield = gui.InstanceInputField.new({
-    Items = {{game:GetService("Lighting"), game:GetService("MaterialService")}, {workspace}}
+    Items = {
+        {
+            Value = {
+                game:GetService("Lighting"),
+                game:GetService("MaterialService")
+            },
+            Name = "Lighting/MaterialService combo"
+        }, workspace,{
+            game:GetService("ReplicatedFirst"),
+            game:GetService("ReplicatedStorage")
+        }
+    }
 })
 gui.Labeled.new({
     Text = "an instance",
@@ -251,14 +274,36 @@ instanceinpfield:DropdownToggled(function(p)
     print(p)
 end)
 
+
 -- keybindinputfield
--- Action, Value, Items, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
+-- Action, Value/Bind, Items/Binds, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
 gui.Labeled.new({
     Text = "keybind",
     Object = gui.KeybindInputField.new({
-        Action = function() print("keybind1 pressed!") end, 
-        Value = {{"N"}, {"LeftShift", "T"}}, 
-        Items = {{{"U"}, {"LeftShift", "L"}},{{"N"}, {"LeftShift", "K"}}}
+        Action = function() print("keybind1 pressed!") end,
+        Bind = {
+            {"N"},
+            {"LeftShift", "T"}
+        },
+        Binds = {
+            {
+                Value = {
+                    {"U"},
+                    {"LeftShift", "L"}
+                }
+            },{
+                Value = {
+                    {"N"},
+                    {"LeftShift", "K"}
+                }
+            },{
+                Name = "Default",
+                Value = {
+                    {"N"},
+                    {"LeftShift", "T"}
+                },
+            }
+        }
     })
 })
 
@@ -273,8 +318,8 @@ end)
 -- checkbox
 -- Value, Disabled
 local checkbox = gui.Labeled.new({
-    Text = "checkbox", 
-    LabelSize = 0.5, 
+    Text = "checkbox",
+    LabelSize = 0.5,
     Object = gui.Checkbox.new({
         Value = true
     })
@@ -286,8 +331,8 @@ end)
 
 local toggle_checkbox = gui.Checkbox.new()
 gui.Labeled.new({
-    Text = "Disable checkbox", 
-    LabelSize = 0.5, 
+    Text = "Disable checkbox",
+    LabelSize = 0.5,
     Object = toggle_checkbox
 })
 toggle_checkbox:Clicked(function(p)
@@ -301,9 +346,9 @@ local labeledslider = gui.Labeled.new({
     Objects = {
         {
             Object = gui.InputField.new({
-                Value = 50, 
-                Size = 1, 
-                NoDropdown = true, 
+                Value = 50,
+                Size = 1,
+                NoDropdown = true,
                 DisableEditing = true
             }),
             Name = "display",
@@ -311,8 +356,8 @@ local labeledslider = gui.Labeled.new({
         },{
             Object = gui.Slider.new({
                 Min = 0,
-                Max = 100, 
-                Value = 50, 
+                Max = 100,
+                Value = 50,
                 Increment = 1
             }),
             Name = "slider"
@@ -333,8 +378,8 @@ end)
 
 local toggle_checkbox2 = gui.Checkbox.new()
 gui.Labeled.new({
-    Text = "Disable Slider", 
-    LabelSize = 0.5, 
+    Text = "Disable Slider",
+    LabelSize = 0.5,
     Object = toggle_checkbox2
 })
 toggle_checkbox2:Clicked(function(p)

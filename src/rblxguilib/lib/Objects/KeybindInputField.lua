@@ -15,44 +15,45 @@ setmetatable(KeybindInputField,InputField)
     {{LeftControl, LeftAlt, Zero},{P}}
     {{"Keybind Preset",{{LeftControl, LeftAlt, Zero},{P}}}}
 ]]--
+function KeybindInputField:UpdateBind(Value)
+    if #Value[1]>0 and #Value[#Value]>0 then Value[#Value + 1] = {} end
+    KeybindManager.UpdateKeybinds(self.ID, Value, self.TriggeredAction)
+end
 
-function KeybindInputField:SetValue(Keybinds)
-    Keybinds = Keybinds or {{}}
-    if type(Keybinds) ~= "table" then Keybinds = {{Keybinds}}
-    else
-        if not Keybinds[1] or type(Keybinds[1]) ~= "table" then Keybinds = {Keybinds} end
+function KeybindInputField:SetBind(Bind)
+    Bind = Bind or {Value = {{}}}
+    local BindInfo = self.GetItemInfo(Bind)
+    local Value = BindInfo.Value
+    self:UpdateBind(Value)
+    self:SetValue({Name = BindInfo.Name or KeybindManager.GenerateKeybindList(Value), ["Value"] = Value})
+end
+
+function KeybindInputField:AddBind(Bind)
+    local BindInfo = self.GetItemInfo(Bind)
+    self:AddItem({Name = BindInfo.Name or KeybindManager.GenerateKeybindList(BindInfo.Value), Value = BindInfo.Value})
+end
+
+function KeybindInputField:AddBinds(Binds)
+    for _, Bind in pairs(Binds) do
+        self:AddBind(Bind)
     end
-    self.Binds = Keybinds
-    if #Keybinds[1]>0 then self.Binds[#self.Binds + 1] = {} end
-    KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
-    self.Input.Text = KeybindManager.GenerateKeybindList(self.Binds)
 end
 
 function KeybindInputField:EditKeybind(Keybind, Complete)
-    self.Binds[#self.Binds] = Keybind
+    local Value = util.CopyTable(self.Value)
+    Value[#Value] = Keybind
     if Complete then
-        self.Binds[#self.Binds+1] = {}
+        Value[#Value+1] = {}
     end
-    local GeneratedList = KeybindManager.GenerateKeybindList(self.Binds)
-    KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
-    self.Input.Text = GeneratedList
+    KeybindManager.UpdateKeybinds(self.ID, Value, self.TriggeredAction)
+    self:SetValue({Name = KeybindManager.GenerateKeybindList(Value), ["Value"] = Value})
 end
 
 function KeybindInputField:RemoveKeybind(Index)
-    Index = Index or #self.Binds - 1
-    table.remove(self.Binds, Index)
-    local GeneratedList = KeybindManager.GenerateKeybindList(self.Binds)
-    self.Input.Text = GeneratedList
-end
-
-function KeybindInputField:RecallItem(Name)
-    if self.ItemTable[Name] then
-        self:SetValue(self.ItemTable[Name])
-        return self.ItemTable[Name]
-    elseif #Name <= 0 then
-        self:SetValue({{}})
-    end
-    return self.Binds
+    local Value = util.CopyTable(self.Value)
+    Index = Index or #Value - 1
+    table.remove(Value, Index)
+    self:SetValue({Name = KeybindManager.GenerateKeybindList(Value), ["Value"] = Value})
 end
 
 function KeybindInputField:UnfocusInputField(ForceUnfocus)
@@ -64,28 +65,17 @@ function KeybindInputField:UnfocusInputField(ForceUnfocus)
     return true
 end
 
-function KeybindInputField:StoreItem(Item)
-    local GeneratedList = KeybindManager.GenerateKeybindList(Item)
-    local StoredItem = Item
-    if type(Item) ~= "table" then
-        StoredItem = {Item}
-    end
-    self.ItemTable[GeneratedList] = StoredItem
-    return {GeneratedList, Item}
-end
-
 function KeybindInputField:Triggered(func)
     function self.TriggeredAction()
         if not self.Disabled then func() end
     end
-    KeybindManager.UpdateKeybinds(self.ID, self.Binds, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.TriggeredAction)
 end
 
 -- Action
 function KeybindInputField.new(Arguments, Parent)
     Arguments = Arguments or {}
     KeybindNum += 1
-    Arguments.IgnoreItems = true
     Arguments.Placeholder = Arguments.Placeholder or "Set Keybind"
     Arguments.DisableEditing = true
     local self = InputField.new(Arguments, Parent)
@@ -93,7 +83,8 @@ function KeybindInputField.new(Arguments, Parent)
     self.TextEditable = true
     self.ID = KeybindNum
     self:Triggered(self.Arguments.Action)
-    self.Binds = {{}}
+    self.Value = {{}}
+    self.Arguments.Binds = self.Arguments.Items or self.Arguments.Binds
     self.Input.Focused:Connect(function()
         if self.Disabled then return end
         self.Focused = true
@@ -101,8 +92,14 @@ function KeybindInputField.new(Arguments, Parent)
         task.wait()
         KeybindManager.FocusInputField(self.ID, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
     end)
-    if self.Arguments.Items then self:AddItems(self.Arguments.Items) end
-    self:SetValue(self.Arguments.Value)
+    if self.Arguments.Binds then self:AddBinds(self.Arguments.Binds) end
+    self:SetBind(self.Arguments.Value or self.Arguments.Bind)
+    self.Input.Changed:Connect(function(p)
+        if p == "Text" then
+            task.wait(0)
+            self:UpdateBind(self.Value)
+        end
+    end)
     return self
 end
 
