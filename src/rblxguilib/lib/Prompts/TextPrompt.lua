@@ -53,6 +53,10 @@ function TextPrompt.new(Arguments)
     self.ButtonsFrameLayout.FillDirection = Enum.FillDirection.Horizontal
     self.ButtonsFrameLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
     self.ButtonsFrameLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    self:OnWindowClose(function()
+        self.Widget:Destroy()
+        if self.Action() then self.Action(0) end
+    end)
     if (#Buttons*82)+14 > 260 then
         self.ButtonsFrame.Size = UDim2.new(0,(#Buttons*82)+14,0,40)
     end
@@ -66,7 +70,7 @@ function TextPrompt.new(Arguments)
         NewButton.Arguments.Unpausable = true
         NewButton.ButtonFrame.Size = UDim2.new(0,82,1,0)
         NewButton:Clicked(function()
-            self.Widget:Destroy()
+            self:Destroy()
             if self.Action then self.Action(i) end
         end)
     end

@@ -2,9 +2,19 @@ local Prompt = {}
 Prompt.__index = Prompt
 
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
+local util = require(GV.LibraryDir.GUIUtil)
 local BackgroundFrame = require(GV.FramesDir.BackgroundFrame)
 local GUIElement = require(GV.LibraryDir.GUIElement)
 setmetatable(Prompt,GUIElement)
+
+function Prompt:Destroy()
+    if not self.Arguments.NoPause then util.UnpauseAll() end
+    self.Widget:Destroy()
+end
+
+function Prompt:OnWindowClose(func)
+    self.CloseAction = func
+end
 
 function Prompt:Reset(Title, Width, Height)
     Title = Title or "Prompt"
@@ -21,6 +31,7 @@ function Prompt:Reset(Title, Width, Height)
                 self:Reset(Title, Width, Height)
             end
         elseif p == "Enabled" then
+            if self.CloseAction then self.CloseAction() end
             NewWidget.Enabled = true
         end
     end)
@@ -33,6 +44,7 @@ function Prompt.new(Arguments)
     local self = GUIElement.new(Arguments)
     setmetatable(self,Prompt)
     self:Reset(self.Arguments.Title, self.Arguments.Width, self.Arguments.Height)
+    if not self.Arguments.NoPause then util.PauseAll() end
     local BackgroundFrame = BackgroundFrame.new(nil, self.Widget)
     self.Parent = BackgroundFrame.Content
     return self

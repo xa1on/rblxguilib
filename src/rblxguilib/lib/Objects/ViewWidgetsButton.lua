@@ -33,10 +33,8 @@ function ViewWidgetsButton:LoadWidgetOption(Widget, i)
         end)
     end)
     DeleteAction.Triggered:Connect(function()
-        util.PauseAll()
         local DeletePrompt = TextPrompt.new({Title = "Delete " .. WidgetTitle, Text = 'Are you sure you want to delete "' .. WidgetTitle .. '"?', Buttons = {"Yes", "No"}})
         DeletePrompt:Clicked(function(p)
-            util.UnpauseAll()
             if p == 2 then return end
             if Widget.TitlebarMenu and #Widget.TitlebarMenu.Pages > 0 then
                 local AvailibleWidgets = {}
