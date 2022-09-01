@@ -3,7 +3,6 @@
     something#7597
     todo:
         Icons for dropdown options
-        Progress bar
         Color selector
 ]]--
 
