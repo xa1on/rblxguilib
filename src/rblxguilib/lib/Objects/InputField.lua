@@ -158,7 +158,7 @@ function InputField:SetValue(Item)
     local ItemInfo = self.GetItemInfo(Item)
     self.SelectedItem = true
     self.Value = ItemInfo.Value
-    self.Input.Text = ItemInfo.Name
+    self.Input.Text = ItemInfo.Name or ""
 end
 
 function InputField:Changed(func)
@@ -313,7 +313,7 @@ function InputField.new(Arguments, Parent)
             end
         end
     end)
-    local Value = self.Arguments.Value or ""
+    local Value = self.Arguments.Value or self.Arguments.CurrentItem or ""
     self:SetValue(Value)
     if self.Arguments.Items then self:AddItems(self.Arguments.Items) end
     self:SetDisabled(self.Arguments.Disabled)

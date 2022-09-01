@@ -93,7 +93,7 @@ function KeybindInputField.new(Arguments, Parent)
         KeybindManager.FocusInputField(self.ID, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
     end)
     if self.Arguments.Binds then self:AddBinds(self.Arguments.Binds) end
-    self:SetBind(self.Arguments.Value or self.Arguments.Bind)
+    self:SetBind(self.Arguments.Bind or self.Arguments.CurrentBind)
     self.Input.Changed:Connect(function(p)
         if p == "Text" then
             task.wait(0)

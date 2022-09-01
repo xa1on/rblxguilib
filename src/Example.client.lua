@@ -201,7 +201,7 @@ end)
 
 
 -- inputfields
--- Placeholder, CurrentItem, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
+-- Placeholder, CurrentItem/Value, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
 gui.InputField.new({
     CurrentItem = "default text",
     Items = {
@@ -245,7 +245,7 @@ local disablebutton = gui.ToggleableButton.new({
 disablebutton:Clicked(function(p) inpfield:SetDisabled(p) end)
 
 -- instanceinputfield
--- Value, Items, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
+-- Value/CurrentItem, Items, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
 local instanceinpfield = gui.InstanceInputField.new({
     Items = {
         {
@@ -276,12 +276,12 @@ end)
 
 
 -- keybindinputfield
--- Action, Value/Bind, Items/Binds, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
+-- Action, Bind/CurrentBind, Items/Binds, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
 gui.Labeled.new({
     Text = "keybind",
     Object = gui.KeybindInputField.new({
         Action = function() print("keybind1 pressed!") end,
-        Bind = {
+        CurrentBind = {
             {"N"},
             {"LeftShift", "T"}
         },
