@@ -46,11 +46,17 @@ function InputField:SetDropdown(State)
     if State then
         self.Parent.ZIndex = 2
         self.InputFieldFrame.ZIndex = 3
+        self.DropdownButton.ZIndex = 3
+        self.DropdownImage.ZIndex = 3
         self.Input.ZIndex = 4
+        
     else
         self.Parent.ZIndex = 0
         self.InputFieldFrame.ZIndex = 0
+        self.DropdownImage.ZIndex = 0
+        self.DropdownButton.ZIndex = 0
         self.Input.ZIndex = 0
+        
     end
     if self.DropdownAction then self.DropdownAction(State) end
 end
@@ -94,7 +100,7 @@ function InputField:AddItem(Item)
     local ItemInfo = self.GetItemInfo(Item)
     local ItemButton = Instance.new("TextButton", self.DropdownScroll.Content)
     ItemButton.Name = ItemInfo.Name
-    ItemButton.Size = UDim2.new(1,0,0,18)
+    ItemButton.Size = UDim2.new(1,0,0,20)
     ItemButton.BorderSizePixel = 0
     util.ColorSync(ItemButton, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     ItemButton.Text = ""
@@ -177,6 +183,14 @@ function InputField:DropdownToggled(func)
     self.DropdownAction = func
 end
 
+function InputField:LostFocus(func)
+    self.LostFocusAction = func
+end
+
+function InputField:GainedFocus(func)
+    self.FocusedAction = func
+end
+
 -- Placeholder, Value, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
 function InputField.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
@@ -244,6 +258,7 @@ function InputField.new(Arguments, Parent)
     self.Input.Focused:Connect(function()
         KeybindManager.Unfocus()
         if not self.Disabled and self.Focusable then
+            if self.FocusedAction then self.FocusedAction(self.Value) end
             util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
         else
             self.Input:ReleaseFocus()
@@ -251,6 +266,7 @@ function InputField.new(Arguments, Parent)
     end)
     self.Input.FocusLost:Connect(function()
         if self.Focusable then
+            if self.LostFocusAction then self.LostFocusAction(self.Value) end
             util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         end
     end)

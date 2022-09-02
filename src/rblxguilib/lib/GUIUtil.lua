@@ -103,4 +103,17 @@ function m.UnpauseAll()
     UnpauseList = {}
 end
 
+function m.Color3ToText(color)
+    return "{" .. m.RoundNumber(color.R*255, 1) .. ", " .. m.RoundNumber(color.G*255, 1) .. ", " .. m.RoundNumber(color.B*255, 1) .. "}"
+end
+
+function m.TextToColor3(text)
+    local numbers = {}
+    for i in text:gmatch("[%.%d]+") do
+        numbers[#numbers+1] = tonumber(i)
+        if #numbers == 3 then break end
+    end
+    return Color3.fromRGB(numbers[1] or 0, numbers[2] or 0, numbers[3] or 0)
+end
+
 return m

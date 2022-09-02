@@ -384,7 +384,10 @@ gui.Labeled.new({
 })
 toggle_checkbox2:Clicked(function(p)
     labeledslider:SetDisabled(p)
+    progressbar:SetDisabled(p)
 end)
+
+local colorinput = gui.ColorInput.new()
 
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new({Text = "Dump GUI into workspace"})

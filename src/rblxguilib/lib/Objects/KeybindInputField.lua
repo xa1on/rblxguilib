@@ -16,6 +16,7 @@ setmetatable(KeybindInputField,InputField)
     {{"Keybind Preset",{{LeftControl, LeftAlt, Zero},{P}}}}
 ]]--
 function KeybindInputField:UpdateBind(Value)
+    if not Value then return end
     if #Value[1]>0 and #Value[#Value]>0 then Value[#Value + 1] = {} end
     KeybindManager.UpdateKeybinds(self.ID, Value, self.TriggeredAction)
 end
