@@ -39,11 +39,10 @@ function Checkbox:UpdateTheme()
     local theme = settings().Studio.Theme
     self.Checkbox.Image = self.Images[tostring(theme)].Box
     self.Checkbox.HoverImage = self.Images[tostring(theme)].Hover
+    self.CheckImage.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator)
     if tostring(theme) == "Dark" then
-        self.CheckImage.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator)
         self.Checkbox.ImageColor3 = Color3.new(1,1,1)
     else
-        self.CheckImage.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator)
         if self.Value then
             self.Checkbox.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBackground, Enum.StudioStyleGuideModifier.Selected)
         else

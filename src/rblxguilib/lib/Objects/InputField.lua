@@ -191,7 +191,7 @@ function InputField:GainedFocus(func)
     self.FocusedAction = func
 end
 
--- Placeholder, Value, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
+-- Placeholder, Value, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearBackground, ClearText, Disabled
 function InputField.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,InputField)
@@ -207,8 +207,14 @@ function InputField.new(Arguments, Parent)
     self.InputFieldFrame.Position = UDim2.new(0.5,0,0.5,0)
     self.InputFieldFrame.AnchorPoint = Vector2.new(0.5,0.5)
     self.InputFieldFrame.Name = "InputFieldFrame"
-    util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
-    util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+    if self.Arguments.ClearBackground then
+        util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.MainBackground)
+        util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
+    else
+        util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+        util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+    end
+    print(self.InputFieldFrame.Transparency)
     self.Input = Instance.new("TextBox", self.InputFieldFrame)
     self.Input.TextTruncate = Enum.TextTruncate.AtEnd
     self.Input.BackgroundTransparency = 1
@@ -244,6 +250,9 @@ function InputField.new(Arguments, Parent)
         self.MouseInInput = true
         if not self.Disabled and not self.Input:IsFocused() and not self.Focused then
             util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Hover)
+            if self.Arguments.ClearBackground then
+                util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Hover)
+            end
         elseif self.Focusable then
             GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Forbidden"
         end
@@ -251,7 +260,12 @@ function InputField.new(Arguments, Parent)
     self.InputFieldFrame.MouseLeave:Connect(function()
         self.MouseInInput = false
         if not self.Disabled and not self.Input:IsFocused() and not self.Focused then
-            util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+            if self.Arguments.ClearBackground then
+                util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.MainBackground)
+                util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
+            else
+                util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+            end
         end
         GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
@@ -260,6 +274,7 @@ function InputField.new(Arguments, Parent)
         if not self.Disabled and self.Focusable then
             if self.FocusedAction then self.FocusedAction(self.Value) end
             util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
+            util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
         else
             self.Input:ReleaseFocus()
         end
@@ -267,7 +282,13 @@ function InputField.new(Arguments, Parent)
     self.Input.FocusLost:Connect(function()
         if self.Focusable then
             if self.LostFocusAction then self.LostFocusAction(self.Value) end
-            util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+            if self.Arguments.ClearBackground then
+                util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.MainBackground)
+                util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
+            else
+                util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+                util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+            end
         end
     end)
     self.DropdownButton = Instance.new("TextButton", self.InputFieldFrame)

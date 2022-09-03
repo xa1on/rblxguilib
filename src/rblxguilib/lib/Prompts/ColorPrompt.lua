@@ -191,7 +191,7 @@ function ColorPrompt.new(Arguments)
     self.ColorPreview.Position = UDim2.fromOffset(50, 42)
     self.ColorPreview.Size = UDim2.fromOffset(75, 75)
 
-    self.RGBInput = InputField.new({NoDropdown = true}, self.ColorPickerOptions)
+    self.RGBInput = InputField.new({NoDropdown = true, ClearBackground = true, Unpausable = true}, self.ColorPickerOptions)
     self.RGBInput.Name = "RGBInput"
     self.RGBInput.InputFieldContainer.AnchorPoint = Vector2.new(0.5,0.5)
     self.RGBInput.InputFieldContainer.Position = UDim2.fromOffset(50,97)
@@ -207,9 +207,10 @@ function ColorPrompt.new(Arguments)
     end)
     self.RGBInput:GainedFocus(function()
         self.RGBInput.Input.TextXAlignment = Enum.TextXAlignment.Left
+        util.ColorSync(self.RGBInput.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     end)
 
-    self.HexInput = InputField.new({NoDropdown = true}, self.ColorPickerOptions)
+    self.HexInput = InputField.new({NoDropdown = true, ClearBackground = true, Unpausable = true}, self.ColorPickerOptions)
     self.HexInput.Name = "HexInput"
     self.HexInput.InputFieldContainer.AnchorPoint = Vector2.new(0.5,0.5)
     self.HexInput.InputFieldContainer.Position = UDim2.fromOffset(50,122)
@@ -230,7 +231,7 @@ function ColorPrompt.new(Arguments)
         self.HexInput.Input.TextXAlignment = Enum.TextXAlignment.Left
     end)
 
-    self.OKButton = Button.new({Text = "OK", Size = 1}, self.ColorPickerOptions)
+    self.OKButton = Button.new({Text = "OK", Size = 1, Unpausable = true}, self.ColorPickerOptions)
     self.OKButton.ButtonFrame.AnchorPoint = Vector2.new(0.5,0.5)
     self.OKButton.ButtonFrame.Size = UDim2.fromOffset(100,25)
     self.OKButton.ButtonFrame.Position = UDim2.fromOffset(50,210)
@@ -240,7 +241,7 @@ function ColorPrompt.new(Arguments)
         if self.DoneAction then self.DoneAction(self.Value) end
     end)
 
-    self.CancelButton = Button.new({Text = "Cancel", Size = 1}, self.ColorPickerOptions)
+    self.CancelButton = Button.new({Text = "Cancel", Size = 1, Unpausable = true}, self.ColorPickerOptions)
     self.CancelButton.ButtonFrame.AnchorPoint = Vector2.new(0.5,0.5)
     self.CancelButton.ButtonFrame.Size = UDim2.fromOffset(100,25)
     self.CancelButton.ButtonFrame.Position = UDim2.fromOffset(50,235)

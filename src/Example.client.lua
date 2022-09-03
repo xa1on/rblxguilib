@@ -2,7 +2,8 @@
     [RBLXGUILib]
     something#7597
     todo:
-        Color selector
+        Accent color modifier
+        COMPLETE!!!!
 ]]--
 
 -- loads the library

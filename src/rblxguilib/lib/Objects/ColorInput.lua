@@ -64,7 +64,7 @@ function ColorInput.new(Arguments, Parent)
             self:SetValue(p)
         end)
     end)
-    self.ColorInput = InputField.new({NoDropdown = true}, self.ColorInputFrame)
+    self.ColorInput = InputField.new({NoDropdown = true, ClearBackground = true}, self.ColorInputFrame)
     self.ColorInput.Name = "ColorInput"
     self.ColorInput.InputFieldContainer.Size = UDim2.new(0,100,0,20)
     self.ColorInput.InputFieldFrame.Size = UDim2.new(1,0,1,0)
