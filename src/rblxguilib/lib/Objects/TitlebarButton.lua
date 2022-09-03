@@ -42,7 +42,7 @@ function TitlebarButton:CreateCopy(TitlebarMenu)
     Button.Name = self.Name
     Button.Position = UDim2.new(0,TitlebarMenu.ButtonContainer.Size.X.Offset,1,0)
     ColorManager.ColorSync(Button, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar,nil,nil,nil,true)
-    Button.ZIndex = 3
+    Button.ZIndex = 4
     Button.BorderSizePixel = 0
     Button.Font = Enum.Font.SourceSans
     Button.TextSize = 14
