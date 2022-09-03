@@ -5,6 +5,7 @@ local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local GUIObject = require(GV.ObjectsDir.GUIObject)
 local InputManager = require(GV.ManagersDir.InputManager)
+local ColorManager = require(GV.ManagersDir.ColorManager)
 setmetatable(Slider,GUIObject)
 
 function Slider:SetDisabled(State)
@@ -61,15 +62,15 @@ function Slider.new(Arguments, Parent)
     self.SlideBar.Position = UDim2.new(0.5,0,0.5,0)
     local Size = util.GetScale(self.Arguments.Size) or UDim.new(1,-12)
     self.SlideBar.Size = UDim2.new(Size.Scale, Size.Offset, 0, 5)
-    util.ColorSync(self.SlideBar, "BackgroundColor3", Enum.StudioStyleGuideColor.FilterButtonAccent)
+    ColorManager.ColorSync(self.SlideBar, "BackgroundColor3", Enum.StudioStyleGuideColor.FilterButtonAccent)
     self.SlideButton = Instance.new("TextButton", self.SlideBar)
     self.SlideButton.Text = ""
     self.SlideButton.BorderSizePixel = 1
     self.SlideButton.AnchorPoint = Vector2.new(0.5,0.5)
     self:UpdatePosition()
     self.SlideButton.Size = UDim2.new(0,7,0,18)
-    util.ColorSync(self.SlideButton, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
-    util.ColorSync(self.SlideButton, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+    ColorManager.ColorSync(self.SlideButton, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+    ColorManager.ColorSync(self.SlideButton, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     self.SlideBar.BorderSizePixel = 0
     self.SliderSelected = false
     self.InitialX = 0

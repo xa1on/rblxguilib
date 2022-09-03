@@ -4,6 +4,7 @@ TitlebarMenu.__index = TitlebarMenu
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
 local util = require(GV.LibraryDir.GUIUtil)
+local ColorManager = require(GV.ManagersDir.ColorManager)
 setmetatable(TitlebarMenu,GUIFrame)
 GV.PluginTitlebarMenus = {}
 
@@ -84,19 +85,19 @@ function TitlebarMenu.new(Arguments, Parent)
     self.TitlebarMenu = Instance.new("Frame", self.Parent)
     self.TitlebarMenu.Name = "TitlebarMenu"
     self.TitlebarMenu.Size = UDim2.new(1,0,0,24)
-    util.ColorSync(self.TitlebarMenu, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
+    ColorManager.ColorSync(self.TitlebarMenu, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
     self.TitlebarMenu.BorderSizePixel = 0
     self.ButtonsFrame = Instance.new("Frame", self.TitlebarMenu)
     self.ButtonsFrame.Size = UDim2.new(0,0,0,24)
     self.ButtonsFrame.ZIndex = 3
-    util.ColorSync(self.ButtonsFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
+    ColorManager.ColorSync(self.ButtonsFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
     self.ButtonsFrame.BorderSizePixel = 0
     self.ButtonsFrame.Name = "ButtonsFrame"
     local ButtonsFrameBorder = Instance.new("Frame", self.ButtonsFrame)
     ButtonsFrameBorder.Position = UDim2.new(0,0,1,-1)
     ButtonsFrameBorder.Size = UDim2.new(1,0,0,1)
     ButtonsFrameBorder.BorderSizePixel = 0
-    util.ColorSync(ButtonsFrameBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
+    ColorManager.ColorSync(ButtonsFrameBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     ButtonsFrameBorder.Name = "Border"
     ButtonsFrameBorder.ZIndex = 4
     self.ButtonContainer = Instance.new("Frame", self.ButtonsFrame)
@@ -134,7 +135,7 @@ function TitlebarMenu.new(Arguments, Parent)
     TabContainerBorder.Position = UDim2.new(0,0,1,-1)
     TabContainerBorder.Size = UDim2.new(1,0,0,1)
     TabContainerBorder.BorderSizePixel = 0
-    util.ColorSync(TabContainerBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
+    ColorManager.ColorSync(TabContainerBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     self.ContentContainers = Instance.new("Frame", self.Parent)
     self.ContentContainers.Name = "Content"
     self.ContentContainers.BackgroundTransparency = 1

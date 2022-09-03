@@ -4,6 +4,7 @@ KeybindInputField.__index = KeybindInputField
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local KeybindManager = require(GV.ManagersDir.KeybindManager)
+local ColorManager = require(GV.ManagersDir.ColorManager)
 local InputField = require(GV.ObjectsDir.InputField)
 local KeybindNum = 0
 setmetatable(KeybindInputField,InputField)
@@ -60,7 +61,7 @@ end
 function KeybindInputField:UnfocusInputField(ForceUnfocus)
     if not ForceUnfocus and self.MouseInInput then return false
     else
-        util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+        ColorManager.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         self.Focused = false
     end
     return true
@@ -89,7 +90,7 @@ function KeybindInputField.new(Arguments, Parent)
     self.Input.Focused:Connect(function()
         if self.Disabled then return end
         self.Focused = true
-        util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected)
+        ColorManager.ColorSync(self.InputFieldFrame, "BorderColor3", "PluginAccent")
         task.wait()
         KeybindManager.FocusInputField(self.ID, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
     end)

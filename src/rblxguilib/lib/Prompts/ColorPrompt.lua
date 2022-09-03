@@ -5,6 +5,7 @@ local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local Prompt = require(GV.PromptsDir.Prompt)
 local InputField = require(GV.ObjectsDir.InputField)
+local ColorManager = require(GV.ManagersDir.ColorManager)
 local Button = require(GV.ObjectsDir.Button)
 
 setmetatable(ColorPrompt, Prompt)
@@ -48,7 +49,7 @@ function ColorPrompt:SetValue(Value, IgnoreText, IgnoreHSV)
     self.LeftHueIndicator.Position = UDim2.fromScale(0,1-self.HSVValue.H)
     self.RightHueIndicator.Position = UDim2.fromScale(1,1-self.HSVValue.H)
     if not IgnoreText then
-        self.RGBInput.Input.Text = util.Color3ToText(self.Value)
+        self.RGBInput.Input.Text = ColorManager.Color3ToText(self.Value)
         self.HexInput.Input.Text = "#"..self.Value:ToHex()
     end
     if self.ChangedAction then self.ChangedAction(self.Value) end
@@ -142,7 +143,7 @@ function ColorPrompt.new(Arguments)
     self.LeftHueIndicator = Instance.new("ImageLabel", self.HueGradientFrame)
     self.LeftHueIndicator.Name = "LeftIndicator"
     self.LeftHueIndicator.Image = self.Images.HueIndicator
-    util.ColorSync(self.LeftHueIndicator, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
+    ColorManager.ColorSync(self.LeftHueIndicator, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
     self.LeftHueIndicator.AnchorPoint = Vector2.new(1, 0.5)
     self.LeftHueIndicator.BackgroundTransparency = 1
     self.LeftHueIndicator.Rotation = -90
@@ -151,7 +152,7 @@ function ColorPrompt.new(Arguments)
     self.RightHueIndicator = Instance.new("ImageLabel", self.HueGradientFrame)
     self.RightHueIndicator.Name = "RightIndicator"
     self.RightHueIndicator.Image = self.Images.HueIndicator
-    util.ColorSync(self.RightHueIndicator, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
+    ColorManager.ColorSync(self.RightHueIndicator, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
     self.RightHueIndicator.AnchorPoint = Vector2.new(0, 0.5)
     self.RightHueIndicator.BackgroundTransparency = 1
     self.RightHueIndicator.Rotation = 90
@@ -187,7 +188,7 @@ function ColorPrompt.new(Arguments)
     self.ColorPreview = Instance.new("Frame", self.ColorPickerOptions)
     self.ColorPreview.Name = "ColorPreview"
     self.ColorPreview.AnchorPoint = Vector2.new(0.5, 0.5)
-    util.ColorSync(self.ColorPreview, "BorderColor3", Enum.StudioStyleGuideColor.Border)
+    ColorManager.ColorSync(self.ColorPreview, "BorderColor3", Enum.StudioStyleGuideColor.Border)
     self.ColorPreview.Position = UDim2.fromOffset(50, 42)
     self.ColorPreview.Size = UDim2.fromOffset(75, 75)
 
@@ -199,15 +200,15 @@ function ColorPrompt.new(Arguments)
     self.RGBInput.InputFieldFrame.Size = UDim2.new(1,0,1,0)
     self.RGBInput.Input.TextXAlignment = Enum.TextXAlignment.Center
     self.RGBInput:Changed(function(p)
-        self:SetValue(util.TextToColor3(p), true)
+        self:SetValue(ColorManager.TextToColor3(p), true)
     end)
     self.RGBInput:LostFocus(function(p)
-        self:SetValue(util.TextToColor3(p))
+        self:SetValue(ColorManager.TextToColor3(p))
         self.RGBInput.Input.TextXAlignment = Enum.TextXAlignment.Center
     end)
     self.RGBInput:GainedFocus(function()
         self.RGBInput.Input.TextXAlignment = Enum.TextXAlignment.Left
-        util.ColorSync(self.RGBInput.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+        ColorManager.ColorSync(self.RGBInput.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     end)
 
     self.HexInput = InputField.new({NoDropdown = true, ClearBackground = true, Unpausable = true}, self.ColorPickerOptions)

@@ -4,6 +4,7 @@ ScrollingFrame.__index = ScrollingFrame
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
+local ColorManager = require(GV.ManagersDir.ColorManager)
 setmetatable(ScrollingFrame,GUIFrame)
 
 ScrollingFrame.Images = {
@@ -28,7 +29,7 @@ function ScrollingFrame.new(Arguments, Parent)
     self.ScrollbarBackground.Size = UDim2.new(0,self.Arguments.BarSize or 15,1,0)
     self.ScrollbarBackground.Position = UDim2.new(1,-(self.Arguments.BarSize or 15),0,0)
     self.ScrollbarBackground.Name = "ScrollbarBackground"
-    util.ColorSync(self.ScrollbarBackground, "BackgroundColor3", Enum.StudioStyleGuideColor.ScrollBarBackground)
+    ColorManager.ColorSync(self.ScrollbarBackground, "BackgroundColor3", Enum.StudioStyleGuideColor.ScrollBarBackground)
 
     -- scrolling frame
     self.Content = Instance.new("ScrollingFrame", self.Parent)
@@ -40,8 +41,8 @@ function ScrollingFrame.new(Arguments, Parent)
     self.Content.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
     self.Content.Name = "ScrollingFrame"
     self.Content.ZIndex = 2
-    util.ColorSync(self.Content, "ScrollBarImageColor3", Enum.StudioStyleGuideColor.ScrollBar)
-    util.ColorSync(self.Content, "BorderColor3", Enum.StudioStyleGuideColor.Border)
+    ColorManager.ColorSync(self.Content, "ScrollBarImageColor3", Enum.StudioStyleGuideColor.ScrollBar)
+    ColorManager.ColorSync(self.Content, "BorderColor3", Enum.StudioStyleGuideColor.Border)
 
     -- list layout for later elements
     self.Layout = Instance.new("UIListLayout", self.Content)

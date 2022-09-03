@@ -4,6 +4,7 @@ ProgressBar.__index = ProgressBar
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local GUIObject = require(GV.ObjectsDir.GUIObject)
+local ColorManager = require(GV.ManagersDir.ColorManager)
 setmetatable(ProgressBar,GUIObject)
 
 function ProgressBar:SetDisabled(State)
@@ -38,13 +39,13 @@ function ProgressBar.new(Arguments, Parent)
     local Size = util.GetScale(self.Arguments.Size) or UDim.new(1,-12)
     self.ProgressBar.Size = UDim2.new(Size.Scale,Size.Offset,0,16)
     self.ProgressBar.Position = UDim2.new(0.5,0,0.5,0)
-    util.ColorSync(self.ProgressBar, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
-    util.ColorSync(self.ProgressBar, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+    ColorManager.ColorSync(self.ProgressBar, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+    ColorManager.ColorSync(self.ProgressBar, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     self.ProgressIndicator = Instance.new("Frame", self.ProgressBar)
     self.ProgressIndicator.Name = "Indicator"
     self:SetValue(self.Arguments.Value)
     self.ProgressIndicator.BorderSizePixel = 0
-    util.ColorSync(self.ProgressIndicator, "BackgroundColor3", Enum.StudioStyleGuideColor.LinkText)
+    ColorManager.ColorSync(self.ProgressIndicator, "BackgroundColor3", "PluginAccent")
     self:SetDisabled(self.Arguments.Disabled)
     self.Object = self.ProgressIndicator
     self.MainMovable = self.ProgressBarContainer

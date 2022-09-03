@@ -388,7 +388,17 @@ toggle_checkbox2:Clicked(function(p)
     progressbar:SetDisabled(p)
 end)
 
-local colorinput = gui.ColorInput.new()
+local colorinput = gui.ColorInput.new({
+    Color = Color3.new(53/255, 181/255, 1)
+})
+gui.Labeled.new({
+    Text = "Plugin accent color",
+    LabelSize = 0.5,
+    Object = colorinput
+})
+colorinput:Changed(function(p)
+    gui.ColorManager.UpdateAccentColor(p)
+end)
 
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new({Text = "Dump GUI into workspace"})

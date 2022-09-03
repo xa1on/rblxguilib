@@ -3,6 +3,7 @@ Button.__index = Button
 
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
+local ColorManager = require(GV.ManagersDir.ColorManager)
 local TextboxMod = require(GV.ObjectsDir.Textbox)
 local GUIObject = require(GV.ObjectsDir.GUIObject)
 setmetatable(Button,GUIObject)
@@ -70,7 +71,7 @@ function Button.new(Arguments, Parent)
     self.Button.AnchorPoint = Vector2.new(0.5,0)
     self.Button.BackgroundTransparency = 1
     self.Button.Image = self.Images.border
-    util.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.DialogButtonBorder)
+    ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.DialogButtonBorder)
     self.Button.ScaleType = Enum.ScaleType.Slice
     self.Button.SliceCenter = Rect.new(7,7,156,36)
     self.Button.Name = "Button"
@@ -80,7 +81,7 @@ function Button.new(Arguments, Parent)
     self.ButtonBackground.BackgroundTransparency = 1
     self.ButtonBackground.Size = UDim2.new(1,0,1,0)
     self.ButtonBackground.Image = self.Images.bg
-    util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
+    ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
     self.ButtonBackground.ScaleType = Enum.ScaleType.Slice
     self.ButtonBackground.SliceCenter = Rect.new(7,7,156,36)
     self.ButtonBackground.ZIndex = 0
@@ -90,30 +91,30 @@ function Button.new(Arguments, Parent)
     self.Button.MouseMoved:Connect(function()
         GV.PluginObject:GetMouse().Icon = self.CursorIcon
         if self.Disabled or Pressed or self.Toggleable then return end
-        util.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Hover)
-        util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Hover)
+        ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Hover)
+        ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Hover)
     end)
     self.Button.MouseLeave:Connect(function()
         task.wait(0)
         GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
         if self.Disabled or self.Toggleable then return end
         Pressed = false
-        util.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
-        util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
+        ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
+        ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
     end)
 
     self.Button.MouseButton1Down:Connect(function()
         if self.Disabled or self.Toggleable then return end
         Pressed = true
-        util.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
-        util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
+        ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
+        ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
     end)
 
     self.Button.MouseButton1Up:Connect(function()
         if self.Disabled or self.Toggleable then return end
         Pressed = false
-        util.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
-        util.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
+        ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
+        ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
     end)
 
     self.Button.MouseButton1Click:Connect(function()

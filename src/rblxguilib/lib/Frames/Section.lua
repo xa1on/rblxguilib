@@ -5,6 +5,7 @@ local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
 local TextboxMod = require(GV.ObjectsDir.Textbox)
+local ColorManager = require(GV.ManagersDir.ColorManager)
 setmetatable(Section,GUIFrame)
 
 Section.Images = {
@@ -44,7 +45,7 @@ function Section.new(Arguments, Parent)
     self.Label.Name = "Section Label"
     self.Label.Size = UDim2.new(2,0,0,25)
     self.Label.BorderSizePixel = 0
-    util.ColorSync(self.Label, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
+    ColorManager.ColorSync(self.Label, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
     self.Label.MouseButton1Click:Connect(function() self:Toggle() end)
     util.HoverIcon(self.Label, "rbxasset://SystemCursors/PointingHand")
 
@@ -71,7 +72,7 @@ function Section.new(Arguments, Parent)
     self.CollapseImage.AnchorPoint = Vector2.new(0.5,0.5)
     self.CollapseImage.Position = UDim2.new(0.5,0,0.5,0)
     self.CollapseImage.Size = UDim2.new(0,15,0,15)
-    util.ColorSync(self.CollapseImage, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
+    ColorManager.ColorSync(self.CollapseImage, "ImageColor3", Enum.StudioStyleGuideColor.MainText)
 
     local Textbox = self.Arguments.Textbox or self.Arguments.Text
     if type(Textbox) == "string" then

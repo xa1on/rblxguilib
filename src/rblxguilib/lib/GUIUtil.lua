@@ -1,25 +1,5 @@
 local m = {}
-
 local GV = require(script.Parent.PluginGlobalVariables)
-local EventManager = require(GV.ManagersDir.EventManager)
-
--- syncs colors with studio theme
-local syncedelements = {}
-
-function m.ColorSync(element, property, enum, enum2)
-    syncedelements[#syncedelements + 1] = {element, property, enum, enum2}
-    m.MatchColor(element, property, enum, enum2)
-end
-
-function m.MatchColor(element, property, enum, enum2)
-    element[property] = settings().Studio.Theme:GetColor(enum, enum2)
-end
-
-EventManager.AddConnection(settings().Studio.ThemeChanged, function()
-    for _, v in pairs(syncedelements) do
-        m.MatchColor(v[1], v[2], v[3], v[4])
-    end
-end)
 
 -- dumps the gui into workspace for debugging
 function m.DumpGUI(parent)
@@ -101,19 +81,6 @@ function m.UnpauseAll()
         v:SetDisabled(false)
     end
     UnpauseList = {}
-end
-
-function m.Color3ToText(color)
-    return "{" .. m.RoundNumber(color.R*255, 1) .. ", " .. m.RoundNumber(color.G*255, 1) .. ", " .. m.RoundNumber(color.B*255, 1) .. "}"
-end
-
-function m.TextToColor3(text)
-    local numbers = {}
-    for i in text:gmatch("[%.%d]+") do
-        numbers[#numbers+1] = tonumber(i)
-        if #numbers == 3 then break end
-    end
-    return Color3.fromRGB(numbers[1] or 0, numbers[2] or 0, numbers[3] or 0)
 end
 
 return m
