@@ -273,7 +273,7 @@ function InputField.new(Arguments, Parent)
         KeybindManager.Unfocus()
         if not self.Disabled and self.Focusable then
             if self.FocusedAction then self.FocusedAction(self.Value) end
-            ColorManager.ColorSync(self.InputFieldFrame, "BorderColor3", "PluginAccent")
+            ColorManager.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected, true)
             ColorManager.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
         else
             self.Input:ReleaseFocus()

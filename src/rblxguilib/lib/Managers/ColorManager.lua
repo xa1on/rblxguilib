@@ -5,30 +5,31 @@ local util = require(GV.LibraryDir.GUIUtil)
 
 -- syncs colors with studio theme
 local syncedelements = {}
-local AccentColor = Color3.new(53/255, 181/255, 1)
 
-function m.ColorSync(element, property, enum, enum2)
-    syncedelements[#syncedelements + 1] = {element, property, enum, enum2}
-    m.MatchColor(element, property, enum, enum2)
+function m.ColorSync(element, property, enum, enum2, accent, accenttheme)
+    syncedelements[#syncedelements + 1] = {element, property, enum, enum2, accent, accenttheme}
+    m.MatchColor(element, property, enum, enum2, accent, accenttheme)
 end
 
-function m.MatchColor(element, property, enum, enum2)
-    if enum == "PluginAccent" then
-        element[property] = AccentColor
+function m.MatchColor(element, property, enum, enum2, accent, accenttheme)
+    local Theme = settings().Studio.Theme
+    if accent and (((accenttheme) and accenttheme == tostring(Theme)) or not accenttheme) then
+        element[property] = m.AccentColor
     else
-        element[property] = settings().Studio.Theme:GetColor(enum, enum2)
+        element[property] = Theme:GetColor(enum, enum2)
     end
 end
 
 function m.ReloadTheme()
     for _, v in pairs(syncedelements) do
-        m.MatchColor(v[1], v[2], v[3], v[4])
+        m.MatchColor(v[1], v[2], v[3], v[4], v[5], v[6])
     end
 end
 
 function m.UpdateAccentColor(newcolor)
-    AccentColor = newcolor
+    m.AccentColor = newcolor
     m.ReloadTheme()
+    GV.PluginObject:SetSetting("PluginGUIAccent", m.Color3ToText(m.AccentColor))
 end
 
 EventManager.AddConnection(settings().Studio.ThemeChanged, function()
@@ -48,5 +49,7 @@ function m.TextToColor3(text)
     return Color3.fromRGB(numbers[1] or 0, numbers[2] or 0, numbers[3] or 0)
 end
 
+m.DefaultAccentColor = Color3.fromRGB(53, 181, 255)
+m.AccentColor = m.TextToColor3(GV.PluginObject:GetSetting("PluginGUIAccent") or m.Color3ToText(m.DefaultAccentColor))
 
 return m

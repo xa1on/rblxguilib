@@ -90,7 +90,7 @@ function KeybindInputField.new(Arguments, Parent)
     self.Input.Focused:Connect(function()
         if self.Disabled then return end
         self.Focused = true
-        ColorManager.ColorSync(self.InputFieldFrame, "BorderColor3", "PluginAccent")
+        ColorManager.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder, Enum.StudioStyleGuideModifier.Selected, true)
         task.wait()
         KeybindManager.FocusInputField(self.ID, self, self.EditKeybind, self.RemoveKeybind, self.UnfocusInputField)
     end)

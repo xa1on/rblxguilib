@@ -102,7 +102,7 @@ function Page.new(Arguments, Parent)
     self.TopBorder.Size = UDim2.new(1,0,0,1)
     self.TopBorder.BorderSizePixel = 0
     self.TopBorder.Name = "TopBorder"
-    ColorManager.ColorSync(self.TopBorder, "BackgroundColor3", "PluginAccent")
+    ColorManager.ColorSync(self.TopBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.RibbonTabTopBar, nil, true)
     self.LeftBorder = Instance.new("Frame", self.TabFrame)
     self.LeftBorder.Size = UDim2.new(0,1,0,24)
     self.LeftBorder.BorderSizePixel = 0

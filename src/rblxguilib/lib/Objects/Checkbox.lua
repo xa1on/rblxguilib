@@ -34,12 +34,11 @@ end
 function Checkbox:SetValue(Toggle)
     self.Value = Toggle
     self.CheckImage.Visible = Toggle
-    --[[
     if Toggle then
-        ColorManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground, Enum.StudioStyleGuideModifier.Selected)
+        ColorManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground, Enum.StudioStyleGuideModifier.Selected, true, "Light")
     else
         ColorManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground)
-    end]]
+    end
 end
 
 function Checkbox:Clicked(func)
@@ -70,7 +69,7 @@ function Checkbox.new(Arguments, Parent)
     self.CheckImage.Image = self.Images.check
     self.CheckImage.BackgroundTransparency = 1
     self.CheckImage.Name = "CheckIndicator"
-    ColorManager.ColorSync(self.CheckImage, "ImageColor3", "PluginAccent")
+    ColorManager.ColorSync(self.CheckImage, "ImageColor3", Enum.StudioStyleGuideColor.CheckedFieldIndicator, nil, true, "Dark")
     self.Checkbox.MouseMoved:Connect(function()
         GV.PluginObject:GetMouse().Icon = self.CursorIcon
         if not self.Disabled then

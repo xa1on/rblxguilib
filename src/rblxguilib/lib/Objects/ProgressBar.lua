@@ -45,7 +45,7 @@ function ProgressBar.new(Arguments, Parent)
     self.ProgressIndicator.Name = "Indicator"
     self:SetValue(self.Arguments.Value)
     self.ProgressIndicator.BorderSizePixel = 0
-    ColorManager.ColorSync(self.ProgressIndicator, "BackgroundColor3", "PluginAccent")
+    ColorManager.ColorSync(self.ProgressIndicator, "BackgroundColor3", Enum.StudioStyleGuideColor.LinkText, nil, true)
     self:SetDisabled(self.Arguments.Disabled)
     self.Object = self.ProgressIndicator
     self.MainMovable = self.ProgressBarContainer

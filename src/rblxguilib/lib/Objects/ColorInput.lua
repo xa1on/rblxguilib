@@ -9,6 +9,10 @@ local ColorManager = require(GV.ManagersDir.ColorManager)
 local ColorPrompt = require(GV.PromptsDir.ColorPrompt)
 setmetatable(ColorInput,GUIObject)
 
+local RightClickMenu = GV.PluginObject:CreatePluginMenu(math.random(), "RightClickMenu - ColorInput")
+RightClickMenu.Name = "ColorInput Right-Click Menu"
+RightClickMenu:AddNewAction("Reset", "Reset")
+
 function ColorInput:SetDisabled(State)
     self.Disabled = State
     self.ColorInput:SetDisabled(State)
@@ -36,7 +40,7 @@ function ColorInput:Changed(func)
     self.Action = func
 end
 
--- Color/Value, Disabled
+-- Color/Value/DefaultColor, Disabled
 function ColorInput.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,ColorInput)
@@ -70,6 +74,13 @@ function ColorInput.new(Arguments, Parent)
             self:SetValue(p)
         end)
     end)
+    self.ColorButton.MouseButton2Click:Connect(function()
+        if self.Disabled then return end
+        local Response = RightClickMenu:ShowAsync()
+        if Response then 
+            if Response.Text == "Reset" then self:SetValue(self.DefaultValue) end
+        end
+    end)
     self.ColorInput = InputField.new({NoDropdown = true, ClearBackground = true}, self.ColorInputFrame)
     self.ColorInput.Name = "ColorInput"
     self.ColorInput.InputFieldContainer.Size = UDim2.new(0,100,0,20)
@@ -92,7 +103,8 @@ function ColorInput.new(Arguments, Parent)
         task.wait(0)
         GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
     end)
-    self:SetValue(self.Arguments.Color or self.Arguments.Value or Color3.new(1,1,1))
+    self.DefaultValue = self.Arguments.Color or self.Arguments.Value or Color3.new(1,1,1)
+    self:SetValue(self.DefaultValue)
     self:SetDisabled(self.Disabled)
     self.Object = self.ColorButton
     self.MainMovable = self.ColorInputContainer

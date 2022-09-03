@@ -389,8 +389,9 @@ toggle_checkbox2:Clicked(function(p)
 end)
 
 local colorinput = gui.ColorInput.new({
-    Color = Color3.new(53/255, 181/255, 1)
+    Color = gui.ColorManager.DefaultAccentColor
 })
+colorinput:SetValue(gui.ColorManager.AccentColor)
 gui.Labeled.new({
     Text = "Plugin accent color",
     LabelSize = 0.5,
