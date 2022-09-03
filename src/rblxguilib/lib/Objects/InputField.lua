@@ -214,7 +214,6 @@ function InputField.new(Arguments, Parent)
         util.ColorSync(self.InputFieldFrame, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
         util.ColorSync(self.InputFieldFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
     end
-    print(self.InputFieldFrame.Transparency)
     self.Input = Instance.new("TextBox", self.InputFieldFrame)
     self.Input.TextTruncate = Enum.TextTruncate.AtEnd
     self.Input.BackgroundTransparency = 1

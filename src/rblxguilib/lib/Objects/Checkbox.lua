@@ -7,48 +7,22 @@ local GUIObject = require(GV.ObjectsDir.GUIObject)
 setmetatable(Checkbox,GUIObject)
 
 Checkbox.Images = {
-    check = "http://www.roblox.com/asset/?id=10278675078",
-    Dark = {
-        Box = "http://www.roblox.com/asset/?id=10278156816",
-        Hover = "http://www.roblox.com/asset/?id=10278155250"
-    },
-    Light = {
-        Box = "http://www.roblox.com/asset/?id=10278156413",
-        Hover = "http://www.roblox.com/asset/?id=10278155707"
-    }
+    check = "http://www.roblox.com/asset/?id=10278675078"
 }
 
 function Checkbox:SetDisabled(State)
     self.Disabled = State
     if self.Disabled then
         self.CursorIcon = "rbxasset://SystemCursors/Forbidden"
-        self.Checkbox.ImageTransparency, self.CheckImage.ImageTransparency = 0.5, 0.5
-        self.Checkbox.HoverImage = self.Checkbox.Image
+        self.Checkbox.Transparency, self.CheckImage.ImageTransparency = 0.5, 0.5
     else
         self.CursorIcon = "rbxasset://SystemCursors/PointingHand"
-        self.Checkbox.ImageTransparency, self.CheckImage.ImageTransparency = 0, 0
-        self:UpdateTheme()
+        self.Checkbox.Transparency, self.CheckImage.ImageTransparency = 0, 0
     end
 end
 
 function Checkbox:ToggleDisable()
     self:SetDisabled(not self.Disabled)
-end
-
-function Checkbox:UpdateTheme()
-    local theme = settings().Studio.Theme
-    self.Checkbox.Image = self.Images[tostring(theme)].Box
-    self.Checkbox.HoverImage = self.Images[tostring(theme)].Hover
-    self.CheckImage.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldIndicator)
-    if tostring(theme) == "Dark" then
-        self.Checkbox.ImageColor3 = Color3.new(1,1,1)
-    else
-        if self.Value then
-            self.Checkbox.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBackground, Enum.StudioStyleGuideModifier.Selected)
-        else
-            self.Checkbox.ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.CheckedFieldBackground)
-        end
-    end
 end
 
 function Checkbox:Toggle()
@@ -59,7 +33,11 @@ end
 function Checkbox:SetValue(Toggle)
     self.Value = Toggle
     self.CheckImage.Visible = Toggle
-    self:UpdateTheme()
+    if Toggle then
+        util.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground, Enum.StudioStyleGuideModifier.Selected)
+    else
+        util.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground)
+    end
 end
 
 function Checkbox:Clicked(func)
@@ -74,12 +52,15 @@ function Checkbox.new(Arguments, Parent)
     self.CheckboxFrame = Instance.new("Frame", self.Parent)
     self.CheckboxFrame.BackgroundTransparency = 1
     self.CheckboxFrame.Name = "CheckboxFrame"
-    self.Checkbox = Instance.new("ImageButton", self.CheckboxFrame)
+    self.Checkbox = Instance.new("TextButton", self.CheckboxFrame)
     self.Checkbox.BackgroundTransparency = 1
     self.Checkbox.AnchorPoint = Vector2.new(0.5,0.5)
     self.Checkbox.Position = UDim2.new(0.5,0,0.5,0)
     self.Checkbox.Size = UDim2.new(0,16,0,16)
     self.Checkbox.Name = "Checkbox"
+    self.Checkbox.Text = ""
+    util.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder)
+    util.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground)
     self.CheckImage = Instance.new("ImageLabel", self.Checkbox)
     self.CheckImage.AnchorPoint = Vector2.new(0.5,0.5)
     self.CheckImage.Position = UDim2.new(0.5,0,0.5,0)
@@ -87,13 +68,17 @@ function Checkbox.new(Arguments, Parent)
     self.CheckImage.Image = self.Images.check
     self.CheckImage.BackgroundTransparency = 1
     self.CheckImage.Name = "CheckIndicator"
-    settings().Studio.ThemeChanged:Connect(function() self:UpdateTheme() end)
+    util.ColorSync(self.CheckImage, "ImageColor3", Enum.StudioStyleGuideColor.CheckedFieldIndicator)
     self.Checkbox.MouseMoved:Connect(function()
         GV.PluginObject:GetMouse().Icon = self.CursorIcon
+        if not self.Disabled then
+            util.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder, Enum.StudioStyleGuideModifier.Hover)
+        end
     end)
     self.Checkbox.MouseLeave:Connect(function()
         task.wait(0)
         GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
+        util.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder)
     end)
     self.Checkbox.MouseButton1Click:Connect(function()
         if not self.Disabled then
