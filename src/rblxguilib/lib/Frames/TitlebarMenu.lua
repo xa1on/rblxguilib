@@ -85,19 +85,19 @@ function TitlebarMenu.new(Arguments, Parent)
     self.TitlebarMenu = Instance.new("Frame", self.Parent)
     self.TitlebarMenu.Name = "TitlebarMenu"
     self.TitlebarMenu.Size = UDim2.new(1,0,0,24)
-    ColorManager.ColorSync(self.TitlebarMenu, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
+    ColorManager.ColorSync(self.TitlebarMenu, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar,nil,nil,nil,true)
     self.TitlebarMenu.BorderSizePixel = 0
     self.ButtonsFrame = Instance.new("Frame", self.TitlebarMenu)
     self.ButtonsFrame.Size = UDim2.new(0,0,0,24)
     self.ButtonsFrame.ZIndex = 3
-    ColorManager.ColorSync(self.ButtonsFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar)
+    ColorManager.ColorSync(self.ButtonsFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar,nil,nil,nil,true)
     self.ButtonsFrame.BorderSizePixel = 0
     self.ButtonsFrame.Name = "ButtonsFrame"
     local ButtonsFrameBorder = Instance.new("Frame", self.ButtonsFrame)
     ButtonsFrameBorder.Position = UDim2.new(0,0,1,-1)
     ButtonsFrameBorder.Size = UDim2.new(1,0,0,1)
     ButtonsFrameBorder.BorderSizePixel = 0
-    ColorManager.ColorSync(ButtonsFrameBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
+    ColorManager.ColorSync(ButtonsFrameBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border,nil,nil,nil,true)
     ButtonsFrameBorder.Name = "Border"
     ButtonsFrameBorder.ZIndex = 4
     self.ButtonContainer = Instance.new("Frame", self.ButtonsFrame)
@@ -135,7 +135,7 @@ function TitlebarMenu.new(Arguments, Parent)
     TabContainerBorder.Position = UDim2.new(0,0,1,-1)
     TabContainerBorder.Size = UDim2.new(1,0,0,1)
     TabContainerBorder.BorderSizePixel = 0
-    ColorManager.ColorSync(TabContainerBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
+    ColorManager.ColorSync(TabContainerBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border,nil,nil,nil,true)
     self.ContentContainers = Instance.new("Frame", self.Parent)
     self.ContentContainers.Name = "Content"
     self.ContentContainers.BackgroundTransparency = 1

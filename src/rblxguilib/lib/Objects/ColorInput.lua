@@ -40,7 +40,7 @@ function ColorInput:Changed(func)
     self.Action = func
 end
 
--- Color/Value/DefaultColor, Disabled
+-- Color/Value/DefaultColor, NoPause, Disabled
 function ColorInput.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,ColorInput)
@@ -66,7 +66,7 @@ function ColorInput.new(Arguments, Parent)
     self.ColorButton.Text = ""
     self.ColorButton.MouseButton1Click:Connect(function()
         if self.Disabled then return end
-        local prompt = ColorPrompt.new({Value = self.Value})
+        local prompt = ColorPrompt.new({Value = self.Value, NoPause = self.Arguments.NoPause})
         prompt:Done(function(p)
             self:SetValue(p)
         end)

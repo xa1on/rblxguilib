@@ -39,7 +39,7 @@ function Prompt:Reset(Title, Width, Height)
     self.Widget = NewWidget
 end
 
--- Title, Width, Height
+-- Title, Width, Height, NoPause
 function Prompt.new(Arguments)
     local self = GUIElement.new(Arguments)
     setmetatable(self,Prompt)

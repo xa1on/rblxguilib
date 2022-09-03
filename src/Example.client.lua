@@ -2,8 +2,7 @@
     [RBLXGUILib]
     something#7597
     todo:
-        Accent color modifier
-        COMPLETE!!!!
+        
 ]]--
 
 -- loads the library
@@ -389,7 +388,8 @@ toggle_checkbox2:Clicked(function(p)
 end)
 
 local colorinput = gui.ColorInput.new({
-    Color = gui.ColorManager.DefaultAccentColor
+    Color = gui.ColorManager.DefaultAccentColor,
+    NoPause = true
 })
 colorinput:SetValue(gui.ColorManager.AccentColor)
 gui.Labeled.new({
@@ -399,6 +399,20 @@ gui.Labeled.new({
 })
 colorinput:Changed(function(p)
     gui.ColorManager.UpdateAccentColor(p)
+end)
+
+local colorinputtheme = gui.ColorInput.new({
+    Color = gui.ColorManager.DefaultThemeColor,
+    NoPause = true
+})
+colorinputtheme:SetValue(gui.ColorManager.ThemeColor)
+gui.Labeled.new({
+    Text = "Plugin theme color (not good)",
+    LabelSize = 0.5,
+    Object = colorinputtheme
+})
+colorinputtheme:Changed(function(p)
+    gui.ColorManager.UpdateThemeColor(p)
 end)
 
 -- dumps the gui into workspace for debugging
