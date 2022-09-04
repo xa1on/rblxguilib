@@ -34,9 +34,9 @@ local mainpage = gui.Page.new({
     Open = true
 })
 
--- view widgets button(edit layouts and widgets)
+-- view button(edit layouts and widgets)
 -- 
-gui.ViewWidgetsButton.new()
+gui.ViewButton.new()
 
 local randommenu = plugin:CreatePluginMenu(math.random(), "Random Menu")
 randommenu.Name = "Random Menu"
@@ -388,32 +388,15 @@ toggle_checkbox2:Clicked(function(p)
 end)
 
 local colorinput = gui.ColorInput.new({
-    Color = gui.ColorManager.DefaultAccentColor,
+    Color = gui.ThemeManager.DefaultAccentColor,
     NoPause = true
 })
-colorinput:SetValue(gui.ColorManager.AccentColor)
+colorinput:SetValue(gui.ThemeManager.AccentColor)
 gui.Labeled.new({
-    Text = "Plugin accent color",
+    Text = "Color Input",
     LabelSize = 0.5,
     Object = colorinput
 })
-colorinput:Changed(function(p)
-    gui.ColorManager.UpdateAccentColor(p)
-end)
-
-local colorinputtheme = gui.ColorInput.new({
-    Color = gui.ColorManager.DefaultThemeColor,
-    NoPause = true
-})
-colorinputtheme:SetValue(gui.ColorManager.ThemeColor)
-gui.Labeled.new({
-    Text = "Plugin theme color (not good)",
-    LabelSize = 0.5,
-    Object = colorinputtheme
-})
-colorinputtheme:Changed(function(p)
-    gui.ColorManager.UpdateThemeColor(p)
-end)
 
 -- dumps the gui into workspace for debugging
 local dumpbutton = gui.Button.new({Text = "Dump GUI into workspace"})

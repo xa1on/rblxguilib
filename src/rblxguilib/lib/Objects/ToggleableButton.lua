@@ -4,7 +4,7 @@ ToggleableButton.__index = ToggleableButton
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local Button = require(GV.ObjectsDir.Button)
-local ColorManager = require(GV.ManagersDir.ColorManager)
+local ThemeManager = require(GV.ManagersDir.ThemeManager)
 setmetatable(ToggleableButton,Button)
 
 function ToggleableButton:Toggle()
@@ -25,33 +25,33 @@ function ToggleableButton.new(Arguments, Parent)
     self.Button.MouseMoved:Connect(function()
         if self.Disabled or Pressed then return end
         if not self.Value then
-            ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Hover)
-            ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Hover)
+            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Hover)
+            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Hover)
         else
-            ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
-            ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
         end
     end)
     self.Button.MouseLeave:Connect(function()
         if self.Disabled then return end
         Pressed = false
         if not self.Value then
-            ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
-            ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
+            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
+            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
         else
-            ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
-            ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
+            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
+            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
         end
     end)
     self.Button.MouseButton1Down:Connect(function()
         if self.Disabled then return end
         Pressed = true
         if not self.Value then
-            ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
-            ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
+            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.InputFieldBackground)
         else
-            ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
-            ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
+            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
+            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
         end
     end)
     
@@ -59,8 +59,8 @@ function ToggleableButton.new(Arguments, Parent)
         if self.Disabled then return end
         Pressed = false
         if not self.Value then
-            ColorManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Hover)
-            ColorManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Hover)
+            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Hover)
+            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Hover)
         end
     end)
 

@@ -4,7 +4,7 @@ TitlebarButton.__index = TitlebarButton
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local GUIObject = require(GV.ObjectsDir.GUIObject)
-local ColorManager = require(GV.ManagersDir.ColorManager)
+local ThemeManager = require(GV.ManagersDir.ThemeManager)
 setmetatable(TitlebarButton,GUIObject)
 
 GV.TitleBarButtons = {}
@@ -41,12 +41,12 @@ function TitlebarButton:CreateCopy(TitlebarMenu)
     Button = Instance.new("TextButton", TitlebarMenu.ButtonContainer)
     Button.Name = self.Name
     Button.Position = UDim2.new(0,TitlebarMenu.ButtonContainer.Size.X.Offset,1,0)
-    ColorManager.ColorSync(Button, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar,nil,nil,nil,true)
+    ThemeManager.ColorSync(Button, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar,nil,nil,nil,true)
     Button.ZIndex = 4
     Button.BorderSizePixel = 0
     Button.Font = Enum.Font.SourceSans
     Button.TextSize = 14
-    ColorManager.ColorSync(Button, "TextColor3", Enum.StudioStyleGuideColor.MainText,nil,nil,nil,true)
+    ThemeManager.ColorSync(Button, "TextColor3", Enum.StudioStyleGuideColor.MainText,nil,nil,nil,true)
     Button.Text = self.Name
     if not self.Size then
         local function sync()

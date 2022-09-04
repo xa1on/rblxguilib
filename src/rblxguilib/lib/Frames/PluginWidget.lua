@@ -8,10 +8,53 @@ local util = require(GV.LibraryDir.GUIUtil)
 local InputManager = require(GV.ManagersDir.InputManager)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
 local TitlebarMenu = require(GV.FramesDir.TitlebarMenu)
+local InputField = require(GV.ObjectsDir.InputField)
+local TextPrompt = require(GV.PromptsDir.TextPrompt)
+local InputPrompt = require(GV.PromptsDir.InputPrompt)
 local BackgroundFrame = require(GV.FramesDir.BackgroundFrame)
 setmetatable(Widget,GUIFrame)
 GV.PluginWidgets = {}
 local Unnamed = 0
+
+function Widget:Delete()
+    local WidgetTitle = self.WidgetObject.Title
+    local DeletePrompt = TextPrompt.new({Title = "Delete " .. WidgetTitle, Text = 'Are you sure you want to delete "' .. WidgetTitle .. '"?', Buttons = {"Yes", "No"}})
+    DeletePrompt:Clicked(function(p)
+        if p == 2 then return end
+        if self.TitlebarMenu and #self.TitlebarMenu.Pages > 0 then
+            local AvailibleWidgets = {}
+            for _,v in pairs(GV.PluginWidgets)do
+                if v.TitlebarMenu and v.WidgetObject.Title ~= WidgetTitle then AvailibleWidgets[#AvailibleWidgets+1] = {Name = v.WidgetObject.Title, Value = v} end
+            end
+            if #AvailibleWidgets < 1 then return end
+            local TransferPrompt = InputPrompt.new({Title = "Transfer Pages", Text = "Where would you like to move the pages?", Buttons = {"OK", "Cancel"}, InputField = InputField.new({Value = AvailibleWidgets[1], Items = AvailibleWidgets, DisableEditing = true, NoFiltering = true, Unpausable = true})})
+            TransferPrompt:Clicked(function(p2)
+                if p2 == 2 then return end
+                local NewWidget = TransferPrompt.InputField.Value
+                if NewWidget == "" then return end
+                for _, v in pairs(self.TitlebarMenu.Pages) do
+                    NewWidget.TitlebarMenu:RecievePage(v)
+                end
+                self.WidgetObject:Destroy()
+                table.remove(GV.PluginWidgets, self.Index)
+                self = nil
+            end)
+            util.DumpGUI(TransferPrompt.Widget)
+        else
+            self.WidgetObject:Destroy()
+            table.remove(GV.PluginWidgets, self.Index)
+            self = nil
+        end
+    end)
+end
+
+function Widget:Rename()
+    local NewTitlePrompt = InputPrompt.new({Title = "Rename " .. self.WidgetObject.Title, Text = "Type in a new name:", Buttons = {"OK", "Cancel"}, InputField = InputField.new({Placeholder = "New name", Text = self.WidgetObject.Title, NoDropdown = true, Unpausable = true})})
+    NewTitlePrompt:Clicked(function(p)
+        if p == 2 then return end
+        self.WidgetObject.Title = NewTitlePrompt.Input.Text
+    end)
+end
 
 -- ID, Title, Enabled, NoTitlebarMenu, DockState, OverrideRestore
 function Widget.new(Arguments)
@@ -64,7 +107,8 @@ function Widget.new(Arguments)
     end
     self.Parent = self.WidgetObject
     self.Content = self.WidgetObject
-    GV.PluginWidgets[#GV.PluginWidgets+1] = self
+    self.Index = #GV.PluginWidgets+1
+    GV.PluginWidgets[self.Index] = self
     return self
 end
 

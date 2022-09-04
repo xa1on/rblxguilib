@@ -14,7 +14,7 @@ function InputPrompt.new(Arguments)
     setmetatable(self,InputPrompt)
     local InputField = self.Arguments.InputField or self.Arguments.Input
     if type(InputField) == "string" then
-        self.InputField = InputFieldMod.new({Placeholder = InputField, Size = UDim.new(1,-30), NoDropdown = true})
+        self.InputField = InputFieldMod.new({Placeholder = InputField, Size = UDim.new(1,-30), NoDropdown = true, Unpausable = true})
     else
         self.InputField = InputField
     end

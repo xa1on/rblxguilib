@@ -28,6 +28,7 @@ function Prompt:Reset(Title, Width, Height)
     NewWidget.Changed:Connect(function(p)
         if p == "AbsoluteSize" then
             if NewWidget.AbsoluteSize.X ~= Width or NewWidget.AbsoluteSize.Y ~= Height then
+                print("what")
                 self:Reset(Title, Width, Height)
             end
         elseif p == "Enabled" then

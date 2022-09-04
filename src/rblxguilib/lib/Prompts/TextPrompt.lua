@@ -12,7 +12,7 @@ function TextPrompt:Clicked(func)
     self.Action = func
 end
 
--- Title, Textbox, Buttons
+-- Title, Textbox/Text, Buttons
 function TextPrompt.new(Arguments)
     local self = Prompt.new(Arguments)
     setmetatable(self,TextPrompt)
@@ -30,8 +30,8 @@ function TextPrompt.new(Arguments)
     self.TextFrame.BackgroundTransparency = 1
     self.TextFrame.BorderSizePixel = 0
     self.TextboxTable = self.Arguments.Textbox or self.Arguments.Text
-    if type(self.TextboxTable) == "string" then
-        self.TextboxTable = TextboxMod.new({Text = self.TextboxTable}, self.TextFrame)
+    if type(self.TextboxTable) == "string" or not self.TextboxTable then
+        self.TextboxTable = TextboxMod.new({Text = self.TextboxTable or ""}, self.TextFrame)
     else
         self.TextboxTable:Move(self.TextFrame, true)
     end
@@ -55,7 +55,7 @@ function TextPrompt.new(Arguments)
     self.ButtonsFrameLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self:OnWindowClose(function()
         self.Widget:Destroy()
-        if self.Action() then self.Action(0) end
+        if self.Action then self.Action(0) end
     end)
     if (#Buttons*82)+14 > 260 then
         self.ButtonsFrame.Size = UDim2.new(0,(#Buttons*82)+14,0,40)

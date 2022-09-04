@@ -4,7 +4,7 @@ Textbox.__index = Textbox
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local GUIObject = require(GV.ObjectsDir.GUIObject)
-local ColorManager = require(GV.ManagersDir.ColorManager)
+local ThemeManager = require(GV.ManagersDir.ThemeManager)
 setmetatable(Textbox,GUIObject)
 
 function Textbox:SetDisabled(State)
@@ -34,7 +34,7 @@ function Textbox.new(Arguments, Parent)
     self.Textbox.TextSize = TextSize
     self.Textbox.Font = Font
     self.Textbox.Text = self.Arguments.Text
-    ColorManager.ColorSync(self.Textbox, "TextColor3", Enum.StudioStyleGuideColor.MainText)
+    ThemeManager.ColorSync(self.Textbox, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     self.Object = self.Textbox
     self.MainMovable = self.Textbox
     return self

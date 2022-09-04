@@ -5,7 +5,7 @@ local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local InputManager = require(GV.ManagersDir.InputManager)
 local GUIFrame = require(GV.FramesDir.GUIFrame)
-local ColorManager = require(GV.ManagersDir.ColorManager)
+local ThemeManager = require(GV.ManagersDir.ThemeManager)
 setmetatable(Page,GUIFrame)
 local PageNum = 0
 GV.PluginPages = {}
@@ -20,9 +20,9 @@ function Page:SetState(State)
     self.Tab.BackgroundTransparency = OppositeTransparency
     self.TabFrame.ZIndex, self.Tab.ZIndex, self.TopBorder.ZIndex, self.LeftBorder.ZIndex, self.RightBorder.ZIndex = OppositeTransparency + 2, OppositeTransparency + 2, OppositeTransparency + 2, OppositeTransparency + 2, OppositeTransparency + 2
     if State then
-        ColorManager.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.MainText)
+        ThemeManager.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.MainText)
     else
-        ColorManager.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText,nil,nil,nil,true)
+        ThemeManager.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText,nil,nil,nil,true)
     end
 end
 
@@ -36,10 +36,10 @@ function Page.new(Arguments, Parent)
     self.TabFrame = Instance.new("Frame", self.TitlebarMenu.TabContainer)
     self.TabFrame.Name = PageNum
     self.TabFrame.BorderSizePixel = 0
-    ColorManager.ColorSync(self.TabFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
+    ThemeManager.ColorSync(self.TabFrame, "BackgroundColor3", Enum.StudioStyleGuideColor.MainBackground)
     self.Tab = Instance.new("TextButton", self.TabFrame)
     self.Tab.Size = UDim2.new(1, 0, 0, 24)
-    ColorManager.ColorSync(self.Tab, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar,nil,nil,nil,true)
+    ThemeManager.ColorSync(self.Tab, "BackgroundColor3", Enum.StudioStyleGuideColor.Titlebar,nil,nil,nil,true)
     self.Tab.BorderSizePixel = 0
     self.Tab.Font = Enum.Font.SourceSans
     self.Tab.Text = self.Arguments.Name
@@ -97,23 +97,23 @@ function Page.new(Arguments, Parent)
         GV.PluginObject:StartDrag({})
         self.TitlebarMenu:RemovePage(self)
     end)
-    ColorManager.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText,nil,nil,nil,true)
+    ThemeManager.ColorSync(self.Tab, "TextColor3", Enum.StudioStyleGuideColor.TitlebarText,nil,nil,nil,true)
     self.TopBorder = Instance.new("Frame", self.TabFrame)
     self.TopBorder.Size = UDim2.new(1,0,0,1)
     self.TopBorder.BorderSizePixel = 0
     self.TopBorder.Name = "TopBorder"
-    ColorManager.ColorSync(self.TopBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.RibbonTabTopBar, nil, true, nil, true)
+    ThemeManager.ColorSync(self.TopBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.RibbonTabTopBar, nil, true, nil, true)
     self.LeftBorder = Instance.new("Frame", self.TabFrame)
     self.LeftBorder.Size = UDim2.new(0,1,0,24)
     self.LeftBorder.BorderSizePixel = 0
     self.LeftBorder.Name = "LeftBorder"
-    ColorManager.ColorSync(self.LeftBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
+    ThemeManager.ColorSync(self.LeftBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     self.RightBorder = Instance.new("Frame", self.TabFrame)
     self.RightBorder.Size = UDim2.new(0,1,0,24)
     self.RightBorder.Position = UDim2.new(1,0,0,0)
     self.RightBorder.BorderSizePixel = 0
     self.RightBorder.Name = "RightBorder"
-    ColorManager.ColorSync(self.RightBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
+    ThemeManager.ColorSync(self.RightBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     self.Content = Instance.new("Frame", self.TitlebarMenu.ContentContainers)
     self.Content.BackgroundTransparency = 1
     self.Content.Size = UDim2.new(1,0,1,0)

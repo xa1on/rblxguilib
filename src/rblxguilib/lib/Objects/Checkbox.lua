@@ -4,7 +4,7 @@ Checkbox.__index = Checkbox
 local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local GUIObject = require(GV.ObjectsDir.GUIObject)
-local ColorManager = require(GV.ManagersDir.ColorManager)
+local ThemeManager = require(GV.ManagersDir.ThemeManager)
 setmetatable(Checkbox,GUIObject)
 
 Checkbox.Images = {
@@ -35,9 +35,9 @@ function Checkbox:SetValue(Toggle)
     self.Value = Toggle
     self.CheckImage.Visible = Toggle
     if Toggle then
-        ColorManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground, Enum.StudioStyleGuideModifier.Selected, true, "Light")
+        ThemeManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground, Enum.StudioStyleGuideModifier.Selected, true, "Light")
     else
-        ColorManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground)
+        ThemeManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground)
     end
 end
 
@@ -60,8 +60,8 @@ function Checkbox.new(Arguments, Parent)
     self.Checkbox.Size = UDim2.new(0,16,0,16)
     self.Checkbox.Name = "Checkbox"
     self.Checkbox.Text = ""
-    ColorManager.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder)
-    ColorManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground)
+    ThemeManager.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder)
+    ThemeManager.ColorSync(self.Checkbox, "BackgroundColor3", Enum.StudioStyleGuideColor.CheckedFieldBackground)
     self.CheckImage = Instance.new("ImageLabel", self.Checkbox)
     self.CheckImage.AnchorPoint = Vector2.new(0.5,0.5)
     self.CheckImage.Position = UDim2.new(0.5,0,0.5,0)
@@ -69,17 +69,17 @@ function Checkbox.new(Arguments, Parent)
     self.CheckImage.Image = self.Images.check
     self.CheckImage.BackgroundTransparency = 1
     self.CheckImage.Name = "CheckIndicator"
-    ColorManager.ColorSync(self.CheckImage, "ImageColor3", Enum.StudioStyleGuideColor.CheckedFieldIndicator, nil, true, "Dark")
+    ThemeManager.ColorSync(self.CheckImage, "ImageColor3", Enum.StudioStyleGuideColor.CheckedFieldIndicator, nil, true, "Dark")
     self.Checkbox.MouseMoved:Connect(function()
         GV.PluginObject:GetMouse().Icon = self.CursorIcon
         if not self.Disabled then
-            ColorManager.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder, Enum.StudioStyleGuideModifier.Hover)
+            ThemeManager.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder, Enum.StudioStyleGuideModifier.Hover)
         end
     end)
     self.Checkbox.MouseLeave:Connect(function()
         task.wait(0)
         GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
-        ColorManager.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder)
+        ThemeManager.ColorSync(self.Checkbox, "BorderColor3", Enum.StudioStyleGuideColor.CheckedFieldBorder)
     end)
     self.Checkbox.MouseButton1Click:Connect(function()
         if not self.Disabled then

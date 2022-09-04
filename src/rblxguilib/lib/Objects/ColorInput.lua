@@ -5,7 +5,7 @@ local GV = require(script.Parent.Parent.PluginGlobalVariables)
 local util = require(GV.LibraryDir.GUIUtil)
 local GUIObject = require(GV.ObjectsDir.GUIObject)
 local InputField = require(GV.ObjectsDir.InputField)
-local ColorManager = require(GV.ManagersDir.ColorManager)
+local ThemeManager = require(GV.ManagersDir.ThemeManager)
 local ColorPrompt = require(GV.PromptsDir.ColorPrompt)
 setmetatable(ColorInput,GUIObject)
 
@@ -32,7 +32,7 @@ end
 function ColorInput:SetValue(Value, IgnoreText)
     self.Value = Value
     self.ColorButton.BackgroundColor3 = self.Value
-    if not IgnoreText then self.ColorInput.Input.Text = ColorManager.Color3ToText(self.Value) end
+    if not IgnoreText then self.ColorInput.Input.Text = util.Color3ToText(self.Value) end
     if self.Action then self.Action(self.Value) end
 end
 
@@ -62,7 +62,7 @@ function ColorInput.new(Arguments, Parent)
     self.ColorButton = Instance.new("TextButton", self.ColorInputFrame)
     self.ColorButton.Name = "ColorButton"
     self.ColorButton.Size = UDim2.new(0,18,0,18)
-    ColorManager.ColorSync(self.ColorButton, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
+    ThemeManager.ColorSync(self.ColorButton, "BorderColor3", Enum.StudioStyleGuideColor.InputFieldBorder)
     self.ColorButton.Text = ""
     self.ColorButton.MouseButton1Click:Connect(function()
         if self.Disabled then return end
@@ -87,10 +87,10 @@ function ColorInput.new(Arguments, Parent)
     self.ColorInput.InputFieldFrame.Size = UDim2.new(1,0,1,0)
     self.ColorInput.Input.TextXAlignment = Enum.TextXAlignment.Center
     self.ColorInput:Changed(function(p)
-        self:SetValue(ColorManager.TextToColor3(p), true)
+        self:SetValue(util.TextToColor3(p), true)
     end)
     self.ColorInput:LostFocus(function(p)
-        self:SetValue(ColorManager.TextToColor3(p))
+        self:SetValue(util.TextToColor3(p))
         self.ColorInput.Input.TextXAlignment = Enum.TextXAlignment.Center
     end)
     self.ColorInput:GainedFocus(function()

@@ -68,6 +68,7 @@ end
 
 local UnpauseList = {}
 function m.PauseAll()
+    if #UnpauseList > 0 then return end
     for _,v in pairs(GV.ObjectList) do
         if v and v.SetDisabled and not v.Disabled and not v.Arguments.Unpausable then
             v:SetDisabled(true)
@@ -81,6 +82,37 @@ function m.UnpauseAll()
         v:SetDisabled(false)
     end
     UnpauseList = {}
+end
+
+function m.AddColor(c1, c2)
+    return Color3.new(c1.R + c2.R, c1.G + c2.G, c1.B + c2.B)
+end
+function m.SubColor(c1, c2)
+    return Color3.new(c1.R - c2.R, c1.G - c2.G, c1.B - c2.B)
+end
+function m.MulitplyColor(c1,c2)
+    return Color3.new(c1.R * c2.R, c1.G * c2.G, c1.B * c2.B)
+end
+
+function m.Color3ToText(color)
+    return "[" .. m.RoundNumber(color.R*255, 1) .. ", " .. m.RoundNumber(color.G*255, 1) .. ", " .. m.RoundNumber(color.B*255, 1) .. "]"
+end
+
+function m.TextToColor3(text)
+    local numbers = {}
+    for i in text:gmatch("[%.%d]+") do
+        numbers[#numbers+1] = tonumber(i)
+        if #numbers == 3 then break end
+    end
+    return Color3.fromRGB(numbers[1] or 0, numbers[2] or 0, numbers[3] or 0)
+end
+
+function m.Color3ToTable(color)
+    return {R = color.R, G = color.G, B = color.B}
+end
+
+function m.TableToColor3(table)
+    return Color3.new(table.R, table.G, table.B)
 end
 
 return m
