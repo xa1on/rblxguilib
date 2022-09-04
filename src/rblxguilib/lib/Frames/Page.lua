@@ -107,13 +107,13 @@ function Page.new(Arguments, Parent)
     self.LeftBorder.Size = UDim2.new(0,1,0,24)
     self.LeftBorder.BorderSizePixel = 0
     self.LeftBorder.Name = "LeftBorder"
-    ColorManager.ColorSync(self.LeftBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border,nil,nil,nil,true)
+    ColorManager.ColorSync(self.LeftBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     self.RightBorder = Instance.new("Frame", self.TabFrame)
     self.RightBorder.Size = UDim2.new(0,1,0,24)
     self.RightBorder.Position = UDim2.new(1,0,0,0)
     self.RightBorder.BorderSizePixel = 0
     self.RightBorder.Name = "RightBorder"
-    ColorManager.ColorSync(self.RightBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border,nil,nil,nil,true)
+    ColorManager.ColorSync(self.RightBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     self.Content = Instance.new("Frame", self.TitlebarMenu.ContentContainers)
     self.Content.BackgroundTransparency = 1
     self.Content.Size = UDim2.new(1,0,1,0)

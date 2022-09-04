@@ -99,7 +99,7 @@ function TitlebarMenu.new(Arguments, Parent)
     ButtonsFrameBorder.BorderSizePixel = 0
     ColorManager.ColorSync(ButtonsFrameBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border,nil,nil,nil,true)
     ButtonsFrameBorder.Name = "Border"
-    ButtonsFrameBorder.ZIndex = 4
+    ButtonsFrameBorder.ZIndex = 5
     self.ButtonContainer = Instance.new("Frame", self.ButtonsFrame)
     self.ButtonContainer.BackgroundTransparency = 1
     self.ButtonContainer.BorderSizePixel = 0
@@ -135,7 +135,8 @@ function TitlebarMenu.new(Arguments, Parent)
     TabContainerBorder.Position = UDim2.new(0,0,1,-1)
     TabContainerBorder.Size = UDim2.new(1,0,0,1)
     TabContainerBorder.BorderSizePixel = 0
-    ColorManager.ColorSync(TabContainerBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border,nil,nil,nil,true)
+    TabContainerBorder.ZIndex = 2
+    ColorManager.ColorSync(TabContainerBorder, "BackgroundColor3", Enum.StudioStyleGuideColor.Border)
     self.ContentContainers = Instance.new("Frame", self.Parent)
     self.ContentContainers.Name = "Content"
     self.ContentContainers.BackgroundTransparency = 1
