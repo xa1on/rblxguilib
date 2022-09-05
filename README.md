@@ -71,5 +71,10 @@ This was a solo project and any help improving or keeping the library up to date
 
 
 
+## Final Notes
+A lot of my code may be a bit messy and unorganized but I hope you can bear with me since this is my first big project with lua and I feel like a grew a lot in the process of making this. In the future, I might plan on using Fusion to help make this library a bit better to work with.
+
+If anyone actually plans on using this, DM me on [Twitter](https://twitter.com/xalondzn) or Discord (something#7597) if you have any questions or you just want to show off what you made.
+
 ## License
 Available under the Apache 2.0 license. See [LICENSE](LICENSE) for details.
