@@ -6,7 +6,7 @@
 ]]--
 
 -- loads the library
-local gui = require(script.Parent.RBLXGUILib.initialize)(plugin)
+local gui = require(script.Parent.rblxgui.initialize)(plugin)
 
 -- plugin toolbar
 toolbar = plugin:CreateToolbar("rblxgui")
@@ -27,7 +27,7 @@ b_resetlayout.Click:Connect(function() gui.LayoutManager.ResetLayout() end)
 
 
 -- page:
--- Name, TitlebarMenu, Open, Size, ID
+-- Name, TitlebarMenu, Open, TabSize, ID
 local mainpage = gui.Page.new({
     Name = "MAIN",
     TitlebarMenu = widget.TitlebarMenu,
@@ -49,7 +49,7 @@ subMenu:AddNewAction("ActionE", "E", "rbxasset://textures/icon_ROBUX.png")
 randommenu:AddMenu(subMenu)
 
 -- title bar button(button on the titlebar of widgets with titlebars)
--- Name, Size, Disabled, PluginMenu
+-- Name, TabSize, Disabled, PluginMenu
 local titlebarbutton = gui.TitlebarButton.new({
     Name = "BUTTON",
     PluginMenu = randommenu
@@ -101,14 +101,14 @@ gui.Textbox.new({
 }, acoolframe.Content)
 
 -- buttons:
--- Text/Textbox, Size, Disabled
+-- Text/Textbox, ButtonSize, Disabled
 local button1 = gui.Button.new({
     Text = "hi"
 })
 button1:Clicked(function() print("hi") end)
 local button2 = gui.Button.new({
     Text = "Hello",
-    Size = 1
+    ButtonSize = 1
 }, button1.Parent)
 button2:Clicked(function() print("Hello") button1:ToggleDisable() end)
 
@@ -201,7 +201,7 @@ end)
 
 
 -- inputfields
--- Placeholder, CurrentItem/Value, Items, Size, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
+-- Placeholder, CurrentItem/Value, Items, InputSize, NoDropdown, NoFiltering, DisableEditing, ClearText, Disabled
 gui.InputField.new({
     CurrentItem = "default text",
     Items = {
@@ -238,14 +238,14 @@ inpfield.Object:Changed(function(text)
 end)
 
 -- toggleable buttons
--- Textbox, Size, Value, Disabled
+-- Textbox, ButtonSize, Value, Disabled
 local disablebutton = gui.ToggleableButton.new({
     Text = "toggle previous"
 })
 disablebutton:Clicked(function(p) inpfield:SetDisabled(p) end)
 
 -- instanceinputfield
--- Value/CurrentItem, Items, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
+-- Value/CurrentItem, Items, InputSize, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
 local instanceinpfield = gui.InstanceInputField.new({
     Items = {
         {
@@ -276,7 +276,7 @@ end)
 
 
 -- keybindinputfield
--- Action, Bind/CurrentBind, Items/Binds, Size, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
+-- Action, Bind/CurrentBind, Items/Binds, InputSize, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
 gui.Labeled.new({
     Text = "keybind",
     Object = gui.KeybindInputField.new({
@@ -340,14 +340,14 @@ toggle_checkbox:Clicked(function(p)
 end)
 
 -- slider
--- Min, Max, Value, Increment, Size, Disabled
+-- Min, Max, Value, Increment, SliderSize, Disabled
 local labeledslider = gui.Labeled.new({
     Text = "Labled Slider",
     Objects = {
         {
             Object = gui.InputField.new({
                 Value = 50,
-                Size = 1,
+                InputSize = 1,
                 NoDropdown = true,
                 DisableEditing = true
             }),
@@ -366,7 +366,7 @@ local labeledslider = gui.Labeled.new({
 })
 
 -- progressbar
--- Size, Value, Disabled
+-- BarSize, Value, Disabled
 local progressbar = gui.ProgressBar.new({
     Value = 0.5
 })
