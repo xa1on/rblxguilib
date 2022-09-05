@@ -14,7 +14,9 @@ This was a solo project and any help improving or keeping the library up to date
 
 <h2 align="center">Getting Started</h2>
 
-In order to install this library, You can clone the repo and build the project with [rojo](https://rojo.space).
+In order to install this library, drag the [latest release](https://github.com/xa1on/rblxguilib/releases) into your plugin folder.
+
+You can also clone the repo and build the project with [rojo](https://rojo.space).
 
 ```bash
 rojo build --output "C:\Users\[Username]\AppData\Local\Roblox\Plugins\[Plugin Name].rbxmx"
