@@ -12,6 +12,38 @@ RBLXGUI hosts a wide variety of GUI Elements made for dockable widgets in order 
 ### Please contribute!
 This was a solo project and any help improving or keeping the library up to date would be greatly appreciated!
 
+<h2 align="center">Getting Started</h2>
+
+In order to install this library, You can clone the repo and build the project with [rojo](https://rojo.space).
+
+```bash
+rojo build --output "C:\Users\[Username]\AppData\Local\Roblox\Plugins\[Plugin Name].rbxmx"
+```
+
+Another way to install the library is by using [HttpService](https://www.robloxdev.com/api-reference/class/HttpService) to pull the contents directly from this github project into module scripts. Make sure you have http service from `Game Settings` enabled in order for this to work.
+
+```Lua
+local http = game:GetService("HttpService")
+local req = http:GetAsync("https://api.github.com/repos/xa1on/rblxguilib/contents/src")
+local json = http:JSONDecode(req)
+
+local targetFolder = Instance.new("Folder")
+targetFolder.Name = "StudioWidgets"
+targetFolder.Parent = game.Workspace
+
+for i = 1, #json do
+	local file = json[i]
+	if (file.type == "file") then
+		local name = file.name:sub(1, #file.name-4)
+		local module = targetFolder:FindFirstChild(name) or Instance.new("ModuleScript")
+		module.Name = name
+		module.Source = http:GetAsync(file.download_url)
+		module.Parent = targetFolder
+	end
+end
+```
+(Credit to the [StudioWidgets](https://github.com/Roblox/StudioWidgets) repo for the import code)
+
 <h2 align="center">Files</h2>
 
 ### Frames
@@ -68,13 +100,12 @@ This was a solo project and any help improving or keeping the library up to date
 | [PluginGlobalVariables.lua](src/rblxgui/lib/PluginGlobalVariables.lua) | ModuleScript that consolidates all variables used globally in the library |
 
 ## Documentation
+No documentation at the moment, but you should be able to see how everything works in the [Example Script](src/Example.client.lua).
 
-
+If anyone actually plans on using this, DM me on [Twitter](https://twitter.com/xalondzn) or Discord (something#7597) if you have any further questions or if you just want to show off what you made.
 
 ## Final Notes
 A lot of my code may be a bit messy and unorganized but I hope you can bear with me since this is my first big project with lua and I feel like a grew a lot in the process of making this. In the future, I might plan on using Fusion to help make this library a bit better to work with.
-
-If anyone actually plans on using this, DM me on [Twitter](https://twitter.com/xalondzn) or Discord (something#7597) if you have any questions or you just want to show off what you made.
 
 ## License
 Available under the Apache 2.0 license. See [LICENSE](LICENSE) for details.
