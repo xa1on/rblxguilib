@@ -90,6 +90,8 @@ function InputField.GetItemInfo(Item)
         elseif typeof(ItemInfo.Value) == "Instance" then
             ItemInfo.Name = ItemInfo.Value.Name
             ItemInfo.Value = {ItemInfo.Value}
+        elseif typeof(ItemInfo.Value) == "EnumItem" then
+            ItemInfo.Name = ItemInfo.Value.Name
         else
             ItemInfo.Name = tostring(ItemInfo.Value)
         end
