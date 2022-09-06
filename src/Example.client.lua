@@ -5,8 +5,8 @@
         
 ]]--
 
--- loads the library
-local gui = require(script.Parent.rblxgui.initialize)(plugin)
+-- loads the library(plugin object, plugin id)
+local gui = require(script.Parent.rblxgui.initialize)(plugin, "rblxgui")
 
 -- plugin toolbar
 toolbar = plugin:CreateToolbar("rblxgui")

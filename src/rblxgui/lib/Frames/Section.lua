@@ -76,7 +76,7 @@ function Section.new(Arguments, Parent)
 
     local Textbox = self.Arguments.Textbox or self.Arguments.Text
     if type(Textbox) == "string" then
-        self.TextboxTable = TextboxMod.new({Text = Textbox, Font = Enum.Font.SourceSansBold, Alignment = Enum.TextXAlignment.Left, Size = 15}, self.CollapseTextboxFrame)
+        self.TextboxTable = TextboxMod.new({Text = Textbox, Font = Enum.Font.SourceSansBold, Alignment = Enum.TextXAlignment.Left, TextSize = 15}, self.CollapseTextboxFrame)
     else
         self.TextboxTable = Textbox
         Textbox:Move(self.CollapseTextboxFrame, true)

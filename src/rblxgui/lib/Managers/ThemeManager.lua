@@ -48,14 +48,14 @@ EventManager.AddConnection(settings().Studio.ThemeChanged, function()
     m.ReloadTheme(m.CurrentTheme, m.CurrentAccent)
 end)
 
-local LatestThemeSave = GV.PluginObject:GetSetting("LatestPluginGUITheme") or {Theme = util.Color3ToTable(m.DefaultThemeColor), Accent = util.Color3ToTable(m.DefaultAccentColor)}
+local LatestThemeSave = GV.PluginObject:GetSetting(GV.PluginID.."PreviousPluginGUITheme") or {Theme = util.Color3ToTable(m.DefaultThemeColor), Accent = util.Color3ToTable(m.DefaultAccentColor)}
 m.AccentColor = util.TableToColor3(LatestThemeSave.Accent)
 m.ThemeColor = util.TableToColor3(LatestThemeSave.Theme)
 m.CurrentTheme = m.ThemeColor
 m.CurrentAccent = m.AccentColor
 
 GV.PluginObject.Unloading:Connect(function()
-    GV.PluginObject:SetSetting("LatestPluginGUITheme", {Theme = util.Color3ToTable(m.ThemeColor), Accent = util.Color3ToTable(m.AccentColor)})
+    GV.PluginObject:SetSetting(GV.PluginID.."PreviousPluginGUITheme", {Theme = util.Color3ToTable(m.ThemeColor), Accent = util.Color3ToTable(m.AccentColor)})
 end)
 
 return m

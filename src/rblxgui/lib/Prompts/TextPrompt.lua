@@ -63,7 +63,7 @@ function TextPrompt.new(Arguments)
     for i,v in pairs(Buttons) do
         local NewButton = v
         if type(v) == "string" then
-            NewButton = Button.new({Text = v, Size = 0.95}, self.ButtonsFrame)
+            NewButton = Button.new({Text = v, ButtonSize = 0.95}, self.ButtonsFrame)
         else
             NewButton:Move(self.ButtonsFrame, true)
         end

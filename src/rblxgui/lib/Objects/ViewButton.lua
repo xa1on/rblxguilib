@@ -83,7 +83,7 @@ end
 
 function ViewButton:LoadLayoutOption(Layout, i)
     if not Layout.Name then Layout.Name = "Unnamed" end
-    local SavedLayouts = GV.PluginObject:GetSetting("SavedGUILayouts") or {}
+    local SavedLayouts = GV.PluginObject:GetSetting(GV.PluginID.."SavedGUILayouts") or {}
     local LayoutMenuObject = GV.PluginObject:CreatePluginMenu(math.random(), tostring(i) .. ': "' .. Layout.Name .. '"')
     LayoutMenuObject.Name = '"' .. Layout.Name .. '" Layout Menu'
     local UseLayoutAction = GV.PluginObject:CreatePluginAction(math.random(), "Use", "", nil, false)
@@ -101,7 +101,7 @@ function ViewButton:LoadLayoutOption(Layout, i)
         local CurrentLayout = LayoutManager.GetLayout()
         CurrentLayout.Name = Layout.Name
         SavedLayouts[i] = CurrentLayout
-        GV.PluginObject:SetSetting("SavedGUILayouts", SavedLayouts)
+        GV.PluginObject:SetSetting(GV.PluginID.."SavedGUILayouts", SavedLayouts)
     end)
     RenameAction.Triggered:Connect(function()
         local RenamePrompt = InputPrompt.new({Title = "Rename Layout ", Text = "Type in a new name:", Buttons = {"OK", "Cancel"}, InputField = InputField.new({Placeholder = "New name", Value = Layout.Name, NoDropdown = true, Unpausable = true})})
@@ -109,7 +109,7 @@ function ViewButton:LoadLayoutOption(Layout, i)
             if p == 2 then return end
             Layout.Name = RenamePrompt.Input.Text
             SavedLayouts[i] = Layout
-            GV.PluginObject:SetSetting("SavedGUILayouts", SavedLayouts)
+            GV.PluginObject:SetSetting(GV.PluginID.."SavedGUILayouts", SavedLayouts)
         end)
     end)
     DeleteAction.Triggered:Connect(function()
@@ -117,7 +117,7 @@ function ViewButton:LoadLayoutOption(Layout, i)
         DeletePrompt:Clicked(function(p)
             if p == 2 then return end
             table.remove(SavedLayouts, i)
-            GV.PluginObject:SetSetting("SavedGUILayouts", SavedLayouts)
+            GV.PluginObject:SetSetting(GV.PluginID.."SavedGUILayouts", SavedLayouts)
         end)
     end)
     LayoutMenuObject:AddAction(UseLayoutAction)
@@ -193,14 +193,14 @@ function ViewButton:CreateMenu()
     self.LayoutsMenu.Name = "Layout Menu"
     local SaveCurrentLayout = GV.PluginObject:CreatePluginAction(math.random(), "Save Layout", "", nil, false)
     SaveCurrentLayout.Triggered:Connect(function()
-        local SavedLayouts = GV.PluginObject:GetSetting("SavedGUILayouts") or {}
+        local SavedLayouts = GV.PluginObject:GetSetting(GV.PluginID.."SavedGUILayouts") or {}
         local NamePrompt = InputPrompt.new({Title = "Name Layout ", Text = "Type in a name for this layout:", Buttons = {"OK", "Cancel"}, InputField = InputField.new({Placeholder = "New name", NoDropdown = true, Unpausable = true})})
         NamePrompt:Clicked(function(p)
             if p == 2 then return end
             local NewLayout = LayoutManager.GetLayout()
             NewLayout.Name = NamePrompt.Input.Text
             SavedLayouts[#SavedLayouts+1] = NewLayout
-            GV.PluginObject:SetSetting("SavedGUILayouts", SavedLayouts)
+            GV.PluginObject:SetSetting(GV.PluginID.."SavedGUILayouts", SavedLayouts)
         end)
     end)
     local ResetLayoutAction = GV.PluginObject:CreatePluginAction(math.random(), "Reset Layout", "", nil, false)
@@ -260,7 +260,7 @@ function ViewButton:RefreshMenu()
         RefreshedMenus[#RefreshedMenus+1] = LoadedOption
         self.WidgetsMenu:AddMenu(LoadedOption)
     end
-    local SavedLayouts = GV.PluginObject:GetSetting("SavedGUILayouts") or {}
+    local SavedLayouts = GV.PluginObject:GetSetting(GV.PluginID.."SavedGUILayouts") or {}
     for i,Layout in pairs(SavedLayouts) do
         local LoadedOption = self:LoadLayoutOption(Layout, i)
         RefreshedMenus[#RefreshedMenus+1] = LoadedOption

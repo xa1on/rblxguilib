@@ -232,7 +232,7 @@ function ColorPrompt.new(Arguments)
         self.HexInput.Input.TextXAlignment = Enum.TextXAlignment.Left
     end)
 
-    self.OKButton = Button.new({Text = "OK", Size = 1, Unpausable = true}, self.ColorPickerOptions)
+    self.OKButton = Button.new({Text = "OK", ButtonSize = 1, Unpausable = true}, self.ColorPickerOptions)
     self.OKButton.ButtonFrame.AnchorPoint = Vector2.new(0.5,0.5)
     self.OKButton.ButtonFrame.Size = UDim2.fromOffset(100,25)
     self.OKButton.ButtonFrame.Position = UDim2.fromOffset(50,210)
@@ -242,7 +242,7 @@ function ColorPrompt.new(Arguments)
         if self.DoneAction then self.DoneAction(self.Value) end
     end)
 
-    self.CancelButton = Button.new({Text = "Cancel", Size = 1, Unpausable = true}, self.ColorPickerOptions)
+    self.CancelButton = Button.new({Text = "Cancel", ButtonSize = 1, Unpausable = true}, self.ColorPickerOptions)
     self.CancelButton.ButtonFrame.AnchorPoint = Vector2.new(0.5,0.5)
     self.CancelButton.ButtonFrame.Size = UDim2.fromOffset(100,25)
     self.CancelButton.ButtonFrame.Position = UDim2.fromOffset(50,235)

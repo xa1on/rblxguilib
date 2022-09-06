@@ -59,12 +59,12 @@ end
 
 function m.SaveLayout(layout)
     layout = layout or m.GetLayout()
-    GV.PluginObject:SetSetting("PreviousGUIState", layout)
+    GV.PluginObject:SetSetting(GV.PluginID.."PreviousGUIState", layout)
 end
 
 function m.RecallSave()
     m.DefaultLayout = m.GetLayout()
-    m.RecallLayout(GV.PluginObject:GetSetting("PreviousGUIState"))
+    m.RecallLayout(GV.PluginObject:GetSetting(GV.PluginID.."PreviousGUIState"))
 end
 
 function m.ResetLayout()
