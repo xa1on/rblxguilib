@@ -20,7 +20,7 @@ function Prompt:Reset(Title, Width, Height)
     Title = Title or "Prompt"
     if not Width or Width < 1 then Width = 260 end
     if not Height or Height < 1 then Height = 75 end
-    local NewWidget = GV.PluginObject:CreateDockWidgetPluginGui(math.random(), DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, true, true, Width, Height,1,1))
+    local NewWidget = GV.PluginObject:CreateDockWidgetPluginGui(game:GetService("HttpService"):GenerateGUID(false), DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, true, true, Width, Height,1,1))
     if self.Widget then for _,v in pairs(self.Widget:GetChildren())do
         v.Parent = NewWidget
     end end
@@ -28,12 +28,14 @@ function Prompt:Reset(Title, Width, Height)
     NewWidget.Changed:Connect(function(p)
         if p == "AbsoluteSize" then
             if NewWidget.AbsoluteSize.X ~= Width or NewWidget.AbsoluteSize.Y ~= Height then
-                print("what")
-                self:Reset(Title, Width, Height)
+                self.ResetCounter = (self.ResetCounter or 0) + 1
+                if self.ResetCounter < 5 then
+                    self:Reset(Title, Width, Height)
+                end
             end
         elseif p == "Enabled" then
-            if self.CloseAction then self.CloseAction() end
             NewWidget.Enabled = true
+            if self.CloseAction then self.CloseAction() end
         end
     end)
     if self.Widget then self.Widget:Destroy() end

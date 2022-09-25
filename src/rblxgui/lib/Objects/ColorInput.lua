@@ -9,7 +9,7 @@ local ThemeManager = require(GV.ManagersDir.ThemeManager)
 local ColorPrompt = require(GV.PromptsDir.ColorPrompt)
 setmetatable(ColorInput,GUIObject)
 
-local RightClickMenu = GV.PluginObject:CreatePluginMenu(math.random(), "RightClickMenu - ColorInput")
+local RightClickMenu = GV.PluginObject:CreatePluginMenu(game:GetService("HttpService"):GenerateGUID(false), "RightClickMenu - ColorInput")
 RightClickMenu.Name = "ColorInput Right-Click Menu"
 RightClickMenu:AddNewAction("Reset", "Reset")
 

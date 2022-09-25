@@ -54,7 +54,7 @@ function TextPrompt.new(Arguments)
     self.ButtonsFrameLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
     self.ButtonsFrameLayout.SortOrder = Enum.SortOrder.LayoutOrder
     self:OnWindowClose(function()
-        self.Widget:Destroy()
+        self:Destroy()
         if self.Action then self.Action(0) end
     end)
     if (#Buttons*82)+14 > 260 then

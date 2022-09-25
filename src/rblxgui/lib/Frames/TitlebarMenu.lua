@@ -80,7 +80,7 @@ end
 -- ID
 function TitlebarMenu.new(Arguments, Parent)
     local self = GUIFrame.new(Arguments, Parent)
-    self.ID = self.Arguments.ID or math.random()
+    self.ID = self.Arguments.ID or game:GetService("HttpService"):GenerateGUID(false)
     setmetatable(self,TitlebarMenu)
     self.TitlebarMenu = Instance.new("Frame", self.Parent)
     self.TitlebarMenu.Name = "TitlebarMenu"

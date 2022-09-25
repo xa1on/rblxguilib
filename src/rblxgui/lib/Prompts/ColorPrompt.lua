@@ -251,13 +251,13 @@ function ColorPrompt.new(Arguments)
         self:Destroy()
         if self.DoneAction then self.DoneAction(self.OriginalValue) end
     end)
-
-    self:SetValue(self.Arguments.Value or self.Arguments.Color or Color3.new(1,1,1))
-    self.OriginalValue = self.Value
     self:OnWindowClose(function()
         self:Destroy()
         if self.DoneAction then self.DoneAction(self.OriginalValue) end
     end)
+
+    self:SetValue(self.Arguments.Value or self.Arguments.Color or Color3.new(1,1,1))
+    self.OriginalValue = self.Value
     return self
 end
 

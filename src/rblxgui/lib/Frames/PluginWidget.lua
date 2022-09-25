@@ -20,7 +20,7 @@ function Widget:Delete()
     local WidgetTitle = self.WidgetObject.Title
     local DeletePrompt = TextPrompt.new({Title = "Delete " .. WidgetTitle, Text = 'Are you sure you want to delete "' .. WidgetTitle .. '"?', Buttons = {"Yes", "No"}})
     DeletePrompt:Clicked(function(p)
-        if p == 2 then return end
+        if p == 2 or p == 0 then return end
         if self.TitlebarMenu and #self.TitlebarMenu.Pages > 0 then
             local AvailibleWidgets = {}
             for _,v in pairs(GV.PluginWidgets)do
@@ -60,7 +60,7 @@ end
 function Widget.new(Arguments)
     local self = GUIFrame.new(Arguments)
     setmetatable(self, Widget)
-    self.ID = self.Arguments.ID or math.random()
+    self.ID = self.Arguments.ID or game:GetService("HttpService"):GenerateGUID(false)
     local title = self.Arguments.Title
     if not title then
         title = self.Arguments.ID

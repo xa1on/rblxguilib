@@ -10,7 +10,7 @@ local ThemeManager = require(GV.ManagersDir.ThemeManager)
 local InputManager = require(GV.ManagersDir.InputManager)
 setmetatable(InputField,GUIObject)
 
-local RightClickMenu = GV.PluginObject:CreatePluginMenu(math.random(), "RightClickMenu - InputField")
+local RightClickMenu = GV.PluginObject:CreatePluginMenu(game:GetService("HttpService"):GenerateGUID(false), "RightClickMenu - InputField")
 RightClickMenu.Name = "InputField Right-Click Menu"
 RightClickMenu:AddNewAction("Edit", "Edit")
 RightClickMenu:AddNewAction("Clear", "Clear Input")

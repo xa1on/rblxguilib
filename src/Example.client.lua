@@ -38,11 +38,11 @@ local mainpage = gui.Page.new({
 -- 
 gui.ViewButton.new()
 
-local randommenu = plugin:CreatePluginMenu(math.random(), "Random Menu")
+local randommenu = plugin:CreatePluginMenu(game:GetService("HttpService"):GenerateGUID(false), "Random Menu")
 randommenu.Name = "Random Menu"
 randommenu:AddNewAction("1", "Option 1", "rbxasset://textures/loading/robloxTiltRed.png")
 randommenu:AddNewAction("2", "Option 2", "rbxasset://textures/loading/robloxTilt.png")
-local subMenu = plugin:CreatePluginMenu(math.random(), "C", "rbxasset://textures/explosion.png")
+local subMenu = plugin:CreatePluginMenu(game:GetService("HttpService"):GenerateGUID(false), "C", "rbxasset://textures/explosion.png")
 subMenu.Name = "Sub Menu"
 subMenu:AddNewAction("ActionD", "D", "rbxasset://textures/whiteCircle.png")
 subMenu:AddNewAction("ActionE", "E", "rbxasset://textures/icon_ROBUX.png")
