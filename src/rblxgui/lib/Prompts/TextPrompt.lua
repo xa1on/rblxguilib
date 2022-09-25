@@ -77,6 +77,7 @@ function TextPrompt.new(Arguments)
     local function syncTextFrame()
         self.TextFrame.Size = UDim2.new(0,self.Textbox.TextBounds.X+24,0,self.Textbox.TextBounds.Y+21)
     end
+    syncTextFrame()
     self.Textbox.Changed:Connect(function(p)
         if p == "TextBounds" then
             syncTextFrame()
@@ -84,13 +85,16 @@ function TextPrompt.new(Arguments)
     end)
     local function syncTextPromptSize()
         self:Reset(self.Arguments.Title, self.TextPromptLayout.AbsoluteContentSize.X, self.TextPromptLayout.AbsoluteContentSize.Y)
+        self.TextPromptContainer.Size = UDim2.fromOffset(self.TextPromptLayout.AbsoluteContentSize.X, self.TextPromptLayout.AbsoluteContentSize.Y)
         self.TextPromptContainer.Parent = self.Parent
     end
+    syncTextPromptSize()
     self.TextPromptLayout.Changed:Connect(function(p)
         if p == "AbsoluteContentSize" then
             syncTextPromptSize()
         end
     end)
+    util.DumpGUI(self.Parent)
     return self
 end
 
