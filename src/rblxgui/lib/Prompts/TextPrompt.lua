@@ -20,7 +20,7 @@ function TextPrompt.new(Arguments)
     self.TextPromptContainer = Instance.new("Frame", self.Parent)
     self.TextPromptContainer.BackgroundTransparency = 1
     self.TextPromptContainer.BorderSizePixel = 0
-    self.TextPromptContainer.Size = UDim2.new(1,0,1,0)
+    self.TextPromptContainer.Size = UDim2.new(0,self.Parent.AbsoluteSize.X,0,self.Parent.AbsoluteSize.Y)
     self.TextPromptContainer.Name = "TextPromptContainer"
     self.TextPromptLayout = Instance.new("UIListLayout", self.TextPromptContainer)
     self.TextPromptLayout.SortOrder = Enum.SortOrder.LayoutOrder
