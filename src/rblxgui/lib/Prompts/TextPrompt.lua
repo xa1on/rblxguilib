@@ -94,7 +94,6 @@ function TextPrompt.new(Arguments)
             syncTextPromptSize()
         end
     end)
-    util.DumpGUI(self.Parent)
     return self
 end
 
