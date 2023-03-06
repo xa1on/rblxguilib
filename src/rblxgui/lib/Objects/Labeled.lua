@@ -82,6 +82,7 @@ function LabeledObject.new(Arguments, Parent)
     else
         self:AddObject(Objects, "Object")
     end
+    self:SetDisabled(self.Arguments.Disabled)
     self.MainMovable = self.MainFrame
     return self
 end
