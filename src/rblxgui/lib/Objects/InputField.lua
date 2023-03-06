@@ -152,6 +152,12 @@ function InputField:AddItems(Items)
     for _, v in pairs(Items) do self:AddItem(v) end
 end
 
+function InputField:ClearItems()
+    for _, v in pairs(self.DropdownScroll.Content:GetChildren()) do
+        if v:IsA("TextButton") then v:Destroy() end
+    end
+end
+
 function InputField:RemoveItem(Item)
     local Target = self.DropdownScroll.Content:FindFirstChild(Item)
     if Target then
