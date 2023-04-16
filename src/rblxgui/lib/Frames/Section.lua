@@ -92,10 +92,21 @@ function Section.new(Arguments, Parent)
     self.Content.BackgroundTransparency = 1
     self.Content.Visible = self.Open
     self.Content.Name = "Contents"
+
     self.Layout = Instance.new("UIListLayout", self.Content)
     self.Layout.SortOrder = Enum.SortOrder.LayoutOrder
     self.Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     self:SetState(self.Arguments.Open)
+
+    local function syncContentSize()
+        self.Content.Size = UDim2.new(1, -15, 0, self.Layout.AbsoluteContentSize.Y);
+    end
+    syncContentSize()
+    self.Layout.Changed:Connect(function(p)
+        if p == "AbsoluteContentSize" then
+            syncContentSize()
+        end
+    end)
 
     return self
 end
