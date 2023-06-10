@@ -204,6 +204,7 @@ end
 function InputField.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,InputField)
+    self.DefaultEmpty = ""
     self.Action = nil
     self.Filtering = not self.Arguments.NoFiltering
     self.InputFieldContainer = Instance.new("Frame", self.Parent)
@@ -240,7 +241,10 @@ function InputField.new(Arguments, Parent)
                 self.Value = self.Input.Text
             end
             self.SelectedItem = false
-            if self.Action then self.Action(self.Value) end
+            if self.Value == "" then self.Value = self.DefaultEmpty end
+            if self.Action then
+                self.Action(self.Value)
+            end
         end
     end)
     self.Focusable = true

@@ -118,29 +118,33 @@ local CompleteBind = false
 local function InputBegan(p)
     if p.UserInputType == Enum.UserInputType.MouseButton1 then m.Unfocus() return end
     if p.UserInputType ~= Enum.UserInputType.Keyboard then return end
-    for _, v in pairs(CurrentKeys) do
-        if v == p.KeyCode.Name then return end
-    end
+    local KeycodeName = m.FilterKeyCode(p.KeyCode.Name)
     local KeyName = m.RecallKeyName(p.KeyCode.Name)
+    print("Began:"..KeyName)
+    for _, v in pairs(CurrentKeys) do
+        if v == KeycodeName then return end
+    end
     if KeyName == "Backspace" and m.FocusFunction.RemoveBind then m.FocusFunction.RemoveBind() return end
     if KeyName == "Escape" and m.FocusFunction.Unfocus then m.Unfocus() return end
-    CurrentKeys[#CurrentKeys+1] = m.FilterKeyCode(p.KeyCode.Name)
+    CurrentKeys[#CurrentKeys+1] = KeycodeName
     if CompleteBind then return end
     if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then
         CompleteBind = true
         if m.FocusFunction.EditBind then
             m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true)
+            print("Endbind")
             return
         end
         m.CheckKeybinds(CurrentKeys)
     end
-    if m.FocusFunction.EditBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys)) end
+    if m.FocusFunction.EditBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), false) end
 end
 
 local function InputEnded(p)
     if p.UserInputType ~= Enum.UserInputType.Keyboard then return end
     local KeycodeName = m.FilterKeyCode(p.KeyCode.Name)
     local KeyName = m.RecallKeyName(KeycodeName)
+    print("End:"..KeyName)
     for i, v in pairs(CurrentKeys) do
         if v == KeycodeName then
             table.remove(CurrentKeys, i)
@@ -149,7 +153,7 @@ local function InputEnded(p)
             end
         end
     end
-    if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys)) end
+    if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), false) end
 end
 
 

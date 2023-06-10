@@ -13,6 +13,7 @@ function InstanceInputField.new(Arguments, Parent)
     Arguments.DisableEditing = true
     local self = InputField.new(Arguments, Parent)
     setmetatable(self,InstanceInputField)
+    self.DefaultEmpty = {}
     self.Focusable = true
     self.TextEditable = true
     self.Input.Focused:Connect(function()
