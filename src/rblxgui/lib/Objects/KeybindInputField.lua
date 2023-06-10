@@ -33,7 +33,6 @@ end
 function KeybindInputField:AddBind(Bind)
     local BindInfo = self.GetItemInfo(Bind)
     if #BindInfo.Value[1]>0 and #BindInfo.Value[#BindInfo.Value]>0 then BindInfo.Value[#BindInfo.Value+1] = {} end
-    print(util.DumpTable(BindInfo.Value))
     self:AddItem({Name = BindInfo.Name or KeybindManager.GenerateKeybindList(BindInfo.Value), Value = BindInfo.Value})
 end
 
@@ -45,13 +44,10 @@ end
 
 function KeybindInputField:EditKeybind(Keybind, Complete)
     local Value = util.CopyTable(self.Value)
-    print(util.DumpTable(Value))
     Value[#Value] = Keybind
     if Complete then
-        print("NewBind")
         Value[#Value+1] = {}
     end
-    print(util.DumpTable(Value))
     KeybindManager.UpdateKeybinds(self.ID, Value, self.TriggeredAction)
     self:SetValue({Name = KeybindManager.GenerateKeybindList(Value), ["Value"] = Value})
 end

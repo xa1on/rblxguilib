@@ -120,7 +120,6 @@ local function InputBegan(p)
     if p.UserInputType ~= Enum.UserInputType.Keyboard then return end
     local KeycodeName = m.FilterKeyCode(p.KeyCode.Name)
     local KeyName = m.RecallKeyName(p.KeyCode.Name)
-    print("Began:"..KeyName)
     for _, v in pairs(CurrentKeys) do
         if v == KeycodeName then return end
     end
@@ -132,7 +131,6 @@ local function InputBegan(p)
         CompleteBind = true
         if m.FocusFunction.EditBind then
             m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true)
-            print("Endbind")
             return
         end
         m.CheckKeybinds(CurrentKeys)
@@ -144,7 +142,6 @@ local function InputEnded(p)
     if p.UserInputType ~= Enum.UserInputType.Keyboard then return end
     local KeycodeName = m.FilterKeyCode(p.KeyCode.Name)
     local KeyName = m.RecallKeyName(KeycodeName)
-    print("End:"..KeyName)
     for i, v in pairs(CurrentKeys) do
         if v == KeycodeName then
             table.remove(CurrentKeys, i)
