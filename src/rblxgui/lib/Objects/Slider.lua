@@ -98,7 +98,10 @@ function Slider.new(Arguments, Parent)
         self:UpdatePosition()
     end)
     InputManager.AddInputEvent("InputEnded", function(p)
-        if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then self.SliderSelected = false end
+        if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then
+            self.SliderSelected = false
+            if self.ReleasedAction then self.ReleasedAction() end
+        end
     end)
     InputManager.AddInputEvent("MouseLeave", function() self.SliderSelected = false if self.ReleasedAction then self.ReleasedAction() end end)
     self.SlideButton.MouseMoved:Connect(function()
