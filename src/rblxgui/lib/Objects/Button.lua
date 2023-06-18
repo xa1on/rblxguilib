@@ -33,6 +33,14 @@ function Button:Clicked(func)
     self.Action = func
 end
 
+function Button:Pressed(func)
+    self.PressedAction = func
+end
+
+function Button:Released(func)
+    self.ReleasedAction = func
+end
+
 -- Text/Textbox, ButtonSize, Disabled
 function Button.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
@@ -98,6 +106,7 @@ function Button.new(Arguments, Parent)
         task.wait(0)
         GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
         if self.Disabled or self.Toggleable then return end
+        if self.ReleasedAction then self.ReleasedAction() end
         Pressed = false
         ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
         ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
@@ -105,6 +114,7 @@ function Button.new(Arguments, Parent)
 
     self.Button.MouseButton1Down:Connect(function()
         if self.Disabled or self.Toggleable then return end
+        if self.PressedAction then self.PressedAction() end
         Pressed = true
         ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
         ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
@@ -112,6 +122,7 @@ function Button.new(Arguments, Parent)
 
     self.Button.MouseButton1Up:Connect(function()
         if self.Disabled or self.Toggleable then return end
+        if self.ReleasedAction then self.ReleasedAction() end
         Pressed = false
         ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
         ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
