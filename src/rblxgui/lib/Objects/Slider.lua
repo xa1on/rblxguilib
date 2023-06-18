@@ -47,6 +47,14 @@ function Slider:Changed(func)
     self.Action = func
 end
 
+function Slider:Pressed(func)
+    self.PressedAction = func
+end
+
+function Slider:Released(func)
+    self.ReleasedAction = func
+end
+
 -- Min, Max, Value, Increment, SliderSize, Disabled
 function Slider.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
@@ -75,9 +83,13 @@ function Slider.new(Arguments, Parent)
     self.SliderSelected = false
     self.InitialX = 0
     self.SlideButton.MouseButton1Down:Connect(function(x)
+        if self.PressedAction then self.PressedAction() end
         if self.Disabled then return end
         self.SliderSelected = true
         self.InitialX = self.SlideButton.AbsolutePosition.X - x
+    end)
+    self.SlideButton.MouseButton1Up:Connect(function()
+        if self.ReleasedAction then self.ReleasedAction() end
     end)
     self.PreviousValue = self.Value
     InputManager.AddInputEvent("MouseMoved", function(x)
@@ -88,7 +100,7 @@ function Slider.new(Arguments, Parent)
     InputManager.AddInputEvent("InputEnded", function(p)
         if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then self.SliderSelected = false end
     end)
-    InputManager.AddInputEvent("MouseLeave", function() self.SliderSelected = false end)
+    InputManager.AddInputEvent("MouseLeave", function() self.SliderSelected = false if self.ReleasedAction then self.ReleasedAction() end end)
     self.SlideButton.MouseMoved:Connect(function()
         GV.PluginObject:GetMouse().Icon = self.CursorIcon
     end)
