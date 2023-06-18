@@ -106,7 +106,7 @@ function Button.new(Arguments, Parent)
         task.wait(0)
         GV.PluginObject:GetMouse().Icon = "rbxasset://SystemCursors/Arrow"
         if self.Disabled or self.Toggleable then return end
-        if self.ReleasedAction then self.ReleasedAction() end
+        if Pressed and self.ReleasedAction then self.ReleasedAction() end
         Pressed = false
         ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
         ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)

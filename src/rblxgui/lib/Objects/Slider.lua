@@ -98,12 +98,15 @@ function Slider.new(Arguments, Parent)
         self:UpdatePosition()
     end)
     InputManager.AddInputEvent("InputEnded", function(p)
-        if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 and self.SliderSelected then
+        if self.SliderSelected and p.UserInputType == Enum.UserInputType.MouseButton1 then
             self.SliderSelected = false
             if self.ReleasedAction then self.ReleasedAction() end
         end
     end)
-    InputManager.AddInputEvent("MouseLeave", function() self.SliderSelected = false if self.ReleasedAction then self.ReleasedAction() end end)
+    InputManager.AddInputEvent("MouseLeave", function()
+        if self.SliderSelected and self.ReleasedAction then self.ReleasedAction() end
+        self.SliderSelected = false
+    end)
     self.SlideButton.MouseMoved:Connect(function()
         GV.PluginObject:GetMouse().Icon = self.CursorIcon
     end)
