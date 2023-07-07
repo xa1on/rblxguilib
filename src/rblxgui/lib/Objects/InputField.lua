@@ -171,6 +171,7 @@ end
 
 function InputField:SetValue(Item)
     local ItemInfo = self.GetItemInfo(Item)
+    if self.Value == ItemInfo.Value then return end
     self.SelectedItem = true
     self.Value = ItemInfo.Value
     self.Input.Text = ItemInfo.Name or ""
