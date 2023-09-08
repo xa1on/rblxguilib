@@ -16,10 +16,11 @@ setmetatable(KeybindInputField,InputField)
     {{LeftControl, LeftAlt, Zero},{P}}
     {{"Keybind Preset",{{LeftControl, LeftAlt, Zero},{P}}}}
 ]]--
+
 function KeybindInputField:UpdateBind(Value)
     if not Value then return end
     if #Value[1]>0 and #Value[#Value]>0 then Value[#Value + 1] = {} end
-    KeybindManager.UpdateKeybinds(self.ID, Value, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.ID, Value, self.PressedAction)
 end
 
 function KeybindInputField:SetBind(Bind)
@@ -48,7 +49,7 @@ function KeybindInputField:EditKeybind(Keybind, Complete)
     if Complete then
         Value[#Value+1] = {}
     end
-    KeybindManager.UpdateKeybinds(self.ID, Value, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.ID, Value, self.PressedAction)
     self:SetValue({Name = KeybindManager.GenerateKeybindList(Value), ["Value"] = Value})
 end
 
@@ -68,14 +69,21 @@ function KeybindInputField:UnfocusInputField(ForceUnfocus)
     return true
 end
 
-function KeybindInputField:Triggered(func)
-    function self.TriggeredAction()
-        if not self.Disabled then func() end
+function KeybindInputField:Pressed(func)
+    function self.PressedAction()
+        if not self.Disabled and func then func() end
     end
-    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.TriggeredAction)
+    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.PressedAction, self.ReleasedAction)
 end
 
--- Action
+function KeybindInputField:Released(func)
+    function self.ReleasedAction()
+        if not self.Disabled and func then func() end
+    end
+    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.PressedAction, self.ReleasedAction)
+end
+
+-- PressedAction, ReleasedAction
 function KeybindInputField.new(Arguments, Parent)
     Arguments = Arguments or {}
     KeybindNum += 1
@@ -86,7 +94,8 @@ function KeybindInputField.new(Arguments, Parent)
     self.DefaultEmpty = {{}}
     self.TextEditable = true
     self.ID = KeybindNum
-    self:Triggered(self.Arguments.Action)
+    self:Pressed(self.Arguments.PressedAction)
+    self:Released(self.Arguments.ReleasedAction)
     self.Value = {{}}
     self.Arguments.Binds = self.Arguments.Items or self.Arguments.Binds
     self.Input.Focused:Connect(function()

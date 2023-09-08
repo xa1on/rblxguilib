@@ -53,10 +53,12 @@ end
 
 
 m.Keybinds = {}
+m.ActiveKeybinds = {}
 
-function m.UpdateKeybinds(Name, Keybind, Action)
+function m.UpdateKeybinds(Name, Keybind, PressedAction, ReleasedAction)
     if not m.Keybinds[Name] then m.Keybinds[Name] = {} end
-    if Action then m.Keybinds[Name].Action = Action end
+    if PressedAction then m.Keybinds[Name].PressedAction = PressedAction end
+    if ReleasedAction then m.Keybinds[Name].ReleasedAction = ReleasedAction end
     m.Keybinds[Name].Keybinds = Keybind
 end
 
@@ -78,11 +80,21 @@ end
 function m.CheckKeybinds(Keys)
     for _, Input in pairs(m.Keybinds) do
         for _, Keybind in pairs(Input.Keybinds) do
-            if m.TableContainsTable(Keybind, Keys) then
-                if Input.Action then Input.Action() end
-                return
+            if #Keys > 0 and m.TableContainsTable(Keybind, Keys) then
+                m.ActiveKeybinds[#m.ActiveKeybinds+1] = Input
+                if Input.PressedAction then Input.PressedAction() end
+                break
             end
         end
+    end
+end
+
+function m.CheckActive()
+    local IndexShift = 0
+    for Index, Input in pairs(m.ActiveKeybinds) do
+        if Input.ReleasedAction then Input.ReleasedAction() end
+        table.remove(m.ActiveKeybinds, Index - IndexShift)
+        IndexShift += 1
     end
 end
 
@@ -123,6 +135,7 @@ local function InputBegan(p)
     for _, v in pairs(CurrentKeys) do
         if v == KeycodeName then return end
     end
+    m.CheckActive()
     if KeyName == "Backspace" and m.FocusFunction.RemoveBind then m.FocusFunction.RemoveBind() return end
     if KeyName == "Escape" and m.FocusFunction.Unfocus then m.Unfocus() return end
     CurrentKeys[#CurrentKeys+1] = KeycodeName
@@ -133,8 +146,8 @@ local function InputBegan(p)
             m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true)
             return
         end
-        m.CheckKeybinds(CurrentKeys)
     end
+    m.CheckKeybinds(CurrentKeys)
     if m.FocusFunction.EditBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), false) end
 end
 
@@ -142,9 +155,12 @@ local function InputEnded(p)
     if p.UserInputType ~= Enum.UserInputType.Keyboard then return end
     local KeycodeName = m.FilterKeyCode(p.KeyCode.Name)
     local KeyName = m.RecallKeyName(KeycodeName)
+    local IndexShift = 0;
+    m.CheckActive()
     for i, v in pairs(CurrentKeys) do
         if v == KeycodeName then
-            table.remove(CurrentKeys, i)
+            table.remove(CurrentKeys, i - IndexShift)
+            IndexShift += 1
             if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then
                 CompleteBind = false
             end

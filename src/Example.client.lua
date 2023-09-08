@@ -276,11 +276,12 @@ end)
 
 
 -- keybindinputfield
--- Action, Bind/CurrentBind, Items/Binds, InputSize, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
+-- PressedAction, ReleasedAction, Bind/CurrentBind, Items/Binds, InputSize, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
 gui.Labeled.new({
     Text = "keybind",
     Object = gui.KeybindInputField.new({
-        Action = function() print("keybind1 pressed!") end,
+        PressedAction = function() print("keybind1 pressed!") end,
+        ReleasedAction = function() print("keybind1 released!") end,
         CurrentBind = {
             {"N"},
             {"LeftShift", "T"}
@@ -311,8 +312,8 @@ local keybindinpfield2 = gui.Labeled.new({
     Text = "another keybind",
     Object = gui.KeybindInputField.new()
 })
-keybindinpfield2.Object:Triggered(function()
-    print("second keybind triggered!")
+keybindinpfield2.Object:Pressed(function()
+    print("second keybind pressed!")
 end)
 
 -- checkbox
