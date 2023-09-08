@@ -20,7 +20,7 @@ setmetatable(KeybindInputField,InputField)
 function KeybindInputField:UpdateBind(Value)
     if not Value then return end
     if #Value[1]>0 and #Value[#Value]>0 then Value[#Value + 1] = {} end
-    KeybindManager.UpdateKeybinds(self.ID, Value, self.PressedAction)
+    KeybindManager.UpdateKeybinds(self.ID, Value, self.Holdable, self.PressedAction, self.ReleasedAction)
 end
 
 function KeybindInputField:SetBind(Bind)
@@ -49,7 +49,7 @@ function KeybindInputField:EditKeybind(Keybind, Complete)
     if Complete then
         Value[#Value+1] = {}
     end
-    KeybindManager.UpdateKeybinds(self.ID, Value, self.PressedAction)
+    KeybindManager.UpdateKeybinds(self.ID, Value, self.Holdable, self.PressedAction, self.ReleasedAction)
     self:SetValue({Name = KeybindManager.GenerateKeybindList(Value), ["Value"] = Value})
 end
 
@@ -73,17 +73,17 @@ function KeybindInputField:Pressed(func)
     function self.PressedAction()
         if not self.Disabled and func then func() end
     end
-    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.PressedAction, self.ReleasedAction)
+    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.Holdable, self.PressedAction, self.ReleasedAction)
 end
 
 function KeybindInputField:Released(func)
     function self.ReleasedAction()
         if not self.Disabled and func then func() end
     end
-    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.PressedAction, self.ReleasedAction)
+    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.Holdable, self.PressedAction, self.ReleasedAction)
 end
 
--- PressedAction, ReleasedAction
+-- PressedAction, ReleasedAction, Holdable
 function KeybindInputField.new(Arguments, Parent)
     Arguments = Arguments or {}
     KeybindNum += 1
@@ -91,6 +91,7 @@ function KeybindInputField.new(Arguments, Parent)
     Arguments.DisableEditing = true
     local self = InputField.new(Arguments, Parent)
     setmetatable(self,KeybindInputField)
+    self.Holdable = self.Arguments.Holdable
     self.DefaultEmpty = {{}}
     self.TextEditable = true
     self.ID = KeybindNum

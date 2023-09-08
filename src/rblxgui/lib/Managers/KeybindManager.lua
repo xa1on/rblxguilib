@@ -55,10 +55,11 @@ end
 m.Keybinds = {}
 m.ActiveKeybinds = {}
 
-function m.UpdateKeybinds(Name, Keybind, PressedAction, ReleasedAction)
+function m.UpdateKeybinds(Name, Keybind, Holdable, PressedAction, ReleasedAction)
     if not m.Keybinds[Name] then m.Keybinds[Name] = {} end
     if PressedAction then m.Keybinds[Name].PressedAction = PressedAction end
     if ReleasedAction then m.Keybinds[Name].ReleasedAction = ReleasedAction end
+    if Holdable then m.Keybinds[Name].Holdable = true else m.Keybinds[Name].Holdable = false end
     m.Keybinds[Name].Keybinds = Keybind
 end
 
@@ -67,37 +68,59 @@ function m.TableContains(Table, Contains)
     return false
 end
 
-function m.TableContainsTable(Table, Contains)
-    if #Contains < #Table then return false end
-    for _, v in pairs(Contains) do
-        if not m.TableContains(Table, v) then
+function m.TableContainsTable(Table1, Table2)
+    if #Table1 < #Table2 or #Table2 < 1 then return false end
+    for _, v in pairs(Table2) do
+        if not m.TableContains(Table1, v) then
             return false
         end
     end
     return true
 end
 
-function m.CheckKeybinds(Keys)
+function m.CheckKeybinds(Keys, Holdable, KeycodeName)
+    local ContainsKeybind = false
     for _, Input in pairs(m.Keybinds) do
+        ContainsKeybind = false
         for _, Keybind in pairs(Input.Keybinds) do
-            if #Keys > 0 and m.TableContainsTable(Keybind, Keys) then
-                m.ActiveKeybinds[#m.ActiveKeybinds+1] = Input
-                if Input.PressedAction then Input.PressedAction() end
-                break
+            if not Holdable and not Input.Holdable then
+                if #Keys > 0 and m.TableContainsTable(Keys, Keybind) then
+                    ContainsKeybind = true
+                    break
+                end
+            end
+            if Holdable and Input.Holdable and KeycodeName and m.TableContains(Keybind, KeycodeName) then
+                ContainsKeybind = true
             end
         end
+        if not ContainsKeybind then continue end
+        m.ActiveKeybinds[#m.ActiveKeybinds+1] = Input
+        if Input.PressedAction then Input.PressedAction() end
     end
 end
 
-function m.CheckActive()
+function m.CheckActive(KeycodeName)
     local IndexShift = 0
+    local ContainsRemoved = false
     for Index, Input in pairs(m.ActiveKeybinds) do
+        if Input.Holdable and KeycodeName then
+            ContainsRemoved = false
+            for _, Keybind in pairs(Input.Keybinds) do
+                if m.TableContains(Keybind, KeycodeName) then
+                    ContainsRemoved = true
+                    break
+                end
+            end
+            if not ContainsRemoved then
+                continue
+            end
+        end
         if Input.ReleasedAction then Input.ReleasedAction() end
         table.remove(m.ActiveKeybinds, Index - IndexShift)
         IndexShift += 1
     end
-end
 
+end
 
 
 m.FocusFunction = {}
@@ -135,10 +158,11 @@ local function InputBegan(p)
     for _, v in pairs(CurrentKeys) do
         if v == KeycodeName then return end
     end
-    m.CheckActive()
+    m.CheckActive(KeycodeName)
     if KeyName == "Backspace" and m.FocusFunction.RemoveBind then m.FocusFunction.RemoveBind() return end
     if KeyName == "Escape" and m.FocusFunction.Unfocus then m.Unfocus() return end
     CurrentKeys[#CurrentKeys+1] = KeycodeName
+    m.CheckKeybinds(CurrentKeys, true, KeycodeName)
     if CompleteBind then return end
     if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then
         CompleteBind = true
@@ -156,7 +180,7 @@ local function InputEnded(p)
     local KeycodeName = m.FilterKeyCode(p.KeyCode.Name)
     local KeyName = m.RecallKeyName(KeycodeName)
     local IndexShift = 0;
-    m.CheckActive()
+    m.CheckActive(KeycodeName)
     for i, v in pairs(CurrentKeys) do
         if v == KeycodeName then
             table.remove(CurrentKeys, i - IndexShift)
