@@ -55,12 +55,8 @@ end
 m.Keybinds = {}
 m.ActiveKeybinds = {}
 
-function m.UpdateKeybinds(Name, Keybind, Holdable, PressedAction, ReleasedAction)
-    if not m.Keybinds[Name] then m.Keybinds[Name] = {} end
-    if PressedAction then m.Keybinds[Name].PressedAction = PressedAction end
-    if ReleasedAction then m.Keybinds[Name].ReleasedAction = ReleasedAction end
-    if Holdable then m.Keybinds[Name].Holdable = true else m.Keybinds[Name].Holdable = false end
-    m.Keybinds[Name].Keybinds = Keybind
+function m.UpdateKeybinds(Name, Args)
+    m.Keybinds[Name] = Args
 end
 
 function m.TableContains(Table, Contains)
@@ -84,12 +80,12 @@ function m.CheckKeybinds(Keys, Holdable, KeycodeName)
         ContainsKeybind = false
         for _, Keybind in pairs(Input.Keybinds) do
             if not Holdable and not Input.Holdable then
-                if #Keys > 0 and m.TableContainsTable(Keys, Keybind) then
+                if #Keys > 0 and #Keys == #Keybind and m.TableContainsTable(Keys, Keybind) then
                     ContainsKeybind = true
                     break
                 end
             end
-            if Holdable and Input.Holdable and KeycodeName and m.TableContains(Keybind, KeycodeName) then
+            if Holdable and Input.Holdable and m.TableContainsTable(Keys, Keybind) and KeycodeName and m.TableContains(Keybind, KeycodeName) then
                 ContainsKeybind = true
             end
         end
@@ -124,12 +120,11 @@ end
 
 
 m.FocusFunction = {}
-
 m.FocusedInputField = {}
 
 function m.FocusInputField(Name, selfobj, EditBind, RemoveBind, Unfocus)
     if m.FocusedInputField.Name and m.FocusedInputField.Name ~= Name then m.Unfocus() end
-    m.FocusedInputField = {Name = Name, EditBind = EditBind, RemoveBind = RemoveBind, Unfocus = Unfocus}
+    m.FocusedInputField = {Name = Name, Unrestricted = selfobj.Unrestricted, EditBind = EditBind, RemoveBind = RemoveBind, Unfocus = Unfocus}
     for i, v in pairs(m.FocusedInputField) do
         if type(v) == "function" then
             m.FocusFunction[i] = function(...)
@@ -151,7 +146,7 @@ local CurrentKeys = {}
 local CompleteBind = false
 
 local function InputBegan(p)
-    if p.UserInputType == Enum.UserInputType.MouseButton1 then m.Unfocus() return end
+    if p.UserInputType == Enum.UserInputType.MouseButton1 or p.UserInputType == Enum.UserInputType.MouseButton2 then m.Unfocus() return end
     if p.UserInputType ~= Enum.UserInputType.Keyboard then return end
     local KeycodeName = m.FilterKeyCode(p.KeyCode.Name)
     local KeyName = m.RecallKeyName(p.KeyCode.Name)
@@ -163,12 +158,14 @@ local function InputBegan(p)
     if KeyName == "Escape" and m.FocusFunction.Unfocus then m.Unfocus() return end
     CurrentKeys[#CurrentKeys+1] = KeycodeName
     m.CheckKeybinds(CurrentKeys, true, KeycodeName)
-    if CompleteBind then return end
-    if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then
-        CompleteBind = true
-        if m.FocusFunction.EditBind then
-            m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true)
-            return
+    if not m.FocusFunction.EditBind or not m.FocusedInputField.Unrestricted then
+        if CompleteBind then return end
+        if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then
+            CompleteBind = true
+            if m.FocusFunction.EditBind then
+                m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true)
+                return
+            end
         end
     end
     m.CheckKeybinds(CurrentKeys)
@@ -183,11 +180,21 @@ local function InputEnded(p)
     m.CheckActive(KeycodeName)
     for i, v in pairs(CurrentKeys) do
         if v == KeycodeName then
-            table.remove(CurrentKeys, i - IndexShift)
-            IndexShift += 1
-            if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then
+            if not m.FocusedInputField.Unrestricted then
+                if KeyName ~= "Ctrl" and KeyName ~= "Alt" and KeyName ~= "Shift" then
+                    CompleteBind = false
+                end
+            elseif (not CompleteBind) or #CurrentKeys ~= 1 then
+                if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true) end
+                CompleteBind = true
+                table.remove(CurrentKeys, i - IndexShift)
+                if #CurrentKeys == 0 then CompleteBind = false end
+                return
+            else
                 CompleteBind = false
             end
+            table.remove(CurrentKeys, i - IndexShift)
+            IndexShift += 1
         end
     end
     if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), false) end
@@ -196,6 +203,7 @@ end
 
 InputManager.AddInputEvent("InputBegan", InputBegan)
 InputManager.AddInputEvent("InputEnded", InputEnded)
+InputManager.AddInputEvent("MouseLeave", m.Unfocus)
 EventManager.AddConnection(InputService.InputBegan, InputBegan)
 EventManager.AddConnection(InputService.InputEnded, InputEnded)
 

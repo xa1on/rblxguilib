@@ -17,10 +17,15 @@ setmetatable(KeybindInputField,InputField)
     {{"Keybind Preset",{{LeftControl, LeftAlt, Zero},{P}}}}
 ]]--
 
+function KeybindInputField:UpdateValues(Value)
+    Value = Value or self.Value
+    KeybindManager.UpdateKeybinds(self.ID, {Keybinds = Value, Holdable = self.Holdable, PressedAction = self.PressedAction, ReleasedAction = self.ReleasedAction})
+end
+
 function KeybindInputField:UpdateBind(Value)
     if not Value then return end
     if #Value[1]>0 and #Value[#Value]>0 then Value[#Value + 1] = {} end
-    KeybindManager.UpdateKeybinds(self.ID, Value, self.Holdable, self.PressedAction, self.ReleasedAction)
+    self:UpdateValues(Value)
 end
 
 function KeybindInputField:SetBind(Bind)
@@ -49,7 +54,7 @@ function KeybindInputField:EditKeybind(Keybind, Complete)
     if Complete then
         Value[#Value+1] = {}
     end
-    KeybindManager.UpdateKeybinds(self.ID, Value, self.Holdable, self.PressedAction, self.ReleasedAction)
+    self:UpdateValues(Value)
     self:SetValue({Name = KeybindManager.GenerateKeybindList(Value), ["Value"] = Value})
 end
 
@@ -73,17 +78,17 @@ function KeybindInputField:Pressed(func)
     function self.PressedAction()
         if not self.Disabled and func then func() end
     end
-    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.Holdable, self.PressedAction, self.ReleasedAction)
+    self:UpdateValues()
 end
 
 function KeybindInputField:Released(func)
     function self.ReleasedAction()
         if not self.Disabled and func then func() end
     end
-    KeybindManager.UpdateKeybinds(self.ID, self.Value, self.Holdable, self.PressedAction, self.ReleasedAction)
+    self:UpdateValues()
 end
 
--- PressedAction, ReleasedAction, Holdable
+-- PressedAction, ReleasedAction, Holdable, Unrestricted, Bind/CurrentBind, Items/Binds
 function KeybindInputField.new(Arguments, Parent)
     Arguments = Arguments or {}
     KeybindNum += 1
@@ -92,6 +97,9 @@ function KeybindInputField.new(Arguments, Parent)
     local self = InputField.new(Arguments, Parent)
     setmetatable(self,KeybindInputField)
     self.Holdable = self.Arguments.Holdable
+    self.Unrestricted = self.Arguments.Unrestricted
+    if not self.Holdable then self.Holdable = false end
+    if not self.Unrestricted then self.Unrestricted = false end
     self.DefaultEmpty = {{}}
     self.TextEditable = true
     self.ID = KeybindNum

@@ -276,7 +276,7 @@ end)
 
 
 -- keybindinputfield
--- PressedAction, ReleasedAction, Holdable, Bind/CurrentBind, Items/Binds, InputSize, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
+-- PressedAction, ReleasedAction, Holdable, Unrestricted, Bind/CurrentBind, Items/Binds, InputSize, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
 gui.Labeled.new({
     Text = "keybind",
     Object = gui.KeybindInputField.new({
@@ -310,7 +310,7 @@ gui.Labeled.new({
 
 local keybindinpfield2 = gui.Labeled.new({
     Text = "another keybind",
-    Object = gui.KeybindInputField.new({Holdable = true})
+    Object = gui.KeybindInputField.new({Holdable = true, Unrestricted = true})
 })
 keybindinpfield2.Object:Pressed(function()
     print("second keybind pressed!")
