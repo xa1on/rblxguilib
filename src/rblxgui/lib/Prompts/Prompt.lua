@@ -23,7 +23,7 @@ function Prompt:Reset(Title, Width, Height)
     Title = Title or "Prompt"
     if not Width or Width < 1 then Width = 260 end
     if not Height or Height < 1 then Height = 75 end
-    local NewWidget = GV.PluginObject:CreateDockWidgetPluginGui(game:GetService("HttpService"):GenerateGUID(false), DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, true, true, Width, Height,1,1))
+    local NewWidget = GV.PluginObject:CreateDockWidgetPluginGui(game:GetService("HttpService"):GenerateGUID(false), DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float, true, true, Width+2, Height+24,1,1))
     if self.Widget then for _,v in pairs(self.Widget:GetChildren())do
         v.Parent = NewWidget
     end self.Widget:Destroy() end
