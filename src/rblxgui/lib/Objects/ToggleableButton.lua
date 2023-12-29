@@ -7,6 +7,16 @@ local Button = require(GV.ObjectsDir.Button)
 local ThemeManager = require(GV.ManagersDir.ThemeManager)
 setmetatable(ToggleableButton,Button)
 
+function ToggleableButton:Update()
+    if not self.Value then
+        ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
+        ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
+    else
+        ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
+        ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
+    end
+end
+
 function ToggleableButton:Toggle()
     self:SetValue(not self.Value)
     return self.Value
@@ -14,6 +24,7 @@ end
 
 function ToggleableButton:SetValue(Value)
     self.Value = Value
+    self:Update()
 end
 
 -- Textbox, Size, Value, Disabled
@@ -35,13 +46,7 @@ function ToggleableButton.new(Arguments, Parent)
     self.Button.MouseLeave:Connect(function()
         if self.Disabled then return end
         Pressed = false
-        if not self.Value then
-            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder)
-            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button)
-        else
-            ThemeManager.ColorSync(self.Button, "ImageColor3", Enum.StudioStyleGuideColor.ButtonBorder, Enum.StudioStyleGuideModifier.Pressed)
-            ThemeManager.ColorSync(self.ButtonBackground, "ImageColor3", Enum.StudioStyleGuideColor.Button, Enum.StudioStyleGuideModifier.Pressed)
-        end
+        self:Update()
     end)
     self.Button.MouseButton1Down:Connect(function()
         if self.Disabled then return end

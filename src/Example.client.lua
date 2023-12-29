@@ -239,10 +239,15 @@ end)
 
 -- toggleable buttons
 -- Textbox, ButtonSize, Value, Disabled
-local disablebutton = gui.ToggleableButton.new({
-    Text = "toggle previous"
+local togglebutton1 = gui.ToggleableButton.new({
+    Text = "toggle next button"
 })
-disablebutton:Clicked(function(p) inpfield:SetDisabled(p) end)
+local togglebutton2 = gui.ToggleableButton.new({
+    Text = "Untoggle previous button",
+    Value = true
+})
+togglebutton1:Clicked(function(p) if p then togglebutton2:SetValue(false) end end)
+togglebutton2:Clicked(function(p) if p then togglebutton1:SetValue(false) end end)
 
 -- instanceinputfield
 -- Value/CurrentItem, Items, InputSize, NoDropdown, NoFiltering, DisabledEditing, ClearText, Disabled
