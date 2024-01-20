@@ -39,7 +39,7 @@ end
 function KeybindInputField:AddBind(Bind)
     local BindInfo = self.GetItemInfo(Bind)
     if #BindInfo.Value[1]>0 and #BindInfo.Value[#BindInfo.Value]>0 then BindInfo.Value[#BindInfo.Value+1] = {} end
-    self:AddItem({Name = BindInfo.Name or KeybindManager.GenerateKeybindList(BindInfo.Value), Value = BindInfo.Value})
+    self:AddItem({Name = BindInfo.Name or KeybindManager.GenerateKeybindList(BindInfo.Value), Value = BindInfo.Value}, function() self:UpdateBind(BindInfo.Value) end)
 end
 
 function KeybindInputField:AddBinds(Binds)
@@ -96,6 +96,7 @@ function KeybindInputField.new(Arguments, Parent)
     Arguments.DisableEditing = true
     local self = InputField.new(Arguments, Parent)
     setmetatable(self,KeybindInputField)
+    self.IgnoreText = true
     self.Holdable = self.Arguments.Holdable
     self.Unrestricted = self.Arguments.Unrestricted
     if not self.Holdable then self.Holdable = false end
@@ -116,12 +117,6 @@ function KeybindInputField.new(Arguments, Parent)
     end)
     if self.Arguments.Binds then self:AddBinds(self.Arguments.Binds) end
     self:SetBind(self.Arguments.Bind or self.Arguments.CurrentBind)
-    self.Input.Changed:Connect(function(p)
-        if p == "Text" then
-            task.wait(0)
-            --self:UpdateBind(self.Value)
-        end
-    end)
     return self
 end
 

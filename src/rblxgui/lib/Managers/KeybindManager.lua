@@ -185,7 +185,7 @@ local function InputEnded(p)
                     CompleteBind = false
                 end
             elseif (not CompleteBind) or #CurrentKeys ~= 1 then
-                if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true) end
+                if m.FocusFunction.EditBind and not CompleteBind then m.FocusFunction.EditBind(util.CopyTable(CurrentKeys), true)end
                 CompleteBind = true
                 table.remove(CurrentKeys, i - IndexShift)
                 if #CurrentKeys == 0 then CompleteBind = false end

@@ -44,6 +44,7 @@ end
 function ColorInput.new(Arguments, Parent)
     local self = GUIObject.new(Arguments, Parent)
     setmetatable(self,ColorInput)
+    self.IgnoreText = true
     self.Disabled = self.Arguments.Disabled
     self.ColorInputContainer = Instance.new("Frame", self.Parent)
     self.ColorInputContainer.BackgroundTransparency = 1

@@ -99,7 +99,7 @@ function InputField.GetItemInfo(Item)
     return ItemInfo
 end
 
-function InputField:AddItem(Item)
+function InputField:AddItem(Item, Action)
     local ItemInfo = self.GetItemInfo(Item)
     local ItemButton = Instance.new("TextButton", self.DropdownScroll.Content)
     ItemButton.Name = ItemInfo.Name
@@ -136,6 +136,9 @@ function InputField:AddItem(Item)
         self.SelectedItem = true
         self.Value = ItemInfo.Value
         self.Input.Text = ItemInfo.Name
+        if Action then
+            Action()
+        end
     end)
     ItemButton.MouseEnter:Connect(function()
         task.wait(0)
@@ -148,8 +151,8 @@ function InputField:AddItem(Item)
     end)
 end
 
-function InputField:AddItems(Items)
-    for _, v in pairs(Items) do self:AddItem(v) end
+function InputField:AddItems(Items, Action)
+    for _, v in pairs(Items) do self:AddItem(v, Action) end
 end
 
 function InputField:ClearItems()
@@ -238,7 +241,7 @@ function InputField.new(Arguments, Parent)
     self.Input.Name = "Input"
     self.Input.Changed:Connect(function(p)
         if p == "Text" then
-            if not self.SelectedItem then
+            if not self.SelectedItem and not self.IgnoreText then
                 self.Value = self.Input.Text
             end
             self.SelectedItem = false
