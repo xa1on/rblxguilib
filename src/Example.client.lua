@@ -195,7 +195,7 @@ testbutton:Clicked(function()
     })
     inputprompt:Clicked(function(p)
         print("option " .. p .. " chosen")
-        print("entered text:" .. inputprompt.Value)
+        print("entered text:" .. inputprompt.InputField.Value)
     end)
 end)
 
