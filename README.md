@@ -25,26 +25,38 @@ rojo build --output "C:\Users\[Username]\AppData\Local\Roblox\Plugins\[Plugin Na
 Another way to install the library is by using [HttpService](https://www.robloxdev.com/api-reference/class/HttpService) to pull the contents directly from this github project into module scripts. Make sure you have http service from `Game Settings` enabled in order for this to work.
 
 ```Lua
+--Modified to support nesting
 local http = game:GetService("HttpService")
 local req = http:GetAsync("https://api.github.com/repos/xa1on/rblxguilib/contents/src")
-local json = http:JSONDecode(req)
+local jsonSrc = http:JSONDecode(req)
 
 local targetFolder = Instance.new("Folder")
 targetFolder.Name = "StudioWidgets"
 targetFolder.Parent = game.Workspace
 
-for i = 1, #json do
-	local file = json[i]
-	if (file.type == "file") then
-		local name = file.name:sub(1, #file.name-4)
-		local module = targetFolder:FindFirstChild(name) or Instance.new("ModuleScript")
-		module.Name = name
-		module.Source = http:GetAsync(file.download_url)
-		module.Parent = targetFolder
+function loopdir(json, folder)
+	for i = 1, #json do
+		local file = json[i]
+		if file.type == "file" then
+			local name = file.name:sub(1, #file.name-4)
+			local module = targetFolder:FindFirstChild(name) or Instance.new("ModuleScript")
+			module.Name = name
+			module.Source = http:GetAsync(file.download_url)
+			module.Parent = folder
+		elseif  file.type == "dir" then
+			local dir = http:GetAsync(`https://api.github.com/repos/xa1on/rblxguilib/contents/{file.path}`)
+			local dirJson = http:JSONDecode(dir)
+			local dirFolder = Instance.new("Folder")
+			dirFolder.Name = file.name
+			dirFolder.Parent = folder
+			loopdir(dirJson, dirFolder)
+		end
 	end
 end
+
+loopdir(jsonSrc, targetFolder)
 ```
-(Credit to the [StudioWidgets](https://github.com/Roblox/StudioWidgets) repo for the import code)
+(Credit to the [StudioWidgets](https://github.com/Roblox/StudioWidgets) repo for the import code, modified by @SpaceySlime to add directory support)
 
 <h2 align="center">Files</h2>
 
