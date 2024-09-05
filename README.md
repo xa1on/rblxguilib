@@ -56,7 +56,7 @@ end
 
 loopdir(jsonSrc, targetFolder)
 ```
-(Credit to the [StudioWidgets](https://github.com/Roblox/StudioWidgets) repo for the import code, modified by @SpaceySlime to add directory support)
+(Credit to the [StudioWidgets](https://github.com/Roblox/StudioWidgets) repo for the import code)
 
 <h2 align="center">Files</h2>
 
