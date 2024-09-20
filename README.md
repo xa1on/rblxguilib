@@ -1,13 +1,20 @@
-<h1 align="center">RBLXGUI</h1>
+[![rblxguibanner|690x215](assets/rblxguibanner.png)](https://github.com/xa1on/rblxguilib)
+<div align="center">
+	<a href="https://github.com/xa1on/rblxguilib">💾 Github</a> | <a href="https://discord.gg/ecWpzSJQg2">📩 Discord</a>
+</div>
+
 
 <div align="center">
-	GUI Library made for creating plugins in studio
+	Hosts a wide variety of GUI Elements made for dockable widgets in order to improve GUI workflow and provide a uniform look and feel for plugins.
 </div>
 
 <div>&nbsp;</div>
 
 ## Overview
-RBLXGUI hosts a wide variety of GUI Elements made for dockable widgets in order to improve GUI workflow in rblxstudio and provide a uniform look and feel for plugins.
+
+[RBLXGUI](https://github.com/xa1on/rblxguilib) is an open-source GUI library for plugins inspired by [Studio Widgets](https://github.com/Roblox/StudioWidgets).
+
+**Warning**: RBLXGUI completely overhauls wigets. if you want something more visually customizable rather than the basic Studio aesthetic, this is probably not for you.
 
 ### Please contribute!
 This was a solo project and any help improving or keeping the library up to date would be greatly appreciated!
