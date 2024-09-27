@@ -123,7 +123,7 @@ loopdir(jsonSrc, targetFolder)
 ## Documentation
 No documentation at the moment, but you should be able to see how everything works in the [Example Script](src/Example.client.lua).
 
-If anyone actually plans on using this, DM me on [Twitter](https://twitter.com/xalondzn) or Discord (something#7597) if you have any further questions or if you just want to show off what you made.
+If anyone actually plans on using this, DM me on [Twitter](https://twitter.com/xalondzn) or Discord (@xa1on) if you have any further questions or if you just want to show off what you made.
 
 ## Final Notes
 A lot of my code may be a bit messy and unorganized but I hope you can bear with me since this is my first big project with lua and I feel like a grew a lot in the process of making this. In the future, I might plan on using Fusion to help make this library a bit better to work with.
